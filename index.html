@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebraic Laboratory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]]},startup:{typeset:false}};</script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        .bg-grid { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px); background-color: #f8fafc; }
+        .algebra-tile { position: absolute; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.25rem; color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); cursor: grab; user-select: none; transition: background-color 0.15s, opacity 0.3s, scale 0.3s; width: 80px; height: 80px; z-index: 10;}
+        .algebra-tile:active { cursor: grabbing; z-index: 50; }
+        .algebra-tile.selected { outline: 4px solid #3b82f6; outline-offset: 2px; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4); z-index: 40; }
+        .flip-anim-start { transform: scaleX(0); transition: transform 0.15s ease-in-out; }
+        .annihilate { opacity: 0; transform: scale(1.5) !important; pointer-events: none; transition: transform 0.3s, opacity 0.3s; }
+        .gathering { transition: left 0.3s ease, top 0.3s ease, opacity 0.3s, transform 0.3s !important; }
+        .tile-unit { width: 50px; height: 50px; }
+        .tile-x, .tile-y { width:80px; height:80px; }
+        
+        /* Selection Box */
+        #selection-box { position: absolute; border: 1px solid rgba(59, 130, 246, 0.8); background-color: rgba(59, 130, 246, 0.2); pointer-events: none; z-index: 9999; display: none; }
+        
+        /* Parenthesis Container */
+        .parenthesis { position: absolute; border: 2px dashed #94a3b8; border-radius: 0.75rem; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; min-width: 220px; min-height: 160px; resize: both; overflow: hidden; z-index: 5; }
+        .paren-handle { height: 28px; background: #e2e8f0; display: flex; align-items: center; justify-content: space-between; padding: 0 8px; cursor: move; user-select: none; border-bottom: 1px solid #cbd5e1; }
+        .paren-sign { width: 48px; border-right: 2px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; cursor: pointer; user-select: none; transition: background 0.2s; }
+        .paren-sign:hover { filter: brightness(0.95); }
+        .paren-content { flex: 1; position: relative; overflow: hidden; }
+        .paren-settings-menu { position: absolute; top: 26px; right: 4px; background: white; border: 1px solid #cbd5e1; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 10000; min-width: 140px; overflow: hidden; }
+        .paren-settings-menu button { display: block; width: 100%; text-align: left; padding: 8px 12px; font-size: 0.875rem; color: #334155; transition: background 0.2s; }
+        .paren-settings-menu button:hover { background: #f1f5f9; }
+        
+        #dynamic-tip { transition: opacity 0.5s ease-in-out; }
+        .tile-variable { width:80px; height:80px; }
+        .rational-tile { width:50px; height:50px; font-size:1rem; }
+        .tile-text { pointer-events:none; }
+        .modal-backdrop.hidden { display:none; }
+        .modal-backdrop { position:fixed; inset:0; z-index:20000; background:rgba(15,23,42,.55); display:flex; align-items:center; justify-content:center; padding:1rem; }
+        .modal-card { background:#fff; color:#1e293b; width:min(520px,96vw); max-height:90vh; overflow:auto; border-radius:16px; box-shadow:0 25px 60px rgba(0,0,0,.28); padding:24px; }
+        .form-field.hidden { display:none; }
+        .form-field { display:flex; flex-direction:column; gap:5px; margin:12px 0; font-size:14px; font-weight:600; }
+        .form-field input,.form-field select { border:1px solid #cbd5e1; border-radius:8px; padding:9px 10px; font-weight:400; }
+        .exercise-logo { width:42px;height:42px;background:#7c3aed;color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 12px #7c3aed44; }
+        .tile-text mjx-container { margin:0 !important; color:inherit !important; }
+        input[type=color] { display:block!important;width:100%!important;height:54px!important;padding:4px!important;border:1px solid #cbd5e1!important;border-radius:9px!important;background:#fff!important;cursor:pointer; }
+        .brand-header { position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 12% 0%,rgba(14,165,233,.25),transparent 43%),radial-gradient(ellipse at 96% 100%,rgba(124,58,237,.35),transparent 44%),linear-gradient(128deg,#050816 0%,#101a38 54%,#11102a 100%);border-bottom:1px solid rgba(103,232,249,.38);box-shadow:0 14px 35px rgba(2,6,23,.35),inset 0 -1px rgba(255,255,255,.08);}
+        .brand-header:before { content:'';position:absolute;inset:0;z-index:-1;opacity:.22;background-image:linear-gradient(rgba(125,211,252,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,.16) 1px,transparent 1px);background-size:24px 24px;mask-image:linear-gradient(120deg,black,transparent 90%); }
+        .brand-header:after { content:'';position:absolute;width:180px;height:180px;right:-70px;top:-100px;z-index:-1;border:1px solid rgba(103,232,249,.25);border-radius:50%;box-shadow:0 0 0 18px rgba(103,232,249,.035),0 0 0 38px rgba(103,232,249,.025),0 0 40px rgba(34,211,238,.25); }
+        .brand-header svg { filter:drop-shadow(0 0 12px rgba(34,211,238,.65)); }
+        .brand-header h1 { text-shadow:0 0 20px rgba(125,211,252,.26); }
+        .brand-kicker { letter-spacing:.22em;color:#67e8f9;text-transform:uppercase;font-size:9px;font-weight:800; }
+        .sidebar-panel { flex:0 0 20rem;width:20rem;min-width:20rem;overflow:hidden;transition:flex-basis .3s ease,width .3s ease,min-width .3s ease,opacity .2s ease; }
+        body.sidebar-collapsed .sidebar-panel { flex-basis:0!important;width:0!important;min-width:0!important;border-left:0!important;opacity:0;pointer-events:none; }
+        #sidebar-toggle { position:fixed;right:calc(20rem - 18px);top:50%;transform:translateY(-50%);z-index:10001;width:36px;height:52px;border:1px solid rgba(34,211,238,.55);border-radius:14px 0 0 14px;background:linear-gradient(145deg,#0f172a,#1e293b);color:#a5f3fc;box-shadow:0 8px 24px rgba(2,6,23,.3),0 0 16px rgba(34,211,238,.18);font-size:23px;font-weight:700;line-height:1;cursor:pointer;transition:right .3s ease,background .2s,box-shadow .2s; }
+        #sidebar-toggle:hover { background:linear-gradient(145deg,#164e63,#312e81);box-shadow:0 8px 28px rgba(2,6,23,.4),0 0 20px rgba(34,211,238,.35); }
+        body.sidebar-collapsed #sidebar-toggle { right:8px;border-radius:14px; }
+        #author-badge { display:flex;align-items:center;gap:8px;transition:padding .2s ease; }
+        #author-info { white-space:nowrap;transition:opacity .2s ease; }
+        #author-badge.author-collapsed #author-info { display:none; }
+        #author-logo { width:28px;height:28px;flex:0 0 28px;border:0;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#0e7490,#4338ca);color:white;font-size:10px;font-weight:900;letter-spacing:-.04em;box-shadow:0 0 12px rgba(14,165,233,.35);cursor:pointer;transition:transform .18s,box-shadow .18s; }
+        #author-logo:hover { transform:scale(1.1);box-shadow:0 0 16px rgba(14,165,233,.6); }
+        #equation-display mjx-container { margin:0 !important; }
+    </style>
+</head>
+<body class="bg-gray-100 h-screen overflow-hidden flex font-sans">
+    <main class="flex-1 relative bg-grid shadow-inner flex flex-col" id="workspace">
+        <!-- Author information expands/collapses from its monogram logo -->
+        <div id="author-badge" class="absolute top-2 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full shadow border border-gray-200 z-20">
+            <span id="author-info" class="text-xs font-semibold text-gray-600">Designed by David Beleño · Math Education · 2026</span>
+            <button id="author-logo" type="button" title="Collapse author information" aria-label="Collapse author information" aria-expanded="true">DB</button>
+        </div>
+
+        <button id="create-exercise-btn" class="absolute top-4 right-4 z-30 exercise-logo hover:bg-violet-700 transition" title="Create exercise (hold to configure)" aria-label="Create exercise">
+            <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/><path d="m16 17 2 2 4-5"/></svg>
+        </button>
+        <div id="selection-box"></div>
+        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-6 py-3 rounded-xl shadow-lg border border-gray-200 z-10">
+            <h2 class="text-sm text-gray-500 font-semibold uppercase tracking-wider mb-1">Current Expression</h2>
+            <div id="equation-display" class="text-3xl font-bold text-gray-800 font-mono">0</div>
+        </div>
+        
+        <div id="tiles-container" class="w-full h-full relative overflow-hidden">
+            <!-- Tiles and Parentheses injected here -->
+        </div>
+
+        <div id="dynamic-tip" class="absolute bottom-4 left-4 bg-blue-50 text-blue-800 px-4 py-2 rounded-lg text-sm shadow opacity-90 pointer-events-none z-10 max-w-sm">
+            💡 <b>Tip:</b> Right-click a tile to change its sign; double-click a variable to change its exponent. Ctrl+E selects all tiles.
+        </div>
+
+        <!-- Exercise Inserter UI -->
+        <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur p-3 rounded-xl shadow-lg border border-gray-200 z-10 flex items-center gap-2" onmousedown="event.stopPropagation()">
+            <input type="text" id="exercise-input" placeholder="e.g. 3x^2 + y" autocomplete="off" spellcheck="false" oninput="sanitizeExerciseInput(this)" title="Allowed: letters, numbers, decimal points, and mathematical operators. Use ^ for powers, e.g. 3x^2." class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-56 text-sm text-gray-800" onkeydown="if(event.key === 'Enter') insertExercise()">
+            <button onclick="insertExercise()" class="bg-blue-500 hover:bg-blue-600 text-white rounded p-2 transition-colors flex items-center justify-center shadow" title="Insert Expression">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+    </main>
+
+    <aside id="sidebar-panel" class="sidebar-panel w-80 bg-white border-l border-gray-200 shadow-xl flex flex-col z-20" onmousedown="event.stopPropagation()">
+        <div class="brand-header p-6 text-white flex items-center gap-3">
+            <!-- Math Logo SVG -->
+            <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+            <div>
+                <div class="brand-kicker mb-1">Interactive math · lab</div><h1 class="text-xl font-bold leading-tight">Algebraic<br>Laboratory</h1>
+                <p class="text-slate-300 text-xs mt-1">Addition & Subtraction</p>
+            </div>
+        </div>
+
+        <div class="p-6 flex-1 overflow-y-auto">
+            <!-- Parenthesis Tool -->
+            <div class="mb-6">
+                 <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Containers</h3>
+                 <button onclick="addParenthesis()" class="w-full flex items-center justify-center gap-2 p-3 bg-indigo-50 hover:bg-indigo-100 border-2 border-indigo-300 text-indigo-700 font-bold rounded-lg transition-colors">
+                     <span class="text-xl">( )</span> Add Parenthesis
+                 </button>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">X Terms</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="addTile('+x')" class="flex flex-col items-center justify-center p-3 bg-green-100 hover:bg-green-200 border-2 border-green-500 rounded-lg transition-colors">
+                        <div class="w-11 h-11 bg-green-500 text-white font-bold rounded mb-2 pointer-events-none flex items-center justify-center">+x</div>
+                    </button>
+                    <button onclick="addTile('-x')" class="flex flex-col items-center justify-center p-3 bg-red-100 hover:bg-red-200 border-2 border-red-500 rounded-lg transition-colors">
+                        <div class="w-11 h-11 bg-red-500 text-white font-bold rounded mb-2 pointer-events-none flex items-center justify-center">-x</div>
+                    </button>
+                </div>
+            </div>
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Y Terms</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="addTile('+y')" class="flex flex-col items-center justify-center p-3 bg-blue-100 hover:bg-blue-200 border-2 border-blue-500 rounded-lg transition-colors">
+                        <div class="w-11 h-11 bg-blue-500 text-white font-bold rounded mb-2 pointer-events-none flex items-center justify-center">+y</div>
+                    </button>
+                    <button onclick="addTile('-y')" class="flex flex-col items-center justify-center p-3 bg-red-100 hover:bg-red-200 border-2 border-red-500 rounded-lg transition-colors">
+                        <div class="w-11 h-11 bg-red-500 text-white font-bold rounded mb-2 pointer-events-none flex items-center justify-center">-y</div>
+                    </button>
+                </div>
+            </div>
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Integers</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="addTile('+1')" class="flex flex-col items-center justify-center p-3 bg-orange-100 hover:bg-orange-200 border-2 border-orange-500 rounded-lg transition-colors">
+                        <div class="bg-orange-500 text-white font-bold px-3 py-3 rounded mb-2 pointer-events-none">+1</div>
+                    </button>
+                    <button onclick="addTile('-1')" class="flex flex-col items-center justify-center p-3 bg-red-100 hover:bg-red-200 border-2 border-red-500 rounded-lg transition-colors">
+                        <div class="bg-red-500 text-white font-bold px-3 py-3 rounded mb-2 pointer-events-none">-1</div>
+                    </button>
+                </div>
+            </div>
+            <div class="mb-6">
+                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Custom Tiles</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="openTileModal('variable')" class="flex flex-col items-center justify-center p-3 bg-white hover:bg-violet-50 border-2 border-dashed border-violet-400 rounded-lg transition-colors">
+                        <div class="w-12 h-12 border-2 border-violet-300 rounded mb-2 flex items-center justify-center text-violet-500 font-bold">x²</div><span class="text-xs font-semibold text-slate-600">Create Variable</span>
+                    </button>
+                    <button onclick="openTileModal('number')" class="flex flex-col items-center justify-center p-3 bg-white hover:bg-cyan-50 border-2 border-dashed border-cyan-400 rounded-lg transition-colors">
+                        <div class="w-12 h-12 border-2 border-cyan-300 rounded mb-2 flex items-center justify-center text-cyan-500 font-bold">½</div><span class="text-xs font-semibold text-slate-600">Create Number</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="p-4 border-t border-gray-200 bg-gray-50">
+            <button onclick="clearWorkspace()" class="w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg shadow transition flex justify-center items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                Clear Board
+            </button>
+        </div>
+    </aside>
+    <button id="sidebar-toggle" type="button" aria-controls="sidebar-panel" aria-expanded="true" title="Collapse tile panel">‹</button>
+
+    <div id="tile-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true"></div>
+    <div id="exponent-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true"></div>
+    <div id="exercise-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true"></div>
+
+    <script>
+        const container = document.getElementById('tiles-container');
+        const workspace = document.getElementById('workspace');
+        const equationDisplay = document.getElementById('equation-display');
+        const selectionBoxDiv = document.getElementById('selection-box');
+        
+        let tileIdCounter = 0;
+        let parenIdCounter = 0;
+        
+        const tileConfig = {
+            '+x': { colorClass: 'bg-green-500', shapeClass: 'tile-x', opposite: '-x' },
+            '-x': { colorClass: 'bg-red-500', shapeClass: 'tile-x', opposite: '+x' },
+            '+y': { colorClass: 'bg-blue-500', shapeClass: 'tile-y', opposite: '-y' },
+            '-y': { colorClass: 'bg-red-500', shapeClass: 'tile-y', opposite: '+y' },
+            '+1': { colorClass: 'bg-orange-500', shapeClass: 'tile-unit', opposite: '-1' },
+            '-1': { colorClass: 'bg-red-500', shapeClass: 'tile-unit', opposite: '+1' }
+        };
+
+        // Interaction State
+        let isDragging = false;
+        let dragGroup = []; // Array of { element, offsetX, offsetY, startLeft, startTop }
+        let longPressTimer = null;
+        let startDragX = 0; let startDragY = 0;
+        
+        // Selection State
+        let isSelecting = false;
+        let selectStartX = 0; let selectStartY = 0;
+        let clipboard = [];
+
+        // History State for Undo/Redo
+        let historyStack = [];
+        let redoStack = [];
+
+        // Dynamic Tips array
+        const tipsArray = [
+            "💡 <b>Tip:</b> Right-click a tile to change its sign; double-click a variable to change its exponent. Ctrl+E selects all tiles.",
+            "💡 <b>Tip:</b> Drag a tile over its opposite to cancel them out.",
+            "💡 <b>Tip:</b> Click and hold a tile (coefficient > 1) to break it apart.",
+            "💡 <b>Tip:</b> Use (Ctrl+Z) to undo and (Ctrl+X) to redo your actions.",
+            "💡 <b>Tip:</b> Parenthesis containers can be moved, resized, and configured using their gear icon."
+        ];
+        let currentTipIndex = 0;
+
+        // --- State Management (Undo/Redo) ---
+        function getStateSnapshot() {
+            const state = { tiles: [], parens: [] };
+            document.querySelectorAll('.parenthesis').forEach(p => {
+                state.parens.push({
+                    id: p.dataset.id, left: p.style.left, top: p.style.top, width: p.style.width, height: p.style.height,
+                    sign: p.querySelector('.paren-sign').innerText
+                });
+            });
+            document.querySelectorAll('.algebra-tile:not(.annihilate)').forEach(t => {
+                state.tiles.push({
+                    id: t.dataset.id, type: t.dataset.type, coeff: parseInt(t.dataset.coeff),
+                    left: t.style.left, top: t.style.top,
+                    parentId: t.parentElement.classList.contains('paren-content') ? t.closest('.parenthesis').dataset.id : 'container'
+                });
+            });
+            return JSON.stringify(state);
+        }
+
+        function saveState() {
+            historyStack.push(getStateSnapshot());
+            if (historyStack.length > 50) historyStack.shift();
+            redoStack = []; 
+        }
+
+        function loadState(stateStr) {
+            if (!stateStr) return;
+            const state = JSON.parse(stateStr);
+            container.innerHTML = '';
+            
+            state.parens.forEach(pData => {
+                const paren = addParenthesisRaw(pData.sign, parseFloat(pData.left), parseFloat(pData.top), pData.id);
+                if(pData.width) paren.style.width = pData.width;
+                if(pData.height) paren.style.height = pData.height;
+            });
+
+            state.tiles.forEach(tData => {
+                let targetParent = container;
+                if (tData.parentId !== 'container') {
+                    const paren = container.querySelector(`.parenthesis[data-id="${tData.parentId}"]`);
+                    if (paren) targetParent = paren.querySelector('.paren-content');
+                }
+                createTileElement(tData.type, parseFloat(tData.left), parseFloat(tData.top), tData.coeff, targetParent, tData.id);
+            });
+            updateEquation();
+        }
+
+        function undo() {
+            if (historyStack.length > 0) {
+                redoStack.push(getStateSnapshot());
+                loadState(historyStack.pop());
+            }
+        }
+
+        function redo() {
+            if (redoStack.length > 0) {
+                historyStack.push(getStateSnapshot());
+                loadState(redoStack.pop());
+            }
+        }
+
+        // --- Core Tile Creation ---
+        function addTile(type) {
+            saveState();
+            const x = (container.clientWidth / 2) - 40 + (Math.random() * 40 - 20);
+            const y = (container.clientHeight / 2) - 40 + (Math.random() * 40 - 20);
+            createTileElement(type, x, y, 1, container);
+            updateEquation();
+        }
+
+        function createTileElement(type, x, y, coeff = 1, parentNode = container, forceId = null) {
+            const config = tileConfig[type];
+            const tile = document.createElement('div');
+            tile.className = `algebra-tile ${config.colorClass} ${config.shapeClass}`;
+            tile.dataset.type = type;
+            tile.dataset.coeff = coeff;
+            tile.dataset.id = forceId || `tile-${tileIdCounter++}`;
+            tile.style.left = `${x}px`;
+            tile.style.top = `${y}px`;
+
+            const textSpan = document.createElement('span');
+            textSpan.className = 'tile-text pointer-events-none drop-shadow-md';
+            tile.appendChild(textSpan);
+            updateTileText(tile);
+
+            const flipBtn = document.createElement('div');
+            flipBtn.className = 'flip-btn';
+            flipBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 2.75a9.25 9.25 0 1 0 4.737 17.197l-1.423-1.637A7.25 7.25 0 1 1 19.25 12h-2.5l3.625-4.168L24 12h-2.75a9.25 9.25 0 0 0-9.25-9.25z"/></svg>`;
+            
+            // Tile Events
+            flipBtn.addEventListener('mousedown', (e) => { e.stopPropagation(); saveState(); flipTileLogic(tile); updateEquation(); });
+            flipBtn.addEventListener('touchstart', (e) => { e.stopPropagation(); e.preventDefault(); saveState(); flipTileLogic(tile); updateEquation(); }, {passive: false});
+            tile.appendChild(flipBtn);
+
+            tile.addEventListener('mousedown', startDrag);
+            tile.addEventListener('touchstart', startDrag, {passive: false});
+
+            parentNode.appendChild(tile);
+            return tile;
+        }
+
+        function updateTileText(tile) {
+            const type = tile.dataset.type;
+            const coeff = parseInt(tile.dataset.coeff);
+            const textSpan = tile.querySelector('.tile-text');
+            const base = type.substring(1);
+            const sign = type.charAt(0);
+            if (base === '1') { textSpan.innerText = `${sign}${coeff}`; }
+            else { textSpan.innerText = `${sign}${coeff > 1 ? coeff : ''}${base}`; }
+        }
+
+        function flipTileLogic(tile, animated = true) {
+            if(tile.classList.contains('annihilate')) return;
+            const flip = () => {
+                const currentType = tile.dataset.type;
+                const newType = tileConfig[currentType].opposite;
+                const newConfig = tileConfig[newType];
+                tile.dataset.type = newType;
+                tile.className = `algebra-tile ${newConfig.colorClass} ${newConfig.shapeClass} ${tile.classList.contains('selected') ? 'selected' : ''}`;
+                updateTileText(tile);
+            };
+
+            if (animated) {
+                tile.classList.add('flip-anim-start');
+                setTimeout(() => { flip(); tile.classList.remove('flip-anim-start'); }, 150);
+            } else {
+                flip();
+            }
+        }
+
+        // --- Parenthesis Drag Logic ---
+        function startParenDrag(e, handleEl) {
+            if (e.target.closest('.settings-btn') || e.target.closest('.paren-settings-menu')) return;
+            
+            saveState();
+            isDragging = true;
+            
+            const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+            startDragX = clientX; startDragY = clientY;
+
+            let targetEl = handleEl.closest('.parenthesis');
+            document.querySelectorAll('.algebra-tile.selected').forEach(t => t.classList.remove('selected'));
+            
+            const rect = targetEl.getBoundingClientRect();
+            dragGroup = [{ el: targetEl, offsetX: clientX - rect.left, offsetY: clientY - rect.top }];
+            targetEl.style.zIndex = 1000;
+            e.stopPropagation();
+        }
+
+        // --- Multi-Select & Drag Logic ---
+        function startDrag(e) {
+            if (e.type==='mousedown' && e.button===2) return;
+            if (e.target.closest('.flip-btn') || e.target.closest('.settings-btn') || e.target.closest('.paren-settings-menu')) return;
+            
+            saveState();
+            let targetEl = e.currentTarget;
+            isDragging = true;
+            
+            const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+            startDragX = clientX; startDragY = clientY;
+
+            // Determine drag group
+            dragGroup = [];
+            
+            // Dragging a tile
+            if (!targetEl.classList.contains('selected')) {
+                // Clicked unselected tile -> deselect others
+                if (!e.shiftKey) {
+                    document.querySelectorAll('.algebra-tile.selected').forEach(t => t.classList.remove('selected'));
+                }
+                targetEl.classList.add('selected');
+            }
+            // Group is all selected tiles
+            document.querySelectorAll('.algebra-tile.selected').forEach(t => {
+                dragGroup.push({ el: t, offsetX: 0, offsetY: 0 });
+            });
+
+            // Calculate offsets for all items in group
+            dragGroup.forEach(item => {
+                const rect = item.el.getBoundingClientRect();
+                item.offsetX = clientX - rect.left;
+                item.offsetY = clientY - rect.top;
+                item.el.style.zIndex = 1000;
+                item.el.classList.add('dragging');
+            });
+
+            // Long press logic (only if single tile dragged)
+            if (dragGroup.length === 1 && dragGroup[0].el.classList.contains('algebra-tile')) {
+                longPressTimer = setTimeout(() => {
+                    if (isDragging) { 
+                        handleLongPress(dragGroup[0].el); 
+                        stopDrag(); 
+                    }
+                }, 1000);
+            }
+            e.stopPropagation();
+        }
+
+        function drag(e) {
+            if (!isDragging || dragGroup.length === 0) return;
+            e.preventDefault();
+            const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+            
+            if (Math.abs(clientX - startDragX) > 10 || Math.abs(clientY - startDragY) > 10) { 
+                clearTimeout(longPressTimer); 
+            }
+
+            dragGroup.forEach(item => {
+                // Calculate absolute physical position
+                let physLeft = clientX - item.offsetX;
+                let physTop = clientY - item.offsetY;
+
+                // Adjust based on parent container offset so it follows mouse correctly
+                const parentRect = item.el.parentElement.getBoundingClientRect();
+                item.el.style.left = `${physLeft - parentRect.left}px`; 
+                item.el.style.top = `${physTop - parentRect.top}px`;
+            });
+        }
+
+        function stopDrag(e) {
+            clearTimeout(longPressTimer);
+            if (!isDragging) return;
+            
+            let tilesToCheck = [];
+
+            dragGroup.forEach(item => {
+                item.el.style.zIndex = '';
+                item.el.classList.remove('dragging');
+                
+                if (item.el.classList.contains('algebra-tile')) {
+                    // Check if dropped inside or outside a parenthesis
+                    handleTileDropHierarchy(item.el);
+                    tilesToCheck.push(item.el);
+                }
+            });
+
+            // Check collisions for dropped tiles against NON-dragging tiles
+            tilesToCheck.forEach(tile => {
+                if(tile.parentElement) checkCollision(tile);
+            });
+
+            updateEquation();
+            isDragging = false; 
+            dragGroup = [];
+        }
+
+        function handleTileDropHierarchy(tile) {
+            const rect = tile.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Find if center is inside any parenthesis content area
+            const parens = Array.from(document.querySelectorAll('.parenthesis'));
+            let targetParen = null;
+            
+            // Traverse reverse to find top-most
+            for (let i = parens.length - 1; i >= 0; i--) {
+                const pRect = parens[i].querySelector('.paren-content').getBoundingClientRect();
+                if (centerX >= pRect.left && centerX <= pRect.right && centerY >= pRect.top && centerY <= pRect.bottom) {
+                    targetParen = parens[i].querySelector('.paren-content');
+                    break;
+                }
+            }
+
+            const currentParent = tile.parentElement;
+            
+            if (targetParen && currentParent !== targetParen) {
+                // Move into parenthesis
+                targetParen.appendChild(tile);
+                const parentRect = targetParen.getBoundingClientRect();
+                tile.style.left = `${rect.left - parentRect.left}px`;
+                tile.style.top = `${rect.top - parentRect.top}px`;
+            } else if (!targetParen && currentParent !== container) {
+                // Move out of parenthesis to main container
+                container.appendChild(tile);
+                const parentRect = container.getBoundingClientRect();
+                tile.style.left = `${rect.left - parentRect.left}px`;
+                tile.style.top = `${rect.top - parentRect.top}px`;
+            }
+        }
+
+        // --- Workspace Selection Box ---
+        workspace.addEventListener('mousedown', (e) => {
+            if (e.target === container || e.target === workspace) {
+                isSelecting = true;
+                selectStartX = e.clientX;
+                selectStartY = e.clientY;
+                selectionBoxDiv.style.left = `${selectStartX}px`;
+                selectionBoxDiv.style.top = `${selectStartY}px`;
+                selectionBoxDiv.style.width = '0px';
+                selectionBoxDiv.style.height = '0px';
+                selectionBoxDiv.style.display = 'block';
+                
+                if (!e.shiftKey) {
+                    document.querySelectorAll('.algebra-tile.selected').forEach(t => t.classList.remove('selected'));
+                }
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (isSelecting) {
+                const currentX = e.clientX;
+                const currentY = e.clientY;
+                const left = Math.min(currentX, selectStartX);
+                const top = Math.min(currentY, selectStartY);
+                const width = Math.abs(currentX - selectStartX);
+                const height = Math.abs(currentY - selectStartY);
+                
+                selectionBoxDiv.style.left = `${left}px`;
+                selectionBoxDiv.style.top = `${top}px`;
+                selectionBoxDiv.style.width = `${width}px`;
+                selectionBoxDiv.style.height = `${height}px`;
+            } else {
+                drag(e);
+            }
+        });
+
+        window.addEventListener('mouseup', (e) => {
+            if (isSelecting) {
+                isSelecting = false;
+                selectionBoxDiv.style.display = 'none';
+                
+                const boxRect = selectionBoxDiv.getBoundingClientRect();
+                document.querySelectorAll('.algebra-tile:not(.annihilate)').forEach(tile => {
+                    const tRect = tile.getBoundingClientRect();
+                    // Intersects
+                    if (boxRect.right > tRect.left && boxRect.left < tRect.right && 
+                        boxRect.bottom > tRect.top && boxRect.top < tRect.bottom) {
+                        tile.classList.add('selected');
+                    }
+                });
+            } else {
+                stopDrag(e);
+            }
+        });
+        
+        window.addEventListener('touchmove', drag, {passive: false}); 
+        window.addEventListener('touchend', stopDrag);
+
+        // --- Keyboard Controls (Delete, Copy, Paste, Undo, Redo) ---
+        window.addEventListener('keydown', (e) => {
+            if (['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)) return; // Preserve editing shortcuts inside fields
+            
+            if (e.ctrlKey && e.key.toLowerCase() === 'e') { e.preventDefault(); document.querySelectorAll('.algebra-tile:not(.annihilate)').forEach(t=>t.classList.add('selected')); return; }
+            if (e.ctrlKey && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); return; }
+            if (e.ctrlKey && e.key.toLowerCase() === 'x') { e.preventDefault(); redo(); return; }
+
+            if (e.key === 'Delete' || e.key === 'Backspace') {
+                const selected = document.querySelectorAll('.algebra-tile.selected');
+                if(selected.length > 0) {
+                    saveState();
+                    selected.forEach(t => t.remove());
+                    updateEquation();
+                }
+            }
+            else if (e.ctrlKey && e.key.toLowerCase() === 'c') {
+                const selected = document.querySelectorAll('.algebra-tile.selected');
+                clipboard = Array.from(selected).map(t => {
+                    const rect = t.getBoundingClientRect();
+                    const containerRect = container.getBoundingClientRect();
+                    const meta={};
+                    for(const k of ['kind','num','den','format','letter','exponent','color','shape'])if(t.dataset[k]!==undefined)meta[k]=t.dataset[k];
+                    return {type:t.dataset.type,coeff:Number(t.dataset.coeff||1),left:rect.left-containerRect.left,top:rect.top-containerRect.top,meta};
+                });
+            }
+            else if (e.ctrlKey && e.key.toLowerCase() === 'v') {
+                if(clipboard.length > 0) saveState();
+                document.querySelectorAll('.algebra-tile.selected').forEach(t => t.classList.remove('selected'));
+                clipboard.forEach(data => {
+                    const newTile = createTileElement(data.type,data.left+30,data.top+30,data.coeff,container,null,data.meta||null);
+                    newTile.classList.add('selected');
+                });
+                updateEquation();
+            }
+        });
+
+        // --- Parenthesis Features ---
+        function getSignClasses(sign) {
+            return sign === '+' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+        }
+
+        function addParenthesisRaw(sign, x, y, forceId = null) {
+            const paren = document.createElement('div');
+            paren.className = 'parenthesis';
+            paren.dataset.id = forceId || `paren-${parenIdCounter++}`;
+            paren.style.left = `${x}px`;
+            paren.style.top = `${y}px`;
+
+            const signClasses = getSignClasses(sign);
+
+            paren.innerHTML = `
+                <div class="paren-handle" onmousedown="startParenDrag(event, this)" ontouchstart="startParenDrag(event, this)">
+                    <span class="text-xs text-gray-500 font-mono tracking-wider">( Container )</span>
+                    <div class="relative">
+                        <button class="settings-btn text-gray-500 hover:text-gray-800 transition" onclick="toggleSettings(this, event)" ontouchstart="toggleSettings(this, event)">⚙️</button>
+                        <div class="paren-settings-menu hidden">
+                            <button onclick="applyParenSigns(this, event)">Apply Signs</button>
+                            <button onclick="separatorParen(this, event)">Separator</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-1 relative overflow-hidden">
+                    <div class="paren-sign ${signClasses}" onclick="toggleParenSign(this, event)">${sign}</div>
+                    <div class="paren-content bg-white/20"></div>
+                </div>
+            `;
+            container.appendChild(paren);
+            return paren;
+        }
+
+        function addParenthesis() {
+            saveState();
+            const x = (container.clientWidth / 2) - 110;
+            const y = (container.clientHeight / 2) - 80;
+            addParenthesisRaw('+', x, y);
+            updateEquation();
+        }
+
+        function toggleSettings(btn, e) {
+            e.stopPropagation();
+            const menu = btn.nextElementSibling;
+            document.querySelectorAll('.paren-settings-menu').forEach(m => { if(m !== menu) m.classList.add('hidden'); });
+            menu.classList.toggle('hidden');
+        }
+
+        // Close menus when clicking outside
+        window.addEventListener('mousedown', (e) => {
+            if (!e.target.closest('.paren-settings-menu') && !e.target.closest('.settings-btn')) {
+                document.querySelectorAll('.paren-settings-menu').forEach(m => m.classList.add('hidden'));
+            }
+        });
+
+        function toggleParenSign(el, e) {
+            e.stopPropagation();
+            saveState();
+            const newSign = el.innerText === '+' ? '-' : '+';
+            el.innerText = newSign;
+            el.className = `paren-sign ${getSignClasses(newSign)}`;
+            updateEquation();
+        }
+
+        function applyParenSigns(btn, e) {
+            e.stopPropagation();
+            saveState();
+            const paren = btn.closest('.parenthesis');
+            const sign = paren.querySelector('.paren-sign').innerText;
+            const content = paren.querySelector('.paren-content');
+            const tiles = Array.from(content.querySelectorAll('.algebra-tile'));
+            
+            const containerRect = container.getBoundingClientRect();
+
+            tiles.forEach(tile => {
+                const rect = tile.getBoundingClientRect();
+                if (sign === '-') flipTileLogic(tile, false);
+                
+                container.appendChild(tile);
+                tile.style.left = `${rect.left - containerRect.left}px`;
+                tile.style.top = `${rect.top - containerRect.top}px`;
+            });
+            
+            paren.remove();
+            updateEquation();
+        }
+
+        function separatorParen(btn, e) {
+            e.stopPropagation();
+            saveState();
+            const paren = btn.closest('.parenthesis');
+            const content = paren.querySelector('.paren-content');
+            const tiles = Array.from(content.querySelectorAll('.algebra-tile:not(.annihilate)'));
+            
+            // Sort visually and align neatly
+            tiles.sort((a, b) => parseFloat(a.style.left) - parseFloat(b.style.left));
+            
+            let currentX = 20;
+            const centerY = (content.clientHeight / 2) - 40; // Center vertically based on typical tile height
+
+            tiles.forEach(tile => {
+                tile.style.left = `${currentX}px`;
+                tile.style.top = `${Math.max(10, centerY)}px`;
+                currentX += tile.offsetWidth + 15;
+            });
+            
+            btn.closest('.paren-settings-menu').classList.add('hidden');
+            updateEquation(); // Equation updates visual operators normally
+        }
+
+        // --- Gather/Split Logic (Long Press) ---
+        function handleLongPress(tile) {
+            if (!tile || tile.classList.contains('annihilate')) return;
+            saveState();
+            const coeff = parseInt(tile.dataset.coeff);
+            const type = tile.dataset.type;
+            const parent = tile.parentElement;
+
+            if (coeff > 1) {
+                tile.dataset.coeff = 1; updateTileText(tile);
+                const currentLeft = parseFloat(tile.style.left);
+                const currentTop = parseFloat(tile.style.top);
+                for (let i = 1; i < coeff; i++) {
+                    const offset = i * 25; 
+                    createTileElement(type, currentLeft + offset, currentTop + offset, 1, parent);
+                }
+                tile.style.transform = 'scale(1.2)';
+                setTimeout(() => tile.style.transform = '', 200);
+            } else {
+                const sameTiles = parent.querySelectorAll(`.algebra-tile[data-type="${type}"]:not(.annihilate)`);
+                let totalCoeff = 1;
+                sameTiles.forEach(otherTile => {
+                    // Don't merge tiles that are currently selected in a drag group
+                    const isDragging = dragGroup.some(item => item.el === otherTile);
+                    if (otherTile !== tile && !isDragging) {
+                        totalCoeff += parseInt(otherTile.dataset.coeff);
+                        otherTile.classList.add('gathering');
+                        otherTile.style.left = tile.style.left; otherTile.style.top = tile.style.top;
+                        setTimeout(() => { otherTile.remove(); }, 300);
+                    }
+                });
+                if (totalCoeff > 1) {
+                    setTimeout(() => {
+                        tile.dataset.coeff = totalCoeff; updateTileText(tile);
+                        tile.style.transform = 'scale(1.2)'; setTimeout(() => tile.style.transform = '', 200);
+                        updateEquation();
+                    }, 300);
+                }
+            }
+            updateEquation();
+        }
+
+        // --- Collision and Addition Logic ---
+        function checkCollision(droppedTile) {
+            if (droppedTile.classList.contains('annihilate')) return;
+            const rect1 = droppedTile.getBoundingClientRect();
+            // Check against siblings in the same container
+            const siblings = droppedTile.parentElement.querySelectorAll('.algebra-tile:not(.annihilate)');
+            
+            for (let targetTile of siblings) {
+                // Skip if same tile or if target is currently being dragged
+                if (targetTile === droppedTile || targetTile.classList.contains('dragging')) continue;
+                
+                const rect2 = targetTile.getBoundingClientRect();
+                const overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+                
+                if (overlap) {
+                    const type1 = droppedTile.dataset.type;
+                    const type2 = targetTile.dataset.type;
+                    const coeff1 = parseInt(droppedTile.dataset.coeff);
+                    const coeff2 = parseInt(targetTile.dataset.coeff);
+                    
+                    if (type1 === type2) {
+                        targetTile.dataset.coeff = coeff1 + coeff2; updateTileText(targetTile);
+                        droppedTile.classList.add('annihilate'); 
+                        setTimeout(() => { droppedTile.remove(); updateEquation(); }, 300);
+                        return; 
+                    }
+                    if (tileConfig[type1].opposite === type2) {
+                        if (coeff1 === coeff2) { annihilateTiles(droppedTile, targetTile); }
+                        else if (coeff1 > coeff2) { droppedTile.dataset.coeff = coeff1 - coeff2; updateTileText(droppedTile); targetTile.classList.add('annihilate'); setTimeout(() => { targetTile.remove(); updateEquation(); }, 300); }
+                        else { targetTile.dataset.coeff = coeff2 - coeff1; updateTileText(targetTile); droppedTile.classList.add('annihilate'); setTimeout(() => { droppedTile.remove(); updateEquation(); }, 300); }
+                        return;
+                    }
+                }
+            }
+        }
+
+        function annihilateTiles(tile1, tile2) {
+            tile1.classList.add('annihilate'); tile2.classList.add('annihilate');
+            setTimeout(() => { tile1.remove(); tile2.remove(); updateEquation(); }, 300);
+        }
+
+        // --- Equation Generator (Hierarchical) ---
+        function formatTerm(type, coeff, isFirstElement) {
+            const sign = type.charAt(0);
+            const base = type.substring(1);
+            let termStr = "";
+            if (base === '1') { termStr = `${coeff}`; }
+            else { termStr = `${coeff > 1 ? coeff : ''}${base}`; }
+            
+            if (isFirstElement) { return (sign === '-' ? '-' : '') + termStr; }
+            else { return ` ${sign} ${termStr}`; }
+        }
+
+        function updateEquation() {
+            let eqParts = [];
+            // Get top level items (tiles and parens) in container
+            const topLevel = Array.from(container.children).filter(c => 
+                (c.classList.contains('algebra-tile') && !c.classList.contains('annihilate')) || 
+                c.classList.contains('parenthesis')
+            );
+            
+            // Sort top level by visual X position
+            topLevel.sort((a, b) => a.getBoundingClientRect().left - b.getBoundingClientRect().left);
+
+            if (topLevel.length === 0) { 
+                equationDisplay.innerText = '0'; 
+                equationDisplay.classList.replace('text-gray-800', 'text-gray-400'); 
+                return; 
+            }
+
+            topLevel.forEach((el, index) => {
+                const isFirst = (index === 0);
+                
+                if (el.classList.contains('algebra-tile')) {
+                    eqParts.push(formatTerm(el.dataset.type, parseInt(el.dataset.coeff), isFirst));
+                } else if (el.classList.contains('parenthesis')) {
+                    const sign = el.querySelector('.paren-sign').innerText;
+                    const content = el.querySelector('.paren-content');
+                    const children = Array.from(content.querySelectorAll('.algebra-tile:not(.annihilate)'));
+                    children.sort((a, b) => a.getBoundingClientRect().left - b.getBoundingClientRect().left);
+                    
+                    let subEq = "";
+                    children.forEach((child, cIndex) => {
+                        subEq += formatTerm(child.dataset.type, parseInt(child.dataset.coeff), cIndex === 0);
+                    });
+                    if (subEq === "") subEq = "0";
+
+                    let parenStr = "";
+                    if (isFirst) {
+                        parenStr = (sign === '-' ? '-' : '') + `(${subEq})`;
+                    } else {
+                        parenStr = ` ${sign} (${subEq})`;
+                    }
+                    eqParts.push(parenStr);
+                }
+            });
+
+            equationDisplay.innerText = eqParts.join("");
+            equationDisplay.classList.replace('text-gray-400', 'text-gray-800');
+        }
+
+        function clearWorkspace() { saveState(); container.innerHTML = ''; updateEquation(); }
+
+        // --- Exercise Inserter Logic ---
+        function insertExercise() {
+            const inputField = document.getElementById('exercise-input');
+            const input = inputField.value;
+            if (!input) return;
+
+            saveState();
+            clearWorkspace(); // Requested feature logic clears previous
+            let expr = input.replace(/\s+/g, '');
+            
+            // Parse parentheses first
+            const parenRegex = /([+-]?)\(([^)]+)\)/g;
+            let match;
+            let startX = 40; let startY = 120;
+            
+            while ((match = parenRegex.exec(expr)) !== null) {
+                let sign = match[1] === '-' ? '-' : '+';
+                let innerExpr = match[2];
+                
+                const paren = addParenthesisRaw(sign, startX, startY);
+                const content = paren.querySelector('.paren-content');
+                
+                const innerTerms = innerExpr.match(/[+-]?[^+-]+/g);
+                let innerX = 10;
+                if (innerTerms) {
+                    innerTerms.forEach(term => {
+                        if (term[0] !== '+' && term[0] !== '-') term = '+' + term;
+                        const tSign = term[0];
+                        const rest = term.slice(1);
+                        let base = '1'; let coeffStr = rest;
+                        if (rest.includes('x')) { base = 'x'; coeffStr = rest.replace('x', ''); }
+                        else if (rest.includes('y')) { base = 'y'; coeffStr = rest.replace('y', ''); }
+                        const coeff = coeffStr === '' ? 1 : parseInt(coeffStr);
+                        if (!isNaN(coeff) && coeff > 0) {
+                            createTileElement(tSign + base, innerX, 20, coeff, content);
+                            innerX += 90;
+                        }
+                    });
+                }
+                // Auto-resize width
+                const requiredWidth = Math.max(220, innerX + 60);
+                paren.style.width = `${requiredWidth}px`;
+                
+                startX += requiredWidth + 20;
+                if (startX > container.clientWidth - 200) { startX = 40; startY += 180; }
+            }
+            
+            // Remove parenthesized blocks to process the rest
+            expr = expr.replace(parenRegex, '');
+            const terms = expr.match(/[+-]?[^+-]+/g);
+
+            if (terms) {
+                terms.forEach(term => {
+                    if (term[0] !== '+' && term[0] !== '-') term = '+' + term;
+                    const sign = term[0];
+                    const rest = term.slice(1);
+                    let base = '1'; let coeffStr = rest;
+
+                    if (rest.includes('x')) { base = 'x'; coeffStr = rest.replace('x', ''); }
+                    else if (rest.includes('y')) { base = 'y'; coeffStr = rest.replace('y', ''); }
+
+                    const coeff = coeffStr === '' ? 1 : parseInt(coeffStr);
+                    if (isNaN(coeff) || coeff <= 0) return; 
+
+                    createTileElement(sign + base, startX, startY, coeff, container);
+                    startX += 90;
+                    if (startX > container.clientWidth - 100) { startX = 40; startY += 110; }
+                });
+            }
+
+            updateEquation();
+            inputField.value = '';
+        }
+
+        // --- Dynamic Tips Initialization ---
+        const tipContainer = document.getElementById('dynamic-tip');
+        if (tipContainer) {
+            setInterval(() => {
+                tipContainer.style.opacity = '0';
+                setTimeout(() => {
+                    currentTipIndex = (currentTipIndex + 1) % tipsArray.length;
+                    tipContainer.innerHTML = tipsArray[currentTipIndex];
+                    tipContainer.style.opacity = '0.9';
+                }, 500);
+            }, 5000);
+        }
+
+
+        // --- Extensions: synthesized sound, rational coefficients, variables, and exercises ---
+        const audioCtx = window.AudioContext ? new AudioContext() : null;
+        function playSound(kind='add') {
+            if (!audioCtx) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const patterns={add:[440,660],clear:[220,165,110],sum:[523,659,784],subtract:[392,311],disappear:[740,440],paren:[330,494],parenSign:[294,440],expression:[523,659,784,988],flip:[587,440]};
+            const seq=patterns[kind]||patterns.add;
+            seq.forEach((hz,i)=>{ const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.type=kind==='clear'?'triangle':'sine'; o.frequency.value=hz; const t=audioCtx.currentTime+i*.075; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.075,t+.012); g.gain.exponentialRampToValueAtTime(.0001,t+.13); o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+.14); });
+        }
+        const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a||1};
+        function rational(n,d=1){ n=Number(n);d=Number(d);if(!Number.isFinite(n)||!Number.isFinite(d)||d===0)return {n:0,d:1}; if(d<0){n=-n;d=-d} const g=gcd(Math.round(Math.abs(n)*1000000),Math.round(d*1000000)); let nn=Math.round(n*1000000),dd=Math.round(d*1000000);const gg=gcd(nn,dd);return {n:nn/gg,d:dd/gg}; }
+        function parseRational(raw){
+            let x=String(raw??'').trim().replace(/,/g,'.'); if(!x) return null;
+            let sign=1;if(x[0]==='-'){sign=-1;x=x.slice(1)}else if(x[0]==='+')x=x.slice(1);
+            let m=x.match(/^(\d+)\s+(\d+)\/(\d+)$/); if(m){const den=+m[3];return den? rational(sign*(+m[1]*den + +m[2]),den):null;}
+            m=x.match(/^(\d+)\/(\d+)$/); if(m)return +m[2]?rational(sign*+m[1],+m[2]):null;
+            if(/^\d*\.?\d+$/.test(x)){const v=Number(x),dec=(x.split('.')[1]||'').length;return rational(sign*Math.round(v*10**dec),10**dec)} return null;
+        }
+        function absRat(t){return rational(Number(t.dataset.num||t.dataset.coeff||1),Number(t.dataset.den||1));}
+        function valueFormat(raw){const x=String(raw??'').trim();return x.includes(' ')?'mixed':x.includes('/')?'fraction':x.includes('.')||x.includes(',')?'decimal':'integer'}
+        function ratTex(r,format='fraction'){r=rational(r.n,r.d);const sign=r.n<0?'-':'',n=Math.abs(r.n);if(format==='decimal'){const val=(n/r.d).toFixed(8).replace(/0+$/,'').replace(/\.$/,'');return sign+(val||'0')}if(format==='mixed'&&r.d>1&&n>=r.d){const whole=Math.floor(n/r.d),rem=n%r.d;return sign+(rem?`${whole}\\,\\frac{${rem}}{${r.d}}`:String(whole))}if(r.d===1)return sign+String(n);return `${sign}\\frac{${n}}{${r.d}}`;}
+        function renderMath(node,tex){node.innerHTML=`\\(${tex}\\)`; if(window.MathJax?.typesetPromise) MathJax.typesetPromise([node]).catch(()=>{});}
+        function signedType(type,sign){return (sign<0?'-':'+')+type.slice(1)}
+        function setTileSign(tile,sign){
+            const positiveType=signedType(tile.dataset.type,1),negativeType=signedType(tile.dataset.type,-1),nextType=sign<0?negativeType:positiveType;
+            const color=tile.dataset.color||tileConfig[positiveType]?.colorClass||'bg-violet-500',shape=tile.dataset.shape||'tile-unit',custom=tile.dataset.kind==='variable'||tile.dataset.kind==='number',isHex=/^#[0-9a-f]{3,8}$/i.test(color);
+            tileConfig[positiveType]={...(tileConfig[positiveType]||{}),colorClass:isHex?'bg-violet-500':color,shapeClass:shape,opposite:negativeType};
+            tileConfig[negativeType]={...(tileConfig[negativeType]||{}),colorClass:'bg-red-500',shapeClass:shape,opposite:positiveType};
+            tile.dataset.type=nextType;
+            const selected=tile.classList.contains('selected');
+            tile.className=`algebra-tile ${sign<0?'bg-red-500':(isHex?'':color)} ${shape} ${selected?'selected':''}`;
+            tile.style.backgroundColor=isHex?(sign<0?'#ef4444':color):'';
+            const signButton=tile.querySelector('.flip-btn');if(signButton)signButton.textContent=sign<0?'−':'+';
+        }
+        function typeSign(tile){return tile.dataset.type?.[0]==='-'?-1:1}
+        function decodeLegacy(type){const base=type.slice(1);if(base==='1')return {kind:'number',num:1,den:1};const m=base.match(/^(.+?)(?:\^(\d+))?$/);return {kind:'variable',letter:m?.[1]||base,exponent:Number(m?.[2]||1),num:1,den:1}}
+        function createTileElement(type,x,y,coeff=1,parentNode=container,forceId=null,meta=null){
+            const legacy=decodeLegacy(type), custom=meta||{}, kind=custom.kind||legacy.kind;
+            const letter=custom.letter||legacy.letter, exponent=Number(custom.exponent??legacy.exponent??1);
+            const num=Number(custom.num??(kind==='number'?1:coeff)), den=Number(custom.den??1);
+            const positiveType=signedType(type,1), color=custom.color||tileConfig[positiveType]?.colorClass||tileConfig[type]?.colorClass||'bg-violet-500';
+            const shape=custom.shape||(kind==='variable'?'tile-variable':'tile-unit');
+            const sign=type[0]==='-'?-1:1, isHex=/^#[0-9a-f]{3,8}$/i.test(color);
+            const tile=document.createElement('div');tile.className=`algebra-tile ${isHex?'':(sign<0?'bg-red-500':color)} ${shape}`;
+            if(isHex)tile.style.backgroundColor=sign<0?'#ef4444':color;
+            tile.dataset.type=type;tile.dataset.coeff=coeff;tile.dataset.id=forceId||`tile-${tileIdCounter++}`;tile.dataset.kind=kind;tile.dataset.num=num;tile.dataset.den=den;tile.dataset.format=custom.format||(den!==1?'fraction':'integer');tile.dataset.color=color;tile.dataset.shape=shape;
+            if(kind==='variable'){tile.dataset.letter=letter;tile.dataset.exponent=exponent}
+            tile.style.left=`${x}px`;tile.style.top=`${y}px`;tile.title=kind==='variable'?'Right-click: change sign · Double-click: change exponent':'Right-click: change sign';
+            const textSpan=document.createElement('span');textSpan.className='tile-text drop-shadow-md';tile.appendChild(textSpan);
+            tile.addEventListener('contextmenu',e=>{e.preventDefault();e.stopPropagation();saveState();flipTileLogic(tile);updateEquation()});
+            tile.addEventListener('dblclick',e=>{if(tile.dataset.kind!=='variable')return;e.preventDefault();e.stopPropagation();openExponentModal(tile)});
+            updateTileText(tile);tile.addEventListener('mousedown',startDrag);tile.addEventListener('touchstart',startDrag,{passive:false});parentNode.appendChild(tile);return tile;
+        }
+        function updateTileText(tile){
+            if(!tile) return; const span=tile.querySelector('.tile-text');if(!span)return;const signButton=tile.querySelector('.flip-btn');if(signButton)signButton.textContent=typeSign(tile)<0?'−':'+';
+            const sign=typeSign(tile), r=absRat(tile), signTxt=sign<0?'-':'';
+            if(tile.dataset.kind==='variable') {let coef=ratTex(r,tile.dataset.format);if(r.n===1&&r.d===1)coef='';const variable=`${tile.dataset.letter}${Number(tile.dataset.exponent)>1?`^{${tile.dataset.exponent}}`:''}`;renderMath(span,`${signTxt}${coef}${variable}`)}
+            else if(tile.dataset.kind==='number'){renderMath(span,`${signTxt}${ratTex(r,tile.dataset.format)}`)}
+            else {const base=tile.dataset.type.slice(1);const val=Number(tile.dataset.coeff||1);span.textContent=base==='1'?`${signTxt}${val}`:`${signTxt}${val>1?val:''}${base}`}
+        }
+        function addTile(type){saveState();const x=container.clientWidth/2-40+(Math.random()*40-20),y=container.clientHeight/2-40+(Math.random()*40-20);createTileElement(type,x,y,1,container);playSound('add');updateEquation()}
+        function flipTileLogic(tile,animated=true){if(!tile||tile.classList.contains('annihilate'))return;const flip=()=>{const sign=-typeSign(tile);setTileSign(tile,sign);updateTileText(tile);updateEquation()};if(animated){tile.classList.add('flip-anim-start');setTimeout(()=>{flip();tile.classList.remove('flip-anim-start')},150)}else flip();playSound('flip')}
+        function addParenthesis(){saveState();addParenthesisRaw('+',container.clientWidth/2-110,container.clientHeight/2-80);playSound('paren');updateEquation()}
+        function toggleParenSign(el,e){e.stopPropagation();saveState();const sign=el.innerText==='+'?'-':'+';el.innerText=sign;el.className=`paren-sign ${getSignClasses(sign)}`;playSound('parenSign');updateEquation()}
+        function applyParenSigns(btn,e){e.stopPropagation();saveState();const paren=btn.closest('.parenthesis'),sign=paren.querySelector('.paren-sign').innerText,content=paren.querySelector('.paren-content'),tiles=Array.from(content.querySelectorAll('.algebra-tile:not(.annihilate)')),rect=container.getBoundingClientRect();tiles.forEach(t=>{const r=t.getBoundingClientRect();if(sign==='-')flipTileLogic(t,false);container.appendChild(t);t.style.left=`${r.left-rect.left}px`;t.style.top=`${r.top-rect.top}px`});paren.remove();playSound('parenSign');updateEquation()}
+        function clearWorkspace(){saveState();container.innerHTML='';playSound('clear');updateEquation()}
+        function deleteSelected(){const selected=document.querySelectorAll('.algebra-tile.selected');if(selected.length){saveState();selected.forEach(t=>t.remove());playSound('disappear');updateEquation()}}
+        function termTex(t){const sign=typeSign(t),r=absRat(t),sg=sign<0?'-':'+'; if(t.dataset.kind==='variable'){let c=ratTex(r,t.dataset.format);if(r.n===1&&r.d===1)c='';return `${sg}${c}${t.dataset.letter}${Number(t.dataset.exponent)>1?`^{${t.dataset.exponent}}`:''}`} if(t.dataset.kind==='number')return `${sg}${ratTex(r,t.dataset.format)}`;const base=t.dataset.type.slice(1),n=Number(t.dataset.coeff||1);return `${sg}${base==='1'?n:`${n>1?n:''}${base}`}`}
+        function joinTerms(tiles){let out='';tiles.forEach(t=>{let x=termTex(t);if(!out)out=x[0]==='+'?x.slice(1):x;else out+=x[0]==='-'?` ${x}`:` + ${x.slice(1)}`});return out||'0'}
+        function updateEquation(){
+            let top=Array.from(container.children).filter(c=>(c.classList.contains('algebra-tile')&&!c.classList.contains('annihilate'))||c.classList.contains('parenthesis'));top.sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left);
+            if(!top.length){equationDisplay.textContent='0';equationDisplay.classList.replace('text-gray-800','text-gray-400');return}
+            const parts=[];top.forEach(el=>{if(el.classList.contains('algebra-tile'))parts.push(termTex(el));else{const sign=el.querySelector('.paren-sign').innerText, children=Array.from(el.querySelector('.paren-content').querySelectorAll('.algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left);const inside=joinTerms(children);parts.push(`${sign==='-'?'-':'+'}(${inside})`)}});
+            let output='';parts.forEach(x=>{if(!output)output=x[0]==='+'?x.slice(1):x;else output+=x[0]==='-'?` - ${x.slice(1)}`:` + ${x.slice(1)}`});equationDisplay.classList.replace('text-gray-400','text-gray-800');renderMath(equationDisplay,output||'0');
+        }
+        function signedNumber(t){const r=absRat(t);return rational(r.n*typeSign(t),r.d)}
+        function setRationalTile(t,r,kind){r=rational(r.n,r.d);t.dataset.kind=kind;t.dataset.num=Math.abs(r.n);t.dataset.den=r.d;t.dataset.coeff=Math.abs(r.n);t.dataset.format=r.d===1?'integer':'fraction';setTileSign(t,r.n<0?-1:1);updateTileText(t)}
+        function checkCollision(droppedTile){
+            if(droppedTile.classList.contains('annihilate'))return;const r1=droppedTile.getBoundingClientRect(),siblings=droppedTile.parentElement.querySelectorAll('.algebra-tile:not(.annihilate)');
+            for(const other of siblings){if(other===droppedTile||other.classList.contains('dragging'))continue;const r2=other.getBoundingClientRect();if(r1.right<r2.left||r1.left>r2.right||r1.bottom<r2.top||r1.top>r2.bottom)continue;
+                const a=droppedTile.dataset.kind,b=other.dataset.kind;
+                if(a==='number'&&b==='number') {const x=signedNumber(droppedTile),y=signedNumber(other),sum=rational(x.n*y.d+y.n*x.d,x.d*y.d);playSound(sum.n===0?'disappear':x.n*y.n<0?'subtract':'sum');if(sum.n===0)annihilateTiles(droppedTile,other);else{setRationalTile(droppedTile,sum,'number');other.classList.add('annihilate');setTimeout(()=>{other.remove();updateEquation()},300)}return}
+                if(a==='variable'&&b==='variable'&&droppedTile.dataset.letter===other.dataset.letter&&droppedTile.dataset.exponent===other.dataset.exponent){const x=signedNumber(droppedTile),y=signedNumber(other),sum=rational(x.n*y.d+y.n*x.d,x.d*y.d);playSound(sum.n===0?'disappear':x.n*y.n<0?'subtract':'sum');if(sum.n===0)annihilateTiles(droppedTile,other);else{setRationalTile(droppedTile,sum,'variable');other.classList.add('annihilate');setTimeout(()=>{other.remove();updateEquation()},300)}return}
+                // Keep legacy behavior for unmatched/legacy algebra tiles
+                const type1=droppedTile.dataset.type,type2=other.dataset.type,co1=Number(droppedTile.dataset.coeff||1),co2=Number(other.dataset.coeff||1);
+                if(type1===type2){other.dataset.coeff=co1+co2;updateTileText(other);droppedTile.classList.add('annihilate');playSound('sum');setTimeout(()=>{droppedTile.remove();updateEquation()},300);return}
+                if(tileConfig[type1]?.opposite===type2){playSound('subtract');if(co1===co2)annihilateTiles(droppedTile,other);else if(co1>co2){droppedTile.dataset.coeff=co1-co2;updateTileText(droppedTile);other.classList.add('annihilate');setTimeout(()=>{other.remove();updateEquation()},300)}else{other.dataset.coeff=co2-co1;updateTileText(other);droppedTile.classList.add('annihilate');setTimeout(()=>{droppedTile.remove();updateEquation()},300)}return}
+            }
+        }
+        function annihilateTiles(a,b){a.classList.add('annihilate');b.classList.add('annihilate');playSound('disappear');setTimeout(()=>{a.remove();b.remove();updateEquation()},300)}
+        function handleLongPress(tile){if(!tile||tile.classList.contains('annihilate'))return;saveState();const coeff=Number(tile.dataset.coeff||1),type=tile.dataset.type,parent=tile.parentElement;if(coeff>1&&tile.dataset.kind==='variable'&&tile.dataset.den==='1'){tile.dataset.coeff=1;tile.dataset.num=1;updateTileText(tile);for(let i=1;i<coeff;i++)createTileElement(type,parseFloat(tile.style.left)+i*25,parseFloat(tile.style.top)+i*25,1,parent,null,{kind:'variable',letter:tile.dataset.letter,exponent:tile.dataset.exponent,num:1,den:1,color:tile.dataset.color});playSound('add')}else if(coeff===1){const same=Array.from(parent.querySelectorAll('.algebra-tile:not(.annihilate)')).filter(o=>o!==tile&&o.dataset.type===type&&!dragGroup.some(item=>item.el===o));if(same.length){let sum=1;same.forEach(o=>{sum+=Number(o.dataset.coeff||1);o.remove()});tile.dataset.coeff=sum;tile.dataset.num=sum;updateTileText(tile);playSound('sum')}}updateEquation()}
+        function openTileModal(kind){
+            const root=document.getElementById('tile-modal');root.classList.remove('hidden');const isVar=kind==='variable';root.innerHTML=`<div class="modal-card"><div class="flex justify-between items-center"><h2 class="text-xl font-bold">Create ${isVar?'Variable':'Number'} Tile</h2><button onclick="closeModal('tile-modal')" class="text-2xl text-slate-400">×</button></div><form id="tile-form">
+                <label class="form-field">Color<input id="tile-color" type="color" value="${isVar?'#8b5cf6':'#06b6d4'}"></label>
+                ${isVar?'<label class="form-field">Letter<input id="tile-letter" value="a" maxlength="2" pattern="[A-Za-z]{1,2}" required></label><label class="form-field">Exponent degree<select id="tile-exponent">'+[1,2,3,4,5].map(n=>`<option>${n}</option>`).join('')+'</select></label><label class="form-field">Coefficient (integer, decimal, or fraction)<input id="tile-value" value="1" placeholder="e.g.: 2, 0.5, 3/4" required></label>':'<label class="form-field">Number value (integer, decimal, mixed number, or fraction)<input id="tile-value" value="1" placeholder="e.g.: 7/4, 1 3/4, 1.75" required></label>'}
+                <label class="form-field">Initial sign<select id="tile-sign"><option value="1">Positive (+)</option><option value="-1">Negative (−)</option></select></label>
+                <div class="flex justify-end gap-2 mt-5"><button type="button" onclick="closeModal('tile-modal')" class="px-4 py-2 rounded-lg bg-slate-100">Cancel</button><button class="px-4 py-2 rounded-lg bg-violet-600 text-white font-semibold">Create Tile</button></div></form></div>`;
+            document.getElementById('tile-form').onsubmit=e=>{e.preventDefault();const rawValue=document.getElementById('tile-value').value, r=parseRational(rawValue);if(!r||r.n===0){alert('Enter a non-zero rational number.');return}const sign=Number(document.getElementById('tile-sign').value),color=document.getElementById('tile-color').value,shape=isVar?'tile-variable':'rational-tile',meta={kind:isVar?'variable':'number',num:Math.abs(r.n),den:r.d,format:valueFormat(rawValue),color,shape};let type;if(isVar){meta.letter=document.getElementById('tile-letter').value.trim();meta.exponent=Number(document.getElementById('tile-exponent').value);type=`${sign<0?'-':'+'}v_${meta.letter}_${meta.exponent}`}else type=sign<0?'-n':'+n';const opp=sign<0?type.replace(/^-/,'+') : type.replace(/^\+/,'-');tileConfig[type]={colorClass:color,shapeClass:shape,opposite:opp};tileConfig[opp]={colorClass:sign<0?'bg-violet-500':color,shapeClass:shape,opposite:type};saveState();createTileElement(type,container.clientWidth/2-40,container.clientHeight/2-40,Math.abs(r.n),container,null,meta);playSound('add');updateEquation();closeModal('tile-modal')};
+        }
+        function openExponentModal(tile){
+            if(!tile||tile.dataset.kind!=='variable')return;
+            const root=document.getElementById('exponent-modal'),current=Number(tile.dataset.exponent||1);root.classList.remove('hidden');
+            root.innerHTML=`<div class="modal-card"><div class="flex justify-between items-center"><h2 class="text-xl font-bold">Change Exponent</h2><button type="button" onclick="closeModal('exponent-modal')" class="text-2xl text-slate-400">×</button></div><form id="exponent-form"><label class="form-field">Choose an exponent<select id="exponent-choice"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="manual">Enter manually…</option></select></label><label class="form-field hidden" id="manual-exponent-wrap">Custom exponent<input id="manual-exponent" type="number" min="1" step="1" value="${Math.max(5,current)}" placeholder="Enter a positive integer"></label><p class="text-sm text-slate-500">Variable: <b>${tile.dataset.letter}</b></p><div class="flex justify-end gap-2 mt-5"><button type="button" onclick="closeModal('exponent-modal')" class="px-4 py-2 rounded-lg bg-slate-100">Cancel</button><button class="px-4 py-2 rounded-lg bg-violet-600 text-white font-semibold">Apply Exponent</button></div></form></div>`;
+            const choice=root.querySelector('#exponent-choice'),manualWrap=root.querySelector('#manual-exponent-wrap');
+            if(current>=1&&current<=4)choice.value=String(current);else{choice.value='manual';manualWrap.classList.remove('hidden');root.querySelector('#manual-exponent').value=String(current)}
+            choice.addEventListener('change',()=>manualWrap.classList.toggle('hidden',choice.value!=='manual'));
+            root.querySelector('#exponent-form').onsubmit=e=>{e.preventDefault();let power=choice.value==='manual'?Number(root.querySelector('#manual-exponent').value):Number(choice.value);if(!Number.isInteger(power)||power<1){alert('The exponent must be a positive integer.');return}saveState();const letter=tile.dataset.letter,sign=typeSign(tile),oldType=tile.dataset.type,nextType=(sign<0?'-':'+')+((power===1&&(letter==='x'||letter==='y'))?letter:`v_${letter}_${power}`);tile.dataset.exponent=power;tile.dataset.type=nextType;tileConfig[nextType]={...(tileConfig[oldType]||{}),colorClass:tile.dataset.color,shapeClass:tile.dataset.shape,opposite:(sign<0?'+':'-')+nextType.slice(1)};tileConfig[tileConfig[nextType].opposite]={colorClass:'bg-red-500',shapeClass:tile.dataset.shape,opposite:nextType};updateTileText(tile);updateEquation();closeModal('exponent-modal')};
+        }
+        function closeModal(id){document.getElementById(id)?.classList.add('hidden')}
+        // Parser for linear sums, rational coefficients and one-level parenthetical groups.
+        function parseTermIntoTile(raw,x,y,parent){let term=raw.trim();if(!term)return x;let sign=1;if(term[0]==='-'){sign=-1;term=term.slice(1)}else if(term[0]==='+')term=term.slice(1);term=term.trim();
+            const vm=term.match(/^(.*?)([A-Za-z])(?:\^(\d+))?$/);
+            if(vm){let coeffText=vm[1].trim()||'1',r=parseRational(coeffText);if(!r)return x;const letter=vm[2],exp=Number(vm[3]||1);if(r.n<0){sign*=-1;r=rational(-r.n,r.d)}const legacy=(letter==='x'||letter==='y')&&exp===1&&r.d===1;let type=legacy?`${sign<0?'-':'+'}${letter}`:`${sign<0?'-':'+'}v_${letter}_${exp}`;const variableColors={a:'bg-violet-500',b:'bg-emerald-500',c:'bg-orange-500',d:'bg-pink-500'};const positiveType=signedType(type,1);const color=tileConfig[positiveType]?.colorClass||variableColors[letter]||'bg-violet-500';tileConfig[type]??={colorClass:color,shapeClass:legacy?(letter==='x'?'tile-x':'tile-y'):'tile-variable',opposite:`${sign<0?'+':'-'}${type.slice(1)}`};tileConfig[tileConfig[type].opposite]??={...tileConfig[type],opposite:type};createTileElement(type,x,y,Math.abs(r.n),parent,null,{kind:'variable',letter,exponent:exp,num:Math.abs(r.n),den:r.d,format:valueFormat(coeffText),color,shape:legacy?(letter==='x'?'tile-x':'tile-y'):'tile-variable'});return x+95}
+            const r=parseRational(term);if(!r)return x;if(r.n<0){sign*=-1;r=rational(-r.n,r.d)}const type=sign<0?'-n':'+n';tileConfig[type]??={colorClass:'bg-cyan-500',shapeClass:'rational-tile',opposite:sign<0?'+n':'-n'};createTileElement(type,x,y,Math.abs(r.n),parent,null,{kind:'number',num:Math.abs(r.n),den:r.d,format:valueFormat(term),color:tileConfig[type].colorClass,shape:'rational-tile'});return x+65;
+        }
+        function sanitizeExerciseInput(input){const allowed=(input.value||'').replace(/[^A-Za-z0-9.+\-/^()\s]/g,'');if(input.value!==allowed){const pos=input.selectionStart;input.value=allowed;if(pos!==null)input.setSelectionRange(Math.min(pos,allowed.length),Math.min(pos,allowed.length))}}
+        function insertExercise(){const inputField=document.getElementById('exercise-input');sanitizeExerciseInput(inputField);const input=inputField.value.trim();if(!input)return;saveState();container.innerHTML='';let expr=input.replace(/\s+/g,' ').trim(),x=40,y=120;
+            const parenRegex=/([+-]?)\(([^()]+)\)/g;let match;while((match=parenRegex.exec(expr))){const sign=match[1]==='-'?'-':'+',paren=addParenthesisRaw(sign,x,y),content=paren.querySelector('.paren-content');let ix=12;const tokens=match[2].match(/[+-]?\s*(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)?\s*[A-Za-z]?(?:\^\d+)?/g)||[];tokens.filter(t=>t.trim()).forEach(t=>{ix=parseTermIntoTile(t,ix,24,content)});paren.style.width=`${Math.max(220,ix+30)}px`;x+=Math.max(250,ix+50);if(x>container.clientWidth-240){x=40;y+=190}}
+            expr=expr.replace(parenRegex,'');const tokens=expr.match(/[+-]?\s*(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)?\s*[A-Za-z]?(?:\^\d+)?/g)||[];tokens.filter(t=>t.trim()).forEach(t=>{x=parseTermIntoTile(t,x,y,container);if(x>container.clientWidth-100){x=40;y+=110}});playSound('expression');updateEquation();inputField.value='';
+        }
+        // Exercise setup and generator
+        const exerciseSettings={terms:3,operators:'combined',variables:1,variableMode:'combined',numbers:'mixed',parentheses:'none',degree:'combined'};
+        function openExerciseSettings(){const root=document.getElementById('exercise-modal');root.classList.remove('hidden');root.innerHTML=`<div class="modal-card"><div class="flex justify-between items-center"><h2 class="text-xl font-bold">Configure Exercises</h2><button onclick="closeModal('exercise-modal')" class="text-2xl text-slate-400">×</button></div><form id="exercise-form">
+            <label class="form-field">Number of terms<select name="terms">${[1,2,3,4,5].map(n=>`<option value="${n}" ${exerciseSettings.terms===n?'selected':''}>${n}</option>`).join('')}</select></label>
+            <label class="form-field">Operators<select name="operators"><option value="sum">Addition</option><option value="sub">Subtraction</option><option value="combined" selected>Combined</option></select></label>
+            <label class="form-field">Number of variables (max. 4)<select name="variables">${[1,2,3,4].map(n=>`<option value="${n}" ${exerciseSettings.variables===n?'selected':''}>${n===1?'One':n+' variables'}</option>`).join('')}</select></label>
+            <label class="form-field"><span><input type="checkbox" name="variableCombined" class="mr-2 accent-violet-600"> Combine variables within terms</span><small class="font-normal text-slate-500">Uncheck to keep variables in separate terms.</small></label>
+            <label class="form-field">Number and coefficient type<select name="numbers"><option value="integer">Integers</option><option value="fraction">Fractions</option><option value="decimal">Decimals</option><option value="mixed">Mixed numbers</option><option value="combined">Combined</option></select></label>
+            <label class="form-field">Parentheses<select name="parentheses"><option value="none">No parentheses</option><option value="all">All terms in parentheses</option><option value="half">Half in parentheses, half without</option><option value="two">Two parentheses (one on each side)</option></select></label>
+            <label class="form-field">Variable exponent degree<select name="degree"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="combined">Combined</option></select></label>
+            <div class="flex justify-end gap-2 mt-5"><button type="button" onclick="closeModal('exercise-modal')" class="px-4 py-2 rounded-lg bg-slate-100">Cancel</button><button class="px-4 py-2 rounded-lg bg-violet-600 text-white font-semibold">Save</button></div></form></div>`;
+            const form=document.getElementById('exercise-form');for(const [k,v] of Object.entries(exerciseSettings)){if(k!=='variableMode'&&form.elements[k])form.elements[k].value=v}form.elements.variableCombined.checked=exerciseSettings.variableMode==='combined';form.onsubmit=e=>{e.preventDefault();for(const k of Object.keys(exerciseSettings)){if(k!=='variableMode')exerciseSettings[k]=form.elements[k].value}exerciseSettings.variableMode=form.elements.variableCombined.checked?'combined':'separate';exerciseSettings.terms=Number(exerciseSettings.terms);exerciseSettings.variables=Number(exerciseSettings.variables);generateExercise();closeModal('exercise-modal')};
+        }
+        function randomInt(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+        function generatedValue(mode){const choices=mode==='combined'?['integer','fraction','decimal','mixed']:[mode];const kind=choices[randomInt(0,choices.length-1)];if(kind==='fraction')return `${randomInt(1,7)}/${randomInt(2,9)}`;if(kind==='decimal')return `${randomInt(1,9)}.${randomInt(1,9)}`;if(kind==='mixed')return `${randomInt(1,3)} ${randomInt(1,4)}/${randomInt(2,7)}`;return String(randomInt(1,9))}
+        function generateExercise(){
+            const count=exerciseSettings.terms,letters=['a','b','c','d'],nvars=exerciseSettings.variables,used=letters.slice(0,nvars),terms=[];
+            for(let i=0;i<count;i++){
+                let letter='';
+                if(exerciseSettings.variableMode==='separate') letter=used[i%nvars];
+                else if(i<nvars) letter=used[i];
+                else if(Math.random()<.65) letter=used[randomInt(0,nvars-1)];
+                const exp=letter?(exerciseSettings.degree==='combined'?randomInt(1,5):Number(exerciseSettings.degree)):1;
+                const value=generatedValue(exerciseSettings.numbers);terms.push(`${value}${letter?letter+(exp>1?`^${exp}`:''):''}`);
+            }
+            const ops=terms.map((_,i)=>i===0?(Math.random()<.5?'+':'-'):(exerciseSettings.operators==='sum'?'+':exerciseSettings.operators==='sub'?'-':Math.random()<.5?'+':'-'));
+            const group=(start,end)=>{let out=(ops[start]==='-'?'-':'')+terms[start];for(let i=start+1;i<end;i++)out+=` ${ops[i]} ${terms[i]}`;return out};
+            let expr=group(0,count),mode=exerciseSettings.parentheses;
+            if(mode==='all')expr=`(${expr})`;
+            else if(mode==='half'&&count>1){const split=Math.ceil(count/2);expr=`(${group(0,split)})`;for(let i=split;i<count;i++)expr+=` ${ops[i]} ${terms[i]}`}
+            else if(mode==='two'){const split=count>1?Math.ceil(count/2):1;const first=group(0,split),second=count>1?group(split,count):(Math.random()<.5?terms[0]:`-${terms[0]}`);const outer1=Math.random()<.5?'-':'',outer2=Math.random()<.5?'-':'+';expr=`${outer1}(${first}) ${outer2}(${second})`}
+            document.getElementById('exercise-input').value=expr;insertExercise();
+        }
+        // Logo click generates; one-second hold opens setup.
+        const exerciseBtn=document.getElementById('create-exercise-btn');let exerciseHold=null,exerciseWasLong=false;
+        exerciseBtn.addEventListener('pointerdown',()=>{exerciseWasLong=false;exerciseHold=setTimeout(()=>{exerciseWasLong=true;openExerciseSettings()},1000)});
+        ['pointerup','pointerleave','pointercancel'].forEach(ev=>exerciseBtn.addEventListener(ev,()=>clearTimeout(exerciseHold)));
+        exerciseBtn.addEventListener('click',()=>{if(exerciseWasLong){exerciseWasLong=false;return}generateExercise()});
+        // Include custom metadata in undo/redo snapshots.
+        const baseGetStateSnapshot=getStateSnapshot;
+        getStateSnapshot=function(){const state=JSON.parse(baseGetStateSnapshot());state.tiles.forEach(t=>{const el=document.querySelector(`.algebra-tile[data-id="${t.id}"]`);if(el){for(const k of ['kind','num','den','format','letter','exponent','color','shape'])if(el.dataset[k]!==undefined)t[k]=el.dataset[k]}});return JSON.stringify(state)};
+        const baseLoadState=loadState;
+        loadState=function(str){if(!str)return;const state=JSON.parse(str);container.innerHTML='';state.parens.forEach(d=>{const p=addParenthesisRaw(d.sign,parseFloat(d.left),parseFloat(d.top),d.id);if(d.width)p.style.width=d.width;if(d.height)p.style.height=d.height});state.tiles.forEach(d=>{let parent=container;if(d.parentId!=='container'){const p=container.querySelector(`.parenthesis[data-id="${d.parentId}"]`);if(p)parent=p.querySelector('.paren-content')}createTileElement(d.type,parseFloat(d.left),parseFloat(d.top),d.coeff,parent,d.id,{kind:d.kind,num:Number(d.num??d.coeff),den:Number(d.den||1),format:d.format,letter:d.letter,exponent:Number(d.exponent||1),color:d.color,shape:d.shape})});updateEquation()};
+        window.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;if(e.key==='Delete'||e.key==='Backspace')deleteSelected()});
+        // Clean tile gestures: right-click changes sign; double-left-click opens exponent settings.
+        // The final tile factory binds these events on every newly created or restored tile.
+        const sidebarToggle=document.getElementById('sidebar-toggle'),sidebarPanel=document.getElementById('sidebar-panel');
+        sidebarToggle.addEventListener('click',()=>{const collapsed=document.body.classList.toggle('sidebar-collapsed');sidebarToggle.textContent=collapsed?'›':'‹';sidebarToggle.setAttribute('aria-expanded',String(!collapsed));sidebarToggle.title=collapsed?'Expand tile panel':'Collapse tile panel';setTimeout(updateEquation,320)});
+        const authorBadge=document.getElementById('author-badge'),authorLogo=document.getElementById('author-logo');
+        authorLogo.addEventListener('click',()=>{const collapsed=authorBadge.classList.toggle('author-collapsed');authorLogo.setAttribute('aria-expanded',String(!collapsed));authorLogo.title=collapsed?'Show David Beleño’s information':'Collapse author information';authorLogo.setAttribute('aria-label',authorLogo.title)});
+        // Add distinct sounds to deletion animations and newly inserted expressions.
+        window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise){const mathNodes=Array.from(document.querySelectorAll('.tile-text,#equation-display'));MathJax.typesetPromise(mathNodes).catch(()=>{})}});
+
+        updateEquation();
+    </script>
+</body>
+</html>
