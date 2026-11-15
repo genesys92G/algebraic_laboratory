@@ -60,22 +60,112 @@
         #author-badge.author-collapsed #author-info { display:none; }
         #author-logo { width:28px;height:28px;flex:0 0 28px;border:0;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#0e7490,#4338ca);color:white;font-size:10px;font-weight:900;letter-spacing:-.04em;box-shadow:0 0 12px rgba(14,165,233,.35);cursor:pointer;transition:transform .18s,box-shadow .18s; }
         #author-logo:hover { transform:scale(1.1);box-shadow:0 0 16px rgba(14,165,233,.6); }
+
+        .product-tile { border:2px solid rgba(255,255,255,.78); overflow:visible; color:#fff; font-weight:800; text-shadow:0 1px 4px rgba(15,23,42,.75); width:max-content!important; min-width:80px; max-width:none; height:80px!important; padding:0 16px; flex:0 0 auto; }
+        .product-tile .tile-text { white-space:nowrap; }
+        .product-preview { opacity:0; transform:scale(.72); transition:opacity .65s ease,transform .65s cubic-bezier(.2,.8,.2,1); pointer-events:none!important; }
+        .product-preview.is-revealed { opacity:1; transform:scale(1); }
+        .distribution-original.is-separating { opacity:.16!important; filter:blur(2px); transition:opacity .6s ease,filter .6s ease; }
+        .distribution-source.is-separating { opacity:.12!important; transform:scale(.82); transition:opacity .65s ease,transform .65s ease; }
+        .distribution-arrow { fill:none;stroke-width:3;stroke-dasharray:12 8;stroke-linecap:round;animation:arrow-draw 1.55s ease-in-out forwards;filter:drop-shadow(0 0 4px currentColor); }
+        @keyframes arrow-draw { from { stroke-dashoffset:var(--path-length);opacity:.1; } 20% { opacity:1; } 85% { opacity:1; } to { stroke-dashoffset:0;opacity:.95; } }
+        .product-finalizing { transition:left .75s cubic-bezier(.2,.75,.2,1),top .75s cubic-bezier(.2,.75,.2,1),opacity .5s ease; }
+        .product-tile.negative-product { box-shadow:inset 0 0 0 3px #ef4444,0 6px 14px rgba(15,23,42,.24); }
+        .distribution-source { outline:4px solid #a855f7!important; outline-offset:4px; animation:factor-pulse .75s infinite alternate; }
+        .distribution-target { border-color:#8b5cf6!important; box-shadow:0 0 0 4px rgba(139,92,246,.2),0 10px 24px rgba(15,23,42,.18)!important; }
+        @keyframes factor-pulse { to { outline-color:#22d3ee; } }
+        .distribution-arrows { position:fixed;inset:0;width:100vw;height:100vh;z-index:19000;pointer-events:none;overflow:visible; }
+        #author-logo { width:32px;height:32px;flex:0 0 32px;font-size:0; }
+        #author-logo svg { width:19px;height:19px; }
+        #operator-mode-controls { display:flex;align-items:center;gap:7px;margin-left:3px;padding-left:9px;border-left:1px solid rgba(148,163,184,.45); }
+        .operator-button { width:34px;height:34px;flex:0 0 34px;border:2px solid rgba(255,255,255,.88);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;line-height:1;font-weight:800;box-shadow:0 3px 10px rgba(15,23,42,.18);cursor:pointer;transition:transform .16s,box-shadow .16s,filter .16s; }
+        .operator-button:hover { transform:translateY(-2px) scale(1.06);box-shadow:0 5px 14px rgba(15,23,42,.28); }
+        .operator-button.is-active { outline:3px solid rgba(255,255,255,.78);outline-offset:2px;transform:scale(1.08); }
+        .operator-addition { background:linear-gradient(145deg,#059669,#10b981); }
+        .operator-multiplication { background:linear-gradient(145deg,#6d28d9,#a855f7); }
+        .operator-division { background:linear-gradient(145deg,#e11d48,#fb7185); }
+        .operator-division:disabled { opacity:.72;cursor:not-allowed;filter:saturate(.75); }
+        body.mode-multiplication #expression-inserter,body.mode-multiplication #create-exercise-btn { display:flex!important; }
+        body.mode-multiplication #expression-inserter { right:1rem; }
+        @media(max-width:640px) { #author-badge { top:8px;gap:5px;padding:5px 7px; } #operator-mode-controls { gap:5px;margin-left:1px;padding-left:6px; } .operator-button { width:30px;height:30px;flex-basis:30px;font-size:18px; } #author-logo { width:29px;height:29px;flex-basis:29px; } }
         #equation-display mjx-container { margin:0 !important; }
+        #tiles-container.distribution-busy { pointer-events:none!important; }
+        #tiles-container.distribution-busy .algebra-tile,#tiles-container.distribution-busy .parenthesis { cursor:wait!important; }
+        body.distribution-lock-active #sidebar-panel,body.distribution-lock-active #expression-inserter,body.distribution-lock-active #operator-mode-controls { pointer-events:none!important;opacity:.58; }
+        .sign-rules-logo { position:absolute;top:1rem;right:4.25rem;z-index:30;border:1px solid rgba(14,165,233,.25);border-radius:12px;background:rgba(255,255,255,.92);color:#0f172a;padding:.55rem .8rem;font-size:.78rem;font-weight:700;box-shadow:0 5px 14px rgba(15,23,42,.12);backdrop-filter:blur(8px);transition:transform .16s,box-shadow .16s; }
+        .sign-rules-logo:hover { transform:translateY(-1px);box-shadow:0 8px 20px rgba(15,23,42,.18); }
+        .sign-rule-card { border:1px solid #e2e8f0;border-radius:12px;padding:14px;margin:10px 0;background:linear-gradient(135deg,#f8fafc,#eef2ff); }
+        .distribution-locked-note { position:fixed;left:50%;top:1rem;transform:translateX(-50%);z-index:19001;background:#0f172a;color:#fff;padding:.5rem 1rem;border-radius:999px;font-size:.8rem;box-shadow:0 6px 20px #0f172a44; }
+        .sign-rules-shell { width:min(760px,96vw);max-height:90vh;overflow:auto;border:1px solid rgba(255,255,255,.7);border-radius:24px;background:linear-gradient(145deg,#ffffff,#f1f5ff);box-shadow:0 28px 80px rgba(2,6,23,.38);padding:clamp(18px,4vw,32px);color:#0f172a; }
+        .sign-rule-heading { display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px; }
+        .sign-rule-kicker { color:#6366f1;font-size:10px;font-weight:900;letter-spacing:.2em;text-transform:uppercase; }
+        .sign-rule-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px; }
+        .sign-rule-example { border:1px solid #dbeafe;border-radius:18px;padding:16px;background:linear-gradient(145deg,#fff,#f8fafc);box-shadow:0 5px 14px rgba(15,23,42,.06);text-align:left;transition:transform .18s,border-color .18s,box-shadow .18s;cursor:pointer; }
+        .sign-rule-example:hover,.sign-rule-example.is-active { transform:translateY(-2px);border-color:#818cf8;box-shadow:0 10px 22px rgba(79,70,229,.15); }
+        .sign-rule-symbols { display:flex;align-items:center;gap:9px;margin-bottom:10px;font-size:25px;font-weight:900; }
+        .sign-symbol { display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:#eef2ff;color:#4338ca;box-shadow:inset 0 0 0 1px #c7d2fe; }
+        .sign-rule-feedback { margin-top:14px;border-radius:15px;padding:13px 16px;background:#0f172a;color:#e0f2fe;font-weight:700; }
+        .distribution-sequence-panel { position:fixed;left:50%;bottom:5.2rem;transform:translateX(-50%);z-index:19002;width:min(620px,calc(100vw - 24px));max-height:34vh;overflow:auto;border:1px solid rgba(129,140,248,.42);border-radius:18px;background:rgba(15,23,42,.96);color:#f8fafc;padding:14px 16px;box-shadow:0 18px 46px rgba(15,23,42,.32);backdrop-filter:blur(14px); }
+        .distribution-sequence-title { display:flex;align-items:center;justify-content:space-between;gap:12px;color:#a5f3fc;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:9px; }
+        .distribution-sequence-step { display:flex;align-items:center;justify-content:space-between;gap:16px;padding:9px 11px;margin-top:7px;border-radius:12px;background:linear-gradient(100deg,rgba(30,41,59,.96),rgba(49,46,129,.72));border:1px solid rgba(148,163,184,.2);font-size:13px; }
+        .distribution-sequence-step mjx-container { margin:0!important;color:inherit!important; }
+        .distribution-step-result { color:#86efac;font-weight:900;white-space:nowrap; }
+        .operator-division { width:auto;height:34px;flex:0 0 auto;border-radius:999px;padding:0 10px;gap:5px;font-size:12px; }
+        .division-symbol { font-size:20px;line-height:1; }
+        .division-coming-soon { font-size:9px;line-height:1.1;font-weight:900;letter-spacing:.02em;white-space:nowrap; }
+        @media(max-width:640px) { .sign-rule-grid { grid-template-columns:1fr; } .distribution-sequence-panel { bottom:4.5rem;max-height:30vh; } .operator-division { height:30px;padding:0 7px;gap:3px; } .division-coming-soon { font-size:8px; } }
+        @media(max-width:640px) { .sign-rules-logo { top:3.6rem;right:.65rem;padding:.45rem .6rem; } }
+
+        #expression-panel { top:5.35rem!important;left:1rem!important;width:min(380px,calc(100vw - 2rem));max-height:25vh;overflow:auto; }
+        #equation-display { max-width:100%;overflow-wrap:anywhere;word-break:break-word;font-size:clamp(1.15rem,2.2vw,1.875rem);line-height:1.25; }
+        .sign-rule-flip-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;perspective:1200px; }
+        .sign-rule-flip-card { min-height:260px;position:relative;border:0;background:transparent;padding:0;cursor:pointer;text-align:inherit;perspective:1200px; }
+        .sign-rule-flip-inner { position:absolute;inset:0;transform-style:preserve-3d;transition:transform .72s cubic-bezier(.2,.75,.2,1); }
+        .sign-rule-flip-card.is-flipped .sign-rule-flip-inner { transform:rotateY(180deg); }
+        .sign-rule-face { position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:24px;padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 18px 35px rgba(15,23,42,.16); }
+        .sign-rule-face-front.positive { background:radial-gradient(circle at 20% 10%,#a7f3d0,transparent 34%),linear-gradient(145deg,#059669,#047857);color:#fff; }
+        .sign-rule-face-back.positive { transform:rotateY(180deg);background:linear-gradient(145deg,#064e3b,#065f46);color:#ecfdf5; }
+        .sign-rule-face-front.negative { background:radial-gradient(circle at 20% 10%,#fecdd3,transparent 34%),linear-gradient(145deg,#e11d48,#be123c);color:#fff; }
+        .sign-rule-face-back.negative { transform:rotateY(180deg);background:linear-gradient(145deg,#881337,#9f1239);color:#fff1f2; }
+        .sign-rule-outcome-logo { display:grid;place-items:center;width:86px;height:86px;border:2px solid rgba(255,255,255,.68);border-radius:26px;background:rgba(255,255,255,.17);font-size:58px;font-weight:900;line-height:1;box-shadow:0 10px 26px rgba(15,23,42,.18); }
+        .sign-rule-example-line { border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.11);border-radius:12px;padding:8px 10px;margin-top:8px;width:100%;font:600 13px ui-monospace,SFMono-Regular,Menlo,monospace; }
+        .distribution-sequence-panel { position:fixed!important;left:12px!important;right:auto!important;top:16.5rem!important;bottom:1rem!important;transform:none!important;width:min(350px,32vw)!important;max-height:none!important;overflow:auto!important;z-index:19002!important; }
+        .distribution-sequence-step { min-height:90px;align-items:center; }
+        .distribution-step-equation { flex:1;min-width:0;font-size:14px; }
+        .distribution-step-result-tile { position:relative!important;left:auto!important;top:auto!important;flex:0 0 auto;transform:scale(.68);transform-origin:center right;margin-left:-18px;pointer-events:none!important; }
+        .distribution-result-ghost { position:relative!important;left:auto!important;top:auto!important;transform:scale(.68);transform-origin:center right;margin-left:-18px;pointer-events:none!important; }
+        .distribution-center-source { transition:left .65s cubic-bezier(.2,.75,.2,1),top .65s cubic-bezier(.2,.75,.2,1); }
+        @media(max-width:700px) {
+            #expression-panel { top:4.6rem!important;left:.5rem!important;width:min(300px,calc(100vw - 1rem));max-height:22vh;padding:.6rem .8rem; }
+            .distribution-sequence-panel { top:13rem!important;bottom:.6rem!important;left:.5rem!important;width:min(270px,43vw)!important;padding:10px!important; }
+            .distribution-sequence-step { padding:7px;gap:3px;font-size:11px; }
+            .distribution-step-equation { font-size:11px; }
+            .sign-rule-flip-grid { grid-template-columns:1fr;gap:12px; }
+            .sign-rule-flip-card { min-height:215px; }
+        }
     </style>
 </head>
 <body class="bg-gray-100 h-screen overflow-hidden flex font-sans">
     <main class="flex-1 relative bg-grid shadow-inner flex flex-col" id="workspace">
         <!-- Author information expands/collapses from its monogram logo -->
-        <div id="author-badge" class="absolute top-2 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full shadow border border-gray-200 z-20">
+        <div id="author-badge" class="absolute top-2 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full shadow border border-gray-200 z-20 author-collapsed">
             <span id="author-info" class="text-xs font-semibold text-gray-600">Designed by David Beleño · Math Education · 2026</span>
-            <button id="author-logo" type="button" title="Collapse author information" aria-label="Collapse author information" aria-expanded="true">DB</button>
+            <button id="author-logo" type="button" title="Show author information" aria-label="Show author information" aria-expanded="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5c3.2-1.1 5.2-3.7 6.8-7.1L15 3.8l3.2 2.1-4.9 8.7c-1.8 3.2-4.6 5.1-9.3 5.9Z"/><path d="m10.7 12.3 4.8 2.8M6.1 18.7l-1.9 1.9M17.2 4.5l2.3-1.1 2 1.3-1.1 2.3"/></svg>
+            </button>
+            <div id="operator-mode-controls" role="group" aria-label="Operation mode">
+                <button id="mode-addition" class="operator-button operator-addition is-active" type="button" title="Addition and subtraction mode" aria-label="Addition and subtraction" aria-pressed="true"><span class="flex flex-col leading-[9px] text-[11px]"><b>+</b><b>−</b></span></button>
+                <button id="mode-multiplication" class="operator-button operator-multiplication" type="button" title="Multiplication mode" aria-label="Multiplication" aria-pressed="false">×</button>
+                <button id="mode-division" class="operator-button operator-division" type="button" title="Division mode — coming soon" aria-label="Division mode, coming soon"><span class="division-symbol">÷</span><span class="division-coming-soon">Coming soon</span></button>
+            </div>
         </div>
 
+        <button id="sign-rules-btn" class="sign-rules-logo" type="button" aria-haspopup="dialog" aria-controls="sign-rules-modal" title="Show the sign rules">± Sign Rules</button>
         <button id="create-exercise-btn" class="absolute top-4 right-4 z-30 exercise-logo hover:bg-violet-700 transition" title="Create exercise (hold to configure)" aria-label="Create exercise">
             <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/><path d="m16 17 2 2 4-5"/></svg>
         </button>
         <div id="selection-box"></div>
-        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-6 py-3 rounded-xl shadow-lg border border-gray-200 z-10">
+        <div id="expression-panel" class="absolute top-4 left-4 bg-white/90 backdrop-blur px-6 py-3 rounded-xl shadow-lg border border-gray-200 z-10">
             <h2 class="text-sm text-gray-500 font-semibold uppercase tracking-wider mb-1">Current Expression</h2>
             <div id="equation-display" class="text-3xl font-bold text-gray-800 font-mono">0</div>
         </div>
@@ -89,7 +179,7 @@
         </div>
 
         <!-- Exercise Inserter UI -->
-        <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur p-3 rounded-xl shadow-lg border border-gray-200 z-10 flex items-center gap-2" onmousedown="event.stopPropagation()">
+        <div id="expression-inserter" class="absolute bottom-4 right-4 bg-white/90 backdrop-blur p-3 rounded-xl shadow-lg border border-gray-200 z-10 flex items-center gap-2" onmousedown="event.stopPropagation()">
             <input type="text" id="exercise-input" placeholder="e.g. 3x^2 + y" autocomplete="off" spellcheck="false" oninput="sanitizeExerciseInput(this)" title="Allowed: letters, numbers, decimal points, and mathematical operators. Use ^ for powers, e.g. 3x^2." class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-56 text-sm text-gray-800" onkeydown="if(event.key === 'Enter') insertExercise()">
             <button onclick="insertExercise()" class="bg-blue-500 hover:bg-blue-600 text-white rounded p-2 transition-colors flex items-center justify-center shadow" title="Insert Expression">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -107,7 +197,7 @@
             </svg>
             <div>
                 <div class="brand-kicker mb-1">Interactive math · lab</div><h1 class="text-xl font-bold leading-tight">Algebraic<br>Laboratory</h1>
-                <p class="text-slate-300 text-xs mt-1">Addition & Subtraction</p>
+                <p id="program-mode-label" class="text-slate-300 text-xs mt-1">Addition &amp; Subtraction</p>
             </div>
         </div>
 
@@ -121,7 +211,7 @@
             </div>
 
             <div class="mb-6">
-                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">X Terms</h3>
+                <h3 id="terms-x-heading" class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">X Terms</h3>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="addTile('+x')" class="flex flex-col items-center justify-center p-3 bg-green-100 hover:bg-green-200 border-2 border-green-500 rounded-lg transition-colors">
                         <div class="w-11 h-11 bg-green-500 text-white font-bold rounded mb-2 pointer-events-none flex items-center justify-center">+x</div>
@@ -132,7 +222,7 @@
                 </div>
             </div>
             <div class="mb-6">
-                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Y Terms</h3>
+                <h3 id="terms-y-heading" class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Y Terms</h3>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="addTile('+y')" class="flex flex-col items-center justify-center p-3 bg-blue-100 hover:bg-blue-200 border-2 border-blue-500 rounded-lg transition-colors">
                         <div class="w-11 h-11 bg-blue-500 text-white font-bold rounded mb-2 pointer-events-none flex items-center justify-center">+y</div>
@@ -143,7 +233,7 @@
                 </div>
             </div>
             <div class="mb-6">
-                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Integers</h3>
+                <h3 id="numbers-heading" class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Integers</h3>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="addTile('+1')" class="flex flex-col items-center justify-center p-3 bg-orange-100 hover:bg-orange-200 border-2 border-orange-500 rounded-lg transition-colors">
                         <div class="bg-orange-500 text-white font-bold px-3 py-3 rounded mb-2 pointer-events-none">+1</div>
@@ -176,6 +266,9 @@
     </aside>
     <button id="sidebar-toggle" type="button" aria-controls="sidebar-panel" aria-expanded="true" title="Collapse tile panel">‹</button>
 
+    <div id="sign-rules-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="sign-rules-title">
+        <div class="sign-rules-shell"><div id="sign-rules-content"></div></div>
+    </div>
     <div id="tile-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true"></div>
     <div id="exponent-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true"></div>
     <div id="exercise-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true"></div>
@@ -188,6 +281,8 @@
         
         let tileIdCounter = 0;
         let parenIdCounter = 0;
+        let operationMode = 'addition';
+        let dragMoved = false, lastGestureMoved = false, multiplicationClickTimer = null;
         
         const tileConfig = {
             '+x': { colorClass: 'bg-green-500', shapeClass: 'tile-x', opposite: '-x' },
@@ -379,6 +474,7 @@
             if (e.target.closest('.flip-btn') || e.target.closest('.settings-btn') || e.target.closest('.paren-settings-menu')) return;
             
             saveState();
+            dragMoved = false;
             let targetEl = e.currentTarget;
             isDragging = true;
             
@@ -415,8 +511,10 @@
             if (dragGroup.length === 1 && dragGroup[0].el.classList.contains('algebra-tile')) {
                 longPressTimer = setTimeout(() => {
                     if (isDragging) { 
-                        handleLongPress(dragGroup[0].el); 
-                        stopDrag(); 
+                        const pressedTile=dragGroup[0].el;
+                        handleLongPress(pressedTile);
+                        if(operationMode==='multiplication'){if(pressedTile.isConnected&&!pressedTile.classList.contains('annihilate'))stopDrag();else{pressedTile.classList.remove('dragging');pressedTile.style.zIndex='';isDragging=false;dragGroup=[];}}
+                        else stopDrag(); 
                     }
                 }, 1000);
             }
@@ -430,6 +528,7 @@
             const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
             
             if (Math.abs(clientX - startDragX) > 10 || Math.abs(clientY - startDragY) > 10) { 
+                dragMoved = true;
                 clearTimeout(longPressTimer); 
             }
 
@@ -448,7 +547,8 @@
         function stopDrag(e) {
             clearTimeout(longPressTimer);
             if (!isDragging) return;
-            
+            lastGestureMoved=dragMoved;
+            setTimeout(()=>{lastGestureMoved=false},0);
             let tilesToCheck = [];
 
             dragGroup.forEach(item => {
@@ -587,7 +687,7 @@
                     const rect = t.getBoundingClientRect();
                     const containerRect = container.getBoundingClientRect();
                     const meta={};
-                    for(const k of ['kind','num','den','format','letter','exponent','color','shape'])if(t.dataset[k]!==undefined)meta[k]=t.dataset[k];
+                    for(const k of ['kind','num','den','format','letter','exponent','color','shape','variables','factorParts','distributionGroup'])if(t.dataset[k]!==undefined)meta[k]=t.dataset[k];
                     return {type:t.dataset.type,coeff:Number(t.dataset.coeff||1),left:rect.left-containerRect.left,top:rect.top-containerRect.top,meta};
                 });
             }
@@ -951,7 +1051,7 @@
         function playSound(kind='add') {
             if (!audioCtx) return;
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            const patterns={add:[440,660],clear:[220,165,110],sum:[523,659,784],subtract:[392,311],disappear:[740,440],paren:[330,494],parenSign:[294,440],expression:[523,659,784,988],flip:[587,440]};
+            const patterns={add:[440,660],clear:[220,165,110],sum:[523,659,784],subtract:[392,311],disappear:[740,440],paren:[330,494],parenSign:[294,440],expression:[523,659,784,988],flip:[587,440],multiply:[349,440,554,698],distribute:[294,392,523,659],decompose:[659,523,440]};
             const seq=patterns[kind]||patterns.add;
             seq.forEach((hz,i)=>{ const o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.type=kind==='clear'?'triangle':'sine'; o.frequency.value=hz; const t=audioCtx.currentTime+i*.075; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.075,t+.012); g.gain.exponentialRampToValueAtTime(.0001,t+.13); o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+.14); });
         }
@@ -976,8 +1076,13 @@
             tileConfig[negativeType]={...(tileConfig[negativeType]||{}),colorClass:'bg-red-500',shapeClass:shape,opposite:positiveType};
             tile.dataset.type=nextType;
             const selected=tile.classList.contains('selected');
-            tile.className=`algebra-tile ${sign<0?'bg-red-500':(isHex?'':color)} ${shape} ${selected?'selected':''}`;
-            tile.style.backgroundColor=isHex?(sign<0?'#ef4444':color):'';
+            if(tile.dataset.kind==='product'){
+                tile.className=`algebra-tile product-tile ${shape} ${selected?'selected':''}`;
+                applyProductAppearance(tile);
+            }else{
+                tile.className=`algebra-tile ${sign<0?'bg-red-500':(isHex?'':color)} ${shape} ${selected?'selected':''}`;
+                tile.style.backgroundColor=isHex?(sign<0?'#ef4444':color):'';
+            }
             const signButton=tile.querySelector('.flip-btn');if(signButton)signButton.textContent=sign<0?'−':'+';
         }
         function typeSign(tile){return tile.dataset.type?.[0]==='-'?-1:1}
@@ -991,18 +1096,22 @@
             const sign=type[0]==='-'?-1:1, isHex=/^#[0-9a-f]{3,8}$/i.test(color);
             const tile=document.createElement('div');tile.className=`algebra-tile ${isHex?'':(sign<0?'bg-red-500':color)} ${shape}`;
             if(isHex)tile.style.backgroundColor=sign<0?'#ef4444':color;
-            tile.dataset.type=type;tile.dataset.coeff=coeff;tile.dataset.id=forceId||`tile-${tileIdCounter++}`;tile.dataset.kind=kind;tile.dataset.num=num;tile.dataset.den=den;tile.dataset.format=custom.format||(den!==1?'fraction':'integer');tile.dataset.color=color;tile.dataset.shape=shape;
+            tile.dataset.type=type;tile.dataset.coeff=coeff;tile.dataset.id=forceId||`tile-${tileIdCounter++}`;tile.dataset.kind=kind;tile.dataset.num=num;tile.dataset.den=den;tile.dataset.format=custom.format||(den!==1?'fraction':'integer');tile.dataset.color=color;tile.dataset.shape=shape;if(custom.distributionGroup)tile.dataset.distributionGroup=custom.distributionGroup;
             if(kind==='variable'){tile.dataset.letter=letter;tile.dataset.exponent=exponent}
+            if(custom.variables)tile.dataset.variables=JSON.stringify(parseVariableList(custom.variables));
+            if(custom.factorParts)tile.dataset.factorParts=JSON.stringify(parseFactorParts(custom.factorParts));
             tile.style.left=`${x}px`;tile.style.top=`${y}px`;tile.title=kind==='variable'?'Right-click: change sign · Double-click: change exponent':'Right-click: change sign';
             const textSpan=document.createElement('span');textSpan.className='tile-text drop-shadow-md';tile.appendChild(textSpan);
             tile.addEventListener('contextmenu',e=>{e.preventDefault();e.stopPropagation();saveState();flipTileLogic(tile);updateEquation()});
-            tile.addEventListener('dblclick',e=>{if(tile.dataset.kind!=='variable')return;e.preventDefault();e.stopPropagation();openExponentModal(tile)});
-            updateTileText(tile);tile.addEventListener('mousedown',startDrag);tile.addEventListener('touchstart',startDrag,{passive:false});parentNode.appendChild(tile);return tile;
+            tile.addEventListener('dblclick',e=>{if(tile.dataset.kind!=='variable')return;clearTimeout(multiplicationClickTimer);multiplicationClickTimer=null;e.preventDefault();e.stopPropagation();openExponentModal(tile)});
+            tile.addEventListener('click',e=>handleMultiplicationTileClick(tile,e));
+            updateTileText(tile);if(kind==='product')applyProductAppearance(tile);tile.addEventListener('mousedown',startDrag);tile.addEventListener('touchstart',startDrag,{passive:false});parentNode.appendChild(tile);return tile;
         }
         function updateTileText(tile){
             if(!tile) return; const span=tile.querySelector('.tile-text');if(!span)return;const signButton=tile.querySelector('.flip-btn');if(signButton)signButton.textContent=typeSign(tile)<0?'−':'+';
             const sign=typeSign(tile), r=absRat(tile), signTxt=sign<0?'-':'';
             if(tile.dataset.kind==='variable') {let coef=ratTex(r,tile.dataset.format);if(r.n===1&&r.d===1)coef='';const variable=`${tile.dataset.letter}${Number(tile.dataset.exponent)>1?`^{${tile.dataset.exponent}}`:''}`;renderMath(span,`${signTxt}${coef}${variable}`)}
+            else if(tile.dataset.kind==='product'){const vars=variablesFromTile(tile);let coef=ratTex(r,tile.dataset.format);if(vars.length&&r.n===1&&r.d===1)coef='';const body=vars.map(v=>`${v.letter}${v.exponent>1?`^{${v.exponent}}`:''}`).join('');renderMath(span,`${signTxt}${coef}${body}`)}
             else if(tile.dataset.kind==='number'){renderMath(span,`${signTxt}${ratTex(r,tile.dataset.format)}`)}
             else {const base=tile.dataset.type.slice(1);const val=Number(tile.dataset.coeff||1);span.textContent=base==='1'?`${signTxt}${val}`:`${signTxt}${val>1?val:''}${base}`}
         }
@@ -1013,22 +1122,124 @@
         function applyParenSigns(btn,e){e.stopPropagation();saveState();const paren=btn.closest('.parenthesis'),sign=paren.querySelector('.paren-sign').innerText,content=paren.querySelector('.paren-content'),tiles=Array.from(content.querySelectorAll('.algebra-tile:not(.annihilate)')),rect=container.getBoundingClientRect();tiles.forEach(t=>{const r=t.getBoundingClientRect();if(sign==='-')flipTileLogic(t,false);container.appendChild(t);t.style.left=`${r.left-rect.left}px`;t.style.top=`${r.top-rect.top}px`});paren.remove();playSound('parenSign');updateEquation()}
         function clearWorkspace(){saveState();container.innerHTML='';playSound('clear');updateEquation()}
         function deleteSelected(){const selected=document.querySelectorAll('.algebra-tile.selected');if(selected.length){saveState();selected.forEach(t=>t.remove());playSound('disappear');updateEquation()}}
-        function termTex(t){const sign=typeSign(t),r=absRat(t),sg=sign<0?'-':'+'; if(t.dataset.kind==='variable'){let c=ratTex(r,t.dataset.format);if(r.n===1&&r.d===1)c='';return `${sg}${c}${t.dataset.letter}${Number(t.dataset.exponent)>1?`^{${t.dataset.exponent}}`:''}`} if(t.dataset.kind==='number')return `${sg}${ratTex(r,t.dataset.format)}`;const base=t.dataset.type.slice(1),n=Number(t.dataset.coeff||1);return `${sg}${base==='1'?n:`${n>1?n:''}${base}`}`}
+        function termTex(t){const sign=typeSign(t),r=absRat(t),sg=sign<0?'-':'+'; if(t.dataset.kind==='variable'){let c=ratTex(r,t.dataset.format);if(r.n===1&&r.d===1)c='';return `${sg}${c}${t.dataset.letter}${Number(t.dataset.exponent)>1?`^{${t.dataset.exponent}}`:''}`} if(t.dataset.kind==='product'){const vars=variablesFromTile(t);let c=ratTex(r,t.dataset.format);if(vars.length&&r.n===1&&r.d===1)c='';return `${sg}${c}${vars.map(v=>`${v.letter}${v.exponent>1?`^{${v.exponent}}`:''}`).join('')}`} if(t.dataset.kind==='number')return `${sg}${ratTex(r,t.dataset.format)}`;const base=t.dataset.type.slice(1),n=Number(t.dataset.coeff||1);return `${sg}${base==='1'?n:`${n>1?n:''}${base}`}`}
         function joinTerms(tiles){let out='';tiles.forEach(t=>{let x=termTex(t);if(!out)out=x[0]==='+'?x.slice(1):x;else out+=x[0]==='-'?` ${x}`:` + ${x.slice(1)}`});return out||'0'}
         function updateEquation(){
             let top=Array.from(container.children).filter(c=>(c.classList.contains('algebra-tile')&&!c.classList.contains('annihilate'))||c.classList.contains('parenthesis'));top.sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left);
             if(!top.length){equationDisplay.textContent='0';equationDisplay.classList.replace('text-gray-800','text-gray-400');return}
             const parts=[];top.forEach(el=>{if(el.classList.contains('algebra-tile'))parts.push(termTex(el));else{const sign=el.querySelector('.paren-sign').innerText, children=Array.from(el.querySelector('.paren-content').querySelectorAll('.algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left);const inside=joinTerms(children);parts.push(`${sign==='-'?'-':'+'}(${inside})`)}});
+            if(operationMode==='multiplication'){
+                const topTiles=top.filter(el=>el.classList.contains('algebra-tile'));
+                const groups=new Set(topTiles.map(t=>t.dataset.distributionGroup).filter(Boolean));
+                if(top.length>1&&groups.size===1&&topTiles.length===top.length){const gid=[...groups][0];if(topTiles.every(t=>t.dataset.distributionGroup===gid)){const sum=joinTerms(topTiles);equationDisplay.classList.replace('text-gray-400','text-gray-800');renderMath(equationDisplay,sum);return}}
+                const consumed=new Set(),factors=[];
+                top.forEach(el=>{
+                    if(el.classList.contains('algebra-tile')&&el.dataset.distributionGroup){
+                        const gid=el.dataset.distributionGroup;if(consumed.has(gid))return;consumed.add(gid);const members=topTiles.filter(t=>t.dataset.distributionGroup===gid),sum=joinTerms(members);factors.push(`(${sum})`);return;
+                    }
+                    if(el.classList.contains('algebra-tile')){const term=termTex(el);factors.push(term.startsWith('+')?term.slice(1):term.startsWith('-')?`(${term})`:term)}
+                    else {const sign=el.querySelector('.paren-sign').innerText,children=Array.from(el.querySelector('.paren-content').querySelectorAll('.algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left),inside=joinTerms(children);factors.push(sign==='-'?`-(${inside})`:`(${inside})`)}
+                });
+                const output=factors.join(String.raw` \times `);equationDisplay.classList.replace('text-gray-400','text-gray-800');renderMath(equationDisplay,output||'1');return;
+            }
             let output='';parts.forEach(x=>{if(!output)output=x[0]==='+'?x.slice(1):x;else output+=x[0]==='-'?` - ${x.slice(1)}`:` + ${x.slice(1)}`});equationDisplay.classList.replace('text-gray-400','text-gray-800');renderMath(equationDisplay,output||'0');
         }
         function signedNumber(t){const r=absRat(t);return rational(r.n*typeSign(t),r.d)}
         function setRationalTile(t,r,kind){r=rational(r.n,r.d);t.dataset.kind=kind;t.dataset.num=Math.abs(r.n);t.dataset.den=r.d;t.dataset.coeff=Math.abs(r.n);t.dataset.format=r.d===1?'integer':'fraction';setTileSign(t,r.n<0?-1:1);updateTileText(t)}
+        const PRODUCT_COLOR_MAP={'bg-green-500':'#22c55e','bg-blue-500':'#3b82f6','bg-violet-500':'#8b5cf6','bg-emerald-500':'#10b981','bg-orange-500':'#f97316','bg-pink-500':'#ec4899','bg-cyan-500':'#06b6d4','bg-red-500':'#ef4444','bg-indigo-500':'#6366f1','bg-purple-500':'#a855f7'};
+        function colorValue(c){return /^#[0-9a-f]{3,8}$/i.test(String(c||''))?c:(PRODUCT_COLOR_MAP[c]||'#8b5cf6')}
+        function parseVariableList(v){if(Array.isArray(v))return v;try{const x=JSON.parse(v||'[]');return Array.isArray(x)?x:[]}catch(_){return []}}
+        function parseFactorParts(v){if(Array.isArray(v))return v;try{const x=JSON.parse(v||'[]');return Array.isArray(x)?x:[]}catch(_){return []}}
+        function variablesFromTile(t){
+            if(t.dataset.kind==='variable')return [{letter:t.dataset.letter||'x',exponent:Number(t.dataset.exponent||1)}];
+            if(t.dataset.kind==='product')return parseVariableList(t.dataset.variables).slice().sort((a,b)=>a.letter.localeCompare(b.letter));
+            return [];
+        }
+        function monomialSignature(t){return variablesFromTile(t).map(v=>`${v.letter}^${v.exponent}`).sort().join('*')}
+        function compactFactorParts(parts){const out=[];for(const f of parts){const item={letter:f.letter,color:colorValue(f.color),count:Math.max(1,Number(f.count||1))},last=out[out.length-1];if(last&&last.letter===item.letter&&last.color===item.color)last.count+=item.count;else out.push(item)}return out}
+        function factorPartsFromTile(t){
+            if(t.dataset.kind==='product')return compactFactorParts(parseFactorParts(t.dataset.factorParts));
+            if(t.dataset.kind==='variable'){const color=colorValue(t.dataset.color||tileConfig[signedType(t.dataset.type,1)]?.colorClass),count=Math.max(1,Number(t.dataset.exponent||1));return [{letter:t.dataset.letter||'x',color,count}]}
+            return [];
+        }
+        function applyProductAppearance(tile){
+            const parts=factorPartsFromTile(tile);tile.classList.add('product-tile');tile.classList.toggle('negative-product',typeSign(tile)<0);
+            tile.style.width='';tile.style.height='';tile.style.backgroundColor='';
+            if(parts.length){const count=parts.reduce((n,x)=>n+x.count,0);let done=0;const stops=[];parts.forEach(part=>{const c=colorValue(part.color),from=done/count*100;done+=part.count;const to=done/count*100;stops.push(`${c} ${from}%`,`${c} ${to}%`)});tile.style.backgroundImage=`linear-gradient(115deg,${stops.join(',')})`}
+            else {tile.style.backgroundImage='none';tile.style.backgroundColor=colorValue(tile.dataset.color||'bg-orange-500')}
+        }
+        function productColorFactorParts(tile){return factorPartsFromTile(tile)}
+        function multiplicationPayload(a,b,outerSign=1){
+            const ra=absRat(a),rb=absRat(b),coefficient=rational(ra.n*rb.n,ra.d*rb.d);
+            const sign=typeSign(a)*typeSign(b)*(outerSign<0?-1:1),parts=compactFactorParts([...productColorFactorParts(a),...productColorFactorParts(b)]); 
+            const powers=new Map();[...variablesFromTile(a),...variablesFromTile(b)].forEach(v=>powers.set(v.letter,(powers.get(v.letter)||0)+Number(v.exponent||1)));
+            const variables=Array.from(powers.entries()).map(([letter,exponent])=>({letter,exponent})).sort((x,y)=>x.letter.localeCompare(y.letter));
+            const kind=variables.length?'product':'number',type=kind==='product'?(sign<0?'-product':'+product'):(sign<0?'-n':'+n');
+            let format=(a.dataset.format==='decimal'||b.dataset.format==='decimal')?'decimal':((a.dataset.format==='mixed'||b.dataset.format==='mixed')?'mixed':(coefficient.d===1?'integer':'fraction'));
+            const color=variables.length?colorValue(parts[0]?.color):'#f97316';
+            return {type,coeff:Math.abs(coefficient.n),meta:{kind,num:Math.abs(coefficient.n),den:coefficient.d,format,color,shape:kind==='product'?'product-tile':'rational-tile',variables,factorParts:parts}};
+        }
+        function makeProductTile(a,b,parent,x,y,outerSign=1){
+            const data=multiplicationPayload(a,b,outerSign);return createTileElement(data.type,x,y,data.coeff,parent,null,data.meta);
+        }
+        function checkMultiplicationCollision(droppedTile){
+            if(!droppedTile?.parentElement)return;const r1=droppedTile.getBoundingClientRect(),siblings=droppedTile.parentElement.querySelectorAll('.algebra-tile:not(.annihilate)');
+            for(const other of siblings){if(other===droppedTile||other.classList.contains('dragging'))continue;const r2=other.getBoundingClientRect();if(r1.right<r2.left||r1.left>r2.right||r1.bottom<r2.top||r1.top>r2.bottom)continue;
+                const parent=droppedTile.parentElement,pr=parent.getBoundingClientRect(),x=((r1.left+r2.left+r1.width/2+r2.width/2)/2)-pr.left-40,y=((r1.top+r2.top+r1.height/2+r2.height/2)/2)-pr.top-40;
+                const data=multiplicationPayload(droppedTile,other),cx=Math.max(8,x),cy=Math.max(8,y);droppedTile.classList.add('annihilate');other.classList.add('annihilate');playSound('multiply');
+                setTimeout(()=>{droppedTile.remove();other.remove();createTileElement(data.type,cx,cy,data.coeff,parent,null,data.meta);updateEquation()},260);return;
+            }
+        }
+        function nearestParenthesis(tile){
+            const tr=tile.getBoundingClientRect(),limit=Math.max(tr.width,tr.height,80)+12;
+            const candidates=Array.from(container.querySelectorAll(':scope > .parenthesis')).filter(p=>p.querySelector('.paren-content .algebra-tile:not(.annihilate)')).map(p=>{const r=p.getBoundingClientRect(),dx=Math.max(0,r.left-tr.right,tr.left-r.right),dy=Math.max(0,r.top-tr.bottom,tr.top-r.bottom);return {p,d:Math.hypot(dx,dy)}}).filter(x=>x.d<=limit).sort((a,b)=>a.d-b.d);
+            return candidates[0]?.p||null;
+        }
+        function handleMultiplicationTileClick(tile,e){
+            if(operationMode!=='multiplication'||lastGestureMoved||!tile.isConnected||tile.parentElement!==container)return;
+            const paren=nearestParenthesis(tile);if(!paren)return;
+            clearTimeout(multiplicationClickTimer);multiplicationClickTimer=setTimeout(()=>{if(tile.isConnected&&paren.isConnected)distributeTileOverParenthesis(tile,paren)},tile.dataset.kind==='variable'?600:40);
+        }
+        function drawDistributionArrows(source,children){
+            const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg'),uid=`arrow-${Date.now()}-${Math.random().toString(36).slice(2,7)}`;svg.setAttribute('class','distribution-arrows');svg.setAttribute('viewBox',`0 0 ${window.innerWidth} ${window.innerHeight}`);svg.setAttribute('preserveAspectRatio','none');
+            const defs=document.createElementNS(ns,'defs');svg.appendChild(defs);const a=source.getBoundingClientRect(),sx=a.left+a.width/2,sy=a.top+a.height/2;
+            children.forEach((child,i)=>{const color=i%2?'#dc2626':'#2563eb',marker=document.createElementNS(ns,'marker'),head=document.createElementNS(ns,'path'),r=child.getBoundingClientRect(),ex=r.left+r.width/2,ey=r.top+r.height/2,delta=ex-sx,lift=Math.max(34,Math.min(100,Math.abs(delta)*.22+Math.abs(ey-sy)*.12)),curve=ey<sy?-lift:lift;marker.setAttribute('id',`${uid}-${i}`);marker.setAttribute('markerWidth','10');marker.setAttribute('markerHeight','10');marker.setAttribute('refX','8');marker.setAttribute('refY','4');marker.setAttribute('orient','auto');head.setAttribute('d','M0,0 L9,4 L0,8 z');head.setAttribute('fill',color);marker.appendChild(head);defs.appendChild(marker);
+                const path=document.createElementNS(ns,'path'),c1x=sx+delta*.25,c2x=sx+delta*.75;path.setAttribute('d',`M ${sx} ${sy} C ${c1x} ${sy+curve}, ${c2x} ${ey+curve}, ${ex} ${ey}`);path.setAttribute('class','distribution-arrow');path.style.color=color;path.style.stroke=color;path.style.markerEnd=`url(#${uid}-${i})`;svg.appendChild(path);const length=path.getTotalLength();path.style.strokeDasharray=String(length);path.style.setProperty('--path-length',String(length));path.style.animationDelay=`${i*.18}s`});
+            document.body.appendChild(svg);return svg;
+        }
+        function distributeTileOverParenthesis(source,paren){
+            if(!source?.isConnected||!paren?.isConnected||source.dataset.distributing==='true'||paren.dataset.distributing==='true')return;
+            const content=paren.querySelector('.paren-content'),children=Array.from(content.querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left);if(!children.length)return;
+            source.dataset.distributing='true';paren.dataset.distributing='true';saveState();const svg=drawDistributionArrows(source,children);source.classList.add('distribution-source');paren.classList.add('distribution-target');playSound('distribute');
+            const board=container.getBoundingClientRect(),pr=paren.getBoundingClientRect(),contentRect=content.getBoundingClientRect(),sign=paren.querySelector('.paren-sign').innerText==='-'?-1:1,groupId=`distribution-${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
+            const products=children.map(child=>{const rect=child.getBoundingClientRect(),data=multiplicationPayload(source,child,sign);data.meta.distributionGroup=groupId;return {child,rect,data,preview:null}});
+            // First let the curved arrows travel; then reveal every separated product inside the group.
+            setTimeout(()=>{source.classList.add('is-separating');children.forEach(c=>c.classList.add('distribution-original','is-separating'));
+                products.forEach(({rect,data},i)=>{const x=rect.left-contentRect.left,y=rect.top-contentRect.top,preview=createTileElement(data.type,x,y,data.coeff,content,null,data.meta);preview.classList.add('product-preview');preview.style.zIndex='25';products[i].preview=preview;setTimeout(()=>preview.classList.add('is-revealed'),i*180)});
+            },1050);
+            setTimeout(()=>{
+                const startX=Math.max(12,pr.left-board.left+12),startY=Math.max(12,pr.top-board.top+48);let x=startX,y=startY,rowH=0;
+                products.forEach(({data,preview},i)=>{if(!preview?.isConnected)return;const w=Math.max(80,preview.getBoundingClientRect().width);if(x+w>container.clientWidth-12){x=12;y+=rowH+16;rowH=0}container.appendChild(preview);preview.classList.remove('product-preview','is-revealed');preview.classList.add('product-finalizing');preview.style.opacity='1';preview.style.transform='scale(1)';preview.style.left=`${x}px`;preview.style.top=`${y}px`;preview.style.zIndex='15';preview.dataset.distributionGroup=groupId;preview.dataset.kind=data.meta.kind;preview.dataset.num=data.meta.num;preview.dataset.den=data.meta.den;preview.dataset.format=data.meta.format;preview.dataset.color=data.meta.color;preview.dataset.shape=data.meta.shape;preview.dataset.variables=JSON.stringify(data.meta.variables||[]);preview.dataset.factorParts=JSON.stringify(data.meta.factorParts||[]);x+=w+14;rowH=Math.max(rowH,80)});
+                svg.remove();source.remove();paren.remove();playSound('multiply');updateEquation();setTimeout(()=>document.querySelectorAll('.product-finalizing').forEach(t=>t.classList.remove('product-finalizing')),800);
+            },3000);
+        }
+        function decomposeForMultiplication(tile){
+            if(!tile?.isConnected)return;const parts=factorPartsFromTile(tile),vars=variablesFromTile(tile),r=absRat(tile),sign=typeSign(tile),needsNumber=r.n!==1||r.d!==1||sign<0,totalFactors=vars.reduce((n,v)=>n+Number(v.exponent||1),0);if(!vars.length)return;
+            if(totalFactors>40){alert('This term has too many variable factors to split in one step.');return}
+            if(totalFactors<=1&&!needsNumber)return;saveState();const parent=tile.parentElement,rect=tile.getBoundingClientRect(),pr=parent.getBoundingClientRect();let x=rect.left-pr.left,y=rect.top-pr.top;
+            const items=[];if(needsNumber)items.push({number:true,color:'#f97316'});vars.forEach(v=>{const matching=parts.filter(p=>p.letter===v.letter),total=matching.reduce((n,p)=>n+p.count,0);for(let i=0;i<Number(v.exponent||1);i++){let cursor=i,color=matching[0]?.color||colorValue(tile.dataset.color||'#8b5cf6');for(const p of matching){if(cursor<p.count){color=p.color;break}cursor-=p.count}items.push({letter:v.letter,color})}});
+            tile.classList.add('annihilate');setTimeout(()=>{tile.remove();items.forEach(item=>{let made;if(item.number){const type=sign<0?'-n':'+n';made=createTileElement(type,x,y,Math.abs(r.n),parent,null,{kind:'number',num:Math.abs(r.n),den:r.d,format:tile.dataset.format||'integer',color:'#f97316',shape:'rational-tile'})}else{const color=colorValue(item.color),type=`+v_${item.letter}_1`;made=createTileElement(type,x,y,1,parent,null,{kind:'variable',letter:item.letter,exponent:1,num:1,den:1,format:'integer',color,shape:'tile-variable'})}x+=(made?.offsetWidth||70)+10});playSound('decompose');updateEquation()},230);
+        }
+
         function checkCollision(droppedTile){
-            if(droppedTile.classList.contains('annihilate'))return;const r1=droppedTile.getBoundingClientRect(),siblings=droppedTile.parentElement.querySelectorAll('.algebra-tile:not(.annihilate)');
+            if(droppedTile.classList.contains('annihilate'))return;
+            if(operationMode==='multiplication'){checkMultiplicationCollision(droppedTile);return;}
+            const r1=droppedTile.getBoundingClientRect(),siblings=droppedTile.parentElement.querySelectorAll('.algebra-tile:not(.annihilate)');
             for(const other of siblings){if(other===droppedTile||other.classList.contains('dragging'))continue;const r2=other.getBoundingClientRect();if(r1.right<r2.left||r1.left>r2.right||r1.bottom<r2.top||r1.top>r2.bottom)continue;
                 const a=droppedTile.dataset.kind,b=other.dataset.kind;
                 if(a==='number'&&b==='number') {const x=signedNumber(droppedTile),y=signedNumber(other),sum=rational(x.n*y.d+y.n*x.d,x.d*y.d);playSound(sum.n===0?'disappear':x.n*y.n<0?'subtract':'sum');if(sum.n===0)annihilateTiles(droppedTile,other);else{setRationalTile(droppedTile,sum,'number');other.classList.add('annihilate');setTimeout(()=>{other.remove();updateEquation()},300)}return}
                 if(a==='variable'&&b==='variable'&&droppedTile.dataset.letter===other.dataset.letter&&droppedTile.dataset.exponent===other.dataset.exponent){const x=signedNumber(droppedTile),y=signedNumber(other),sum=rational(x.n*y.d+y.n*x.d,x.d*y.d);playSound(sum.n===0?'disappear':x.n*y.n<0?'subtract':'sum');if(sum.n===0)annihilateTiles(droppedTile,other);else{setRationalTile(droppedTile,sum,'variable');other.classList.add('annihilate');setTimeout(()=>{other.remove();updateEquation()},300)}return}
+                if((a==='product'||a==='variable')&&(b==='product'||b==='variable')&&monomialSignature(droppedTile)===monomialSignature(other)){const x=signedNumber(droppedTile),y=signedNumber(other),sum=rational(x.n*y.d+y.n*x.d,x.d*y.d),parts=factorPartsFromTile(droppedTile),variables=variablesFromTile(droppedTile),kind=a==='product'||b==='product'?'product':'variable';playSound(sum.n===0?'disappear':x.n*y.n<0?'subtract':'sum');if(sum.n===0)annihilateTiles(droppedTile,other);else{if(kind==='product'){droppedTile.dataset.variables=JSON.stringify(variables);droppedTile.dataset.factorParts=JSON.stringify(parts)}setRationalTile(droppedTile,sum,kind);other.classList.add('annihilate');setTimeout(()=>{other.remove();updateEquation()},300)}return}
                 // Keep legacy behavior for unmatched/legacy algebra tiles
                 const type1=droppedTile.dataset.type,type2=other.dataset.type,co1=Number(droppedTile.dataset.coeff||1),co2=Number(other.dataset.coeff||1);
                 if(type1===type2){other.dataset.coeff=co1+co2;updateTileText(other);droppedTile.classList.add('annihilate');playSound('sum');setTimeout(()=>{droppedTile.remove();updateEquation()},300);return}
@@ -1036,7 +1247,7 @@
             }
         }
         function annihilateTiles(a,b){a.classList.add('annihilate');b.classList.add('annihilate');playSound('disappear');setTimeout(()=>{a.remove();b.remove();updateEquation()},300)}
-        function handleLongPress(tile){if(!tile||tile.classList.contains('annihilate'))return;saveState();const coeff=Number(tile.dataset.coeff||1),type=tile.dataset.type,parent=tile.parentElement;if(coeff>1&&tile.dataset.kind==='variable'&&tile.dataset.den==='1'){tile.dataset.coeff=1;tile.dataset.num=1;updateTileText(tile);for(let i=1;i<coeff;i++)createTileElement(type,parseFloat(tile.style.left)+i*25,parseFloat(tile.style.top)+i*25,1,parent,null,{kind:'variable',letter:tile.dataset.letter,exponent:tile.dataset.exponent,num:1,den:1,color:tile.dataset.color});playSound('add')}else if(coeff===1){const same=Array.from(parent.querySelectorAll('.algebra-tile:not(.annihilate)')).filter(o=>o!==tile&&o.dataset.type===type&&!dragGroup.some(item=>item.el===o));if(same.length){let sum=1;same.forEach(o=>{sum+=Number(o.dataset.coeff||1);o.remove()});tile.dataset.coeff=sum;tile.dataset.num=sum;updateTileText(tile);playSound('sum')}}updateEquation()}
+        function handleLongPress(tile){if(!tile||tile.classList.contains('annihilate'))return;if(operationMode==='multiplication'){decomposeForMultiplication(tile);return}saveState();const coeff=Number(tile.dataset.coeff||1),type=tile.dataset.type,parent=tile.parentElement;if(coeff>1&&tile.dataset.kind==='variable'&&tile.dataset.den==='1'){tile.dataset.coeff=1;tile.dataset.num=1;updateTileText(tile);for(let i=1;i<coeff;i++)createTileElement(type,parseFloat(tile.style.left)+i*25,parseFloat(tile.style.top)+i*25,1,parent,null,{kind:'variable',letter:tile.dataset.letter,exponent:tile.dataset.exponent,num:1,den:1,color:tile.dataset.color});playSound('add')}else if(coeff===1){const same=Array.from(parent.querySelectorAll('.algebra-tile:not(.annihilate)')).filter(o=>o!==tile&&o.dataset.type===type&&!dragGroup.some(item=>item.el===o));if(same.length){let sum=1;same.forEach(o=>{sum+=Number(o.dataset.coeff||1);o.remove()});tile.dataset.coeff=sum;tile.dataset.num=sum;updateTileText(tile);playSound('sum')}}updateEquation()}
         function openTileModal(kind){
             const root=document.getElementById('tile-modal');root.classList.remove('hidden');const isVar=kind==='variable';root.innerHTML=`<div class="modal-card"><div class="flex justify-between items-center"><h2 class="text-xl font-bold">Create ${isVar?'Variable':'Number'} Tile</h2><button onclick="closeModal('tile-modal')" class="text-2xl text-slate-400">×</button></div><form id="tile-form">
                 <label class="form-field">Color<input id="tile-color" type="color" value="${isVar?'#8b5cf6':'#06b6d4'}"></label>
@@ -1047,12 +1258,19 @@
         }
         function openExponentModal(tile){
             if(!tile||tile.dataset.kind!=='variable')return;
-            const root=document.getElementById('exponent-modal'),current=Number(tile.dataset.exponent||1);root.classList.remove('hidden');
-            root.innerHTML=`<div class="modal-card"><div class="flex justify-between items-center"><h2 class="text-xl font-bold">Change Exponent</h2><button type="button" onclick="closeModal('exponent-modal')" class="text-2xl text-slate-400">×</button></div><form id="exponent-form"><label class="form-field">Choose an exponent<select id="exponent-choice"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="manual">Enter manually…</option></select></label><label class="form-field hidden" id="manual-exponent-wrap">Custom exponent<input id="manual-exponent" type="number" min="1" step="1" value="${Math.max(5,current)}" placeholder="Enter a positive integer"></label><p class="text-sm text-slate-500">Variable: <b>${tile.dataset.letter}</b></p><div class="flex justify-end gap-2 mt-5"><button type="button" onclick="closeModal('exponent-modal')" class="px-4 py-2 rounded-lg bg-slate-100">Cancel</button><button class="px-4 py-2 rounded-lg bg-violet-600 text-white font-semibold">Apply Exponent</button></div></form></div>`;
+            const root=document.getElementById('exponent-modal'),current=Number(tile.dataset.exponent||1),r=absRat(tile);root.classList.remove('hidden');
+            const coeffValue=r.d===1?String(r.n):`${r.n}/${r.d}`;
+            root.innerHTML=`<div class="modal-card"><div class="flex justify-between items-center"><h2 class="text-xl font-bold">Edit Variable Tile</h2><button type="button" onclick="closeModal('exponent-modal')" class="text-2xl text-slate-400">×</button></div><form id="exponent-form"><label class="form-field">Exponent<select id="exponent-choice"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="manual">Enter a value…</option></select></label><label class="form-field hidden" id="manual-exponent-wrap">Custom exponent (non-negative integer)<input id="manual-exponent" type="number" min="0" step="1" value="${current}" placeholder="Enter 0 or a positive integer" inputmode="numeric"></label><label class="form-field">Coefficient<input id="variable-coefficient" type="text" value="${coeffValue}" placeholder="e.g. 3, 0.5, or 3/4" autocomplete="off" required></label><p class="text-sm text-slate-500">Variable: <b>${tile.dataset.letter}</b>. An exponent of 0 turns the term into its coefficient.</p><div class="flex justify-end gap-2 mt-5"><button type="button" onclick="closeModal('exponent-modal')" class="px-4 py-2 rounded-lg bg-slate-100">Cancel</button><button class="px-4 py-2 rounded-lg bg-violet-600 text-white font-semibold">Apply Changes</button></div></form></div>`;
             const choice=root.querySelector('#exponent-choice'),manualWrap=root.querySelector('#manual-exponent-wrap');
-            if(current>=1&&current<=4)choice.value=String(current);else{choice.value='manual';manualWrap.classList.remove('hidden');root.querySelector('#manual-exponent').value=String(current)}
+            if(current>=1&&current<=4)choice.value=String(current);else{choice.value='manual';manualWrap.classList.remove('hidden')}
             choice.addEventListener('change',()=>manualWrap.classList.toggle('hidden',choice.value!=='manual'));
-            root.querySelector('#exponent-form').onsubmit=e=>{e.preventDefault();let power=choice.value==='manual'?Number(root.querySelector('#manual-exponent').value):Number(choice.value);if(!Number.isInteger(power)||power<1){alert('The exponent must be a positive integer.');return}saveState();const letter=tile.dataset.letter,sign=typeSign(tile),oldType=tile.dataset.type,nextType=(sign<0?'-':'+')+((power===1&&(letter==='x'||letter==='y'))?letter:`v_${letter}_${power}`);tile.dataset.exponent=power;tile.dataset.type=nextType;tileConfig[nextType]={...(tileConfig[oldType]||{}),colorClass:tile.dataset.color,shapeClass:tile.dataset.shape,opposite:(sign<0?'+':'-')+nextType.slice(1)};tileConfig[tileConfig[nextType].opposite]={colorClass:'bg-red-500',shapeClass:tile.dataset.shape,opposite:nextType};updateTileText(tile);updateEquation();closeModal('exponent-modal')};
+            root.querySelector('#exponent-form').onsubmit=e=>{e.preventDefault();const power=choice.value==='manual'?Number(root.querySelector('#manual-exponent').value):Number(choice.value),raw=root.querySelector('#variable-coefficient').value,coef=parseRational(raw);
+                if(!Number.isInteger(power)||power<0){alert('The exponent must be a non-negative integer.');return}if(!coef){alert('Enter a valid integer, decimal, or fraction for the coefficient.');return}
+                saveState();if(coef.n===0){tile.remove();playSound('disappear');updateEquation();closeModal('exponent-modal');return}
+                const letter=tile.dataset.letter,sign=typeSign(tile)*(coef.n<0?-1:1),oldType=tile.dataset.type,format=valueFormat(raw),color=tile.dataset.color||'#8b5cf6';tile.dataset.num=Math.abs(coef.n);tile.dataset.den=coef.d;tile.dataset.coeff=Math.abs(coef.n);tile.dataset.format=format;
+                if(power===0){tile.dataset.kind='number';tile.dataset.type=sign<0?'-n':'+n';tile.dataset.shape='rational-tile';delete tile.dataset.letter;delete tile.dataset.exponent;tile.classList.remove('product-tile','negative-product','tile-variable','tile-x','tile-y');tile.classList.add('rational-tile');tile.style.width='';tile.style.height='';tile.style.backgroundImage='none';tile.style.backgroundColor=sign<0?'#ef4444':color}
+                else {const nextType=`${sign<0?'-':'+'}v_${letter}_${power}`;tile.dataset.kind='variable';tile.dataset.letter=letter;tile.dataset.exponent=power;tile.dataset.shape=oldType.endsWith('x')?'tile-x':oldType.endsWith('y')?'tile-y':'tile-variable';tile.dataset.type=nextType;tile.classList.remove('rational-tile');tile.classList.add(tile.dataset.shape);tileConfig[nextType]={...(tileConfig[oldType]||{}),colorClass:color,shapeClass:tile.dataset.shape,opposite:`${sign<0?'+':'-'}${nextType.slice(1)}`};tileConfig[tileConfig[nextType].opposite]={colorClass:'bg-red-500',shapeClass:tile.dataset.shape,opposite:nextType};setTileSign(tile,sign)}
+                updateTileText(tile);updateEquation();closeModal('exponent-modal')};
         }
         function closeModal(id){document.getElementById(id)?.classList.add('hidden')}
         // Parser for linear sums, rational coefficients and one-level parenthetical groups.
@@ -1061,14 +1279,33 @@
             if(vm){let coeffText=vm[1].trim()||'1',r=parseRational(coeffText);if(!r)return x;const letter=vm[2],exp=Number(vm[3]||1);if(r.n<0){sign*=-1;r=rational(-r.n,r.d)}const legacy=(letter==='x'||letter==='y')&&exp===1&&r.d===1;let type=legacy?`${sign<0?'-':'+'}${letter}`:`${sign<0?'-':'+'}v_${letter}_${exp}`;const variableColors={a:'bg-violet-500',b:'bg-emerald-500',c:'bg-orange-500',d:'bg-pink-500'};const positiveType=signedType(type,1);const color=tileConfig[positiveType]?.colorClass||variableColors[letter]||'bg-violet-500';tileConfig[type]??={colorClass:color,shapeClass:legacy?(letter==='x'?'tile-x':'tile-y'):'tile-variable',opposite:`${sign<0?'+':'-'}${type.slice(1)}`};tileConfig[tileConfig[type].opposite]??={...tileConfig[type],opposite:type};createTileElement(type,x,y,Math.abs(r.n),parent,null,{kind:'variable',letter,exponent:exp,num:Math.abs(r.n),den:r.d,format:valueFormat(coeffText),color,shape:legacy?(letter==='x'?'tile-x':'tile-y'):'tile-variable'});return x+95}
             const r=parseRational(term);if(!r)return x;if(r.n<0){sign*=-1;r=rational(-r.n,r.d)}const type=sign<0?'-n':'+n';tileConfig[type]??={colorClass:'bg-cyan-500',shapeClass:'rational-tile',opposite:sign<0?'+n':'-n'};createTileElement(type,x,y,Math.abs(r.n),parent,null,{kind:'number',num:Math.abs(r.n),den:r.d,format:valueFormat(term),color:tileConfig[type].colorClass,shape:'rational-tile'});return x+65;
         }
-        function sanitizeExerciseInput(input){const allowed=(input.value||'').replace(/[^A-Za-z0-9.+\-/^()\s]/g,'');if(input.value!==allowed){const pos=input.selectionStart;input.value=allowed;if(pos!==null)input.setSelectionRange(Math.min(pos,allowed.length),Math.min(pos,allowed.length))}}
-        function insertExercise(){const inputField=document.getElementById('exercise-input');sanitizeExerciseInput(inputField);const input=inputField.value.trim();if(!input)return;saveState();container.innerHTML='';let expr=input.replace(/\s+/g,' ').trim(),x=40,y=120;
-            const parenRegex=/([+-]?)\(([^()]+)\)/g;let match;while((match=parenRegex.exec(expr))){const sign=match[1]==='-'?'-':'+',paren=addParenthesisRaw(sign,x,y),content=paren.querySelector('.paren-content');let ix=12;const tokens=match[2].match(/[+-]?\s*(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)?\s*[A-Za-z]?(?:\^\d+)?/g)||[];tokens.filter(t=>t.trim()).forEach(t=>{ix=parseTermIntoTile(t,ix,24,content)});paren.style.width=`${Math.max(220,ix+30)}px`;x+=Math.max(250,ix+50);if(x>container.clientWidth-240){x=40;y+=190}}
+        function sanitizeExerciseInput(input){const allowed=(input.value||'').replace(/[^A-Za-z0-9.+\-/^()×·*\s]/g,'');if(input.value!==allowed){const pos=input.selectionStart;input.value=allowed;if(pos!==null)input.setSelectionRange(Math.min(pos,allowed.length),Math.min(pos,allowed.length))}}
+        function topLevelProductFactors(expr){
+            const factors=[];let depth=0,start=0;
+            for(let i=0;i<expr.length;i++){const c=expr[i];if(c==='(')depth++;else if(c===')'){depth--;if(depth<0)return {error:'Parentheses are not balanced.'}}else if((c==='*'||c==='×'||c==='·')&&depth===0){factors.push(expr.slice(start,i).trim());start=i+1}}
+            if(depth!==0)return {error:'Parentheses are not balanced.'};factors.push(expr.slice(start).trim());if(factors.some(x=>!x))return {error:'Enter a factor on both sides of each multiplication sign.'};return {factors};
+        }
+        function tokenizeAdditiveTerms(expr){
+            const out=[];let i=0;const re=/([+-]?)\s*((?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)?[A-Za-z](?:\^\d+)?|(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+))/y;
+            while(i<expr.length){while(/\s/.test(expr[i]||''))i++;if(i>=expr.length)break;re.lastIndex=i;const m=re.exec(expr);if(!m)return null;out.push((m[1]||'')+m[2]);i=re.lastIndex;while(/\s/.test(expr[i]||''))i++;if(i<expr.length&&expr[i]!=='+'&&expr[i]!=='-')return null}
+            return out.length?out:null;
+        }
+        function insertMultiplicationExercise(inputField,input){
+            let depth=0,invalidAdd=false;for(let i=0;i<input.length;i++){if(input[i]==='(')depth++;else if(input[i]===')')depth--;else if(depth===0&&(input[i]==='+'||input[i]==='-')&&i>0&&!/[*/×·]$/.test(input.slice(0,i).trim()))invalidAdd=true}
+            if(depth!==0){alert('Parentheses are not balanced.');return false}if(invalidAdd){alert('You are in Multiplication mode. Addition and subtraction are allowed only inside parentheses; connect outside factors with * instead.');return false}
+            const parsed=topLevelProductFactors(input);if(parsed.error){alert(parsed.error);return false}const factors=parsed.factors;const parsedFactors=factors.map(f=>{const clean=f.trim(),outer=clean.match(/^([+-]?)\s*\(([\s\S]*)\)$/);if(outer){const terms=tokenizeAdditiveTerms(outer[2]);return terms?{kind:'group',sign:outer[1]==='-'?'-':'+',terms}:null}const varOk=/^[+-]?\s*(?:(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)\s*)?[A-Za-z](?:\^\d+)?$/.test(clean),numOk=/^[+-]?\s*(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)$/.test(clean);return varOk||numOk?{kind:'term',term:clean}:null});
+            if(parsedFactors.some(x=>!x)){alert('Use a number or one variable as each factor. Parentheses may contain sums, for example 3x*(y+2).');return false}
+            saveState();container.innerHTML='';let x=40,y=130;
+            parsedFactors.forEach(f=>{if(f.kind==='term'){parseTermIntoTile(f.term,x,y,container);x+=100}else{const paren=addParenthesisRaw(f.sign,x,y),content=paren.querySelector('.paren-content');let ix=12;f.terms.forEach(term=>{ix=parseTermIntoTile(term,ix,28,content)});paren.style.width=`${Math.max(220,ix+25)}px`;x+=Math.max(245,ix+45)}if(x>container.clientWidth-240){x=32;y+=220}});
+            playSound('expression');updateEquation();inputField.value='';return true;
+        }
+        function insertExercise(){const inputField=document.getElementById('exercise-input');sanitizeExerciseInput(inputField);const input=inputField.value.trim();if(!input)return;if(operationMode==='multiplication'){insertMultiplicationExercise(inputField,input);return}saveState();container.innerHTML='';let expr=input.replace(/\s+/g,' ').trim(),x=40,y=120;
+            const parenRegex=/([+-]?)\(([^()]+)\)/g;let match;while((match=parenRegex.exec(expr))){const sign=match[1]==='-'?'-':'+';const paren=addParenthesisRaw(sign,x,y),content=paren.querySelector('.paren-content');let ix=12;const tokens=match[2].match(/[+-]?\s*(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)?\s*[A-Za-z]?(?:\^\d+)?/g)||[];tokens.filter(t=>t.trim()).forEach(t=>{ix=parseTermIntoTile(t,ix,24,content)});paren.style.width=`${Math.max(220,ix+30)}px`;x+=Math.max(250,ix+50);if(x>container.clientWidth-240){x=40;y+=190}}
             expr=expr.replace(parenRegex,'');const tokens=expr.match(/[+-]?\s*(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)?\s*[A-Za-z]?(?:\^\d+)?/g)||[];tokens.filter(t=>t.trim()).forEach(t=>{x=parseTermIntoTile(t,x,y,container);if(x>container.clientWidth-100){x=40;y+=110}});playSound('expression');updateEquation();inputField.value='';
         }
         // Exercise setup and generator
-        const exerciseSettings={terms:3,operators:'combined',variables:1,variableMode:'combined',numbers:'mixed',parentheses:'none',degree:'combined'};
-        function openExerciseSettings(){const root=document.getElementById('exercise-modal');root.classList.remove('hidden');root.innerHTML=`<div class="modal-card"><div class="flex justify-between items-center"><h2 class="text-xl font-bold">Configure Exercises</h2><button onclick="closeModal('exercise-modal')" class="text-2xl text-slate-400">×</button></div><form id="exercise-form">
+        const exerciseSettings={terms:3,operators:'combined',variables:1,variableMode:'combined',numbers:'integer',parentheses:'none',degree:'1'};
+        function openAdditionExerciseSettings(){const root=document.getElementById('exercise-modal');root.classList.remove('hidden');root.innerHTML=`<div class="modal-card"><div class="flex justify-between items-center"><h2 class="text-xl font-bold">Configure Addition Exercises</h2><button onclick="closeModal('exercise-modal')" class="text-2xl text-slate-400">×</button></div><form id="exercise-form">
             <label class="form-field">Number of terms<select name="terms">${[1,2,3,4,5].map(n=>`<option value="${n}" ${exerciseSettings.terms===n?'selected':''}>${n}</option>`).join('')}</select></label>
             <label class="form-field">Operators<select name="operators"><option value="sum">Addition</option><option value="sub">Subtraction</option><option value="combined" selected>Combined</option></select></label>
             <label class="form-field">Number of variables (max. 4)<select name="variables">${[1,2,3,4].map(n=>`<option value="${n}" ${exerciseSettings.variables===n?'selected':''}>${n===1?'One':n+' variables'}</option>`).join('')}</select></label>
@@ -1079,9 +1316,23 @@
             <div class="flex justify-end gap-2 mt-5"><button type="button" onclick="closeModal('exercise-modal')" class="px-4 py-2 rounded-lg bg-slate-100">Cancel</button><button class="px-4 py-2 rounded-lg bg-violet-600 text-white font-semibold">Save</button></div></form></div>`;
             const form=document.getElementById('exercise-form');for(const [k,v] of Object.entries(exerciseSettings)){if(k!=='variableMode'&&form.elements[k])form.elements[k].value=v}form.elements.variableCombined.checked=exerciseSettings.variableMode==='combined';form.onsubmit=e=>{e.preventDefault();for(const k of Object.keys(exerciseSettings)){if(k!=='variableMode')exerciseSettings[k]=form.elements[k].value}exerciseSettings.variableMode=form.elements.variableCombined.checked?'combined':'separate';exerciseSettings.terms=Number(exerciseSettings.terms);exerciseSettings.variables=Number(exerciseSettings.variables);generateExercise();closeModal('exercise-modal')};
         }
+        const multiplicationSettings={factors:3,variables:1,variableMode:'combined',numbers:'integer',parentheses:'none',termsPerParenthesis:3,degree:'1'};
+        function openMultiplicationExerciseSettings(){const root=document.getElementById('exercise-modal');root.classList.remove('hidden');root.innerHTML=`<div class="modal-card"><div class="flex justify-between items-center"><h2 class="text-xl font-bold">Configure Multiplication Exercises</h2><button type="button" onclick="closeModal('exercise-modal')" class="text-2xl text-slate-400">×</button></div><form id="multiplication-exercise-form">
+            <label class="form-field">Number of factors<select name="factors">${[1,2,3,4,5].map(n=>`<option value="${n}" ${multiplicationSettings.factors===n?'selected':''}>${n}</option>`).join('')}</select></label>
+            <label class="form-field">Variables (maximum 4)<select name="variables">${[0,1,2,3,4].map(n=>`<option value="${n}" ${multiplicationSettings.variables===n?'selected':''}>${n===0?'Numbers only':n===1?'One variable':n+' variables'}</option>`).join('')}</select></label>
+            <label class="form-field">Variable arrangement<select name="variableMode"><option value="combined">Variables may repeat / combine</option><option value="separate">Keep variables separate</option></select></label>
+            <label class="form-field">Number and coefficient type<select name="numbers"><option value="integer">Integers</option><option value="fraction">Fractions</option><option value="decimal">Decimals</option><option value="mixed">Mixed numbers</option><option value="combined">Combined</option></select></label>
+            <label class="form-field">Parenthesis factors<select name="parentheses"><option value="none">No parenthesis factor</option><option value="one">One parenthesis factor</option><option value="two">Two parenthesis factors</option></select></label>
+            <label class="form-field">Terms inside each parenthesis<select name="termsPerParenthesis">${[2,3,4].map(n=>`<option value="${n}" ${multiplicationSettings.termsPerParenthesis===n?'selected':''}>${n} terms</option>`).join('')}</select></label>
+            <label class="form-field">Variable exponent<select name="degree"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="combined">Combined (1–5)</option></select></label>
+            <p class="text-xs text-slate-500">Generated factors are multiplied. Addition or subtraction may appear only inside parentheses.</p>
+            <div class="flex justify-end gap-2 mt-5"><button type="button" onclick="closeModal('exercise-modal')" class="px-4 py-2 rounded-lg bg-slate-100">Cancel</button><button class="px-4 py-2 rounded-lg bg-violet-600 text-white font-semibold">Save & Generate</button></div></form></div>`;
+            const form=root.querySelector('#multiplication-exercise-form');form.elements.variableMode.value=multiplicationSettings.variableMode;form.onsubmit=e=>{e.preventDefault();multiplicationSettings.factors=Number(form.elements.factors.value);multiplicationSettings.variables=Number(form.elements.variables.value);multiplicationSettings.variableMode=form.elements.variableMode.value;multiplicationSettings.numbers=form.elements.numbers.value;multiplicationSettings.parentheses=form.elements.parentheses.value;multiplicationSettings.termsPerParenthesis=Number(form.elements.termsPerParenthesis.value);multiplicationSettings.degree=form.elements.degree.value;generateMultiplicationExercise();closeModal('exercise-modal')};
+        }
+        function openExerciseSettings(){if(operationMode==='multiplication')openMultiplicationExerciseSettings();else openAdditionExerciseSettings()}
         function randomInt(a,b){return Math.floor(Math.random()*(b-a+1))+a}
         function generatedValue(mode){const choices=mode==='combined'?['integer','fraction','decimal','mixed']:[mode];const kind=choices[randomInt(0,choices.length-1)];if(kind==='fraction')return `${randomInt(1,7)}/${randomInt(2,9)}`;if(kind==='decimal')return `${randomInt(1,9)}.${randomInt(1,9)}`;if(kind==='mixed')return `${randomInt(1,3)} ${randomInt(1,4)}/${randomInt(2,7)}`;return String(randomInt(1,9))}
-        function generateExercise(){
+        function generateAdditionExercise(){
             const count=exerciseSettings.terms,letters=['a','b','c','d'],nvars=exerciseSettings.variables,used=letters.slice(0,nvars),terms=[];
             for(let i=0;i<count;i++){
                 let letter='';
@@ -1099,17 +1350,42 @@
             else if(mode==='two'){const split=count>1?Math.ceil(count/2):1;const first=group(0,split),second=count>1?group(split,count):(Math.random()<.5?terms[0]:`-${terms[0]}`);const outer1=Math.random()<.5?'-':'',outer2=Math.random()<.5?'-':'+';expr=`${outer1}(${first}) ${outer2}(${second})`}
             document.getElementById('exercise-input').value=expr;insertExercise();
         }
-        // Logo click generates; one-second hold opens setup.
+        function generateMultiplicationExercise(){
+            const cfg=multiplicationSettings,letters=['a','b','c','d'],factorCount=Math.max(cfg.factors,cfg.parentheses==='two'?2:1),groupCount=cfg.parentheses==='two'?2:cfg.parentheses==='one'?1:0,used=letters.slice(0,cfg.variables),degree=()=>cfg.degree==='combined'?randomInt(1,5):Number(cfg.degree);
+            const variableTerm=(index,allowNumber=true)=>{if(!used.length||allowNumber&&Math.random()<.28)return generatedValue(cfg.numbers);const letter=cfg.variableMode==='separate'?used[index%used.length]:used[randomInt(0,used.length-1)],exp=degree(),value=generatedValue(cfg.numbers);return `${value}${letter}${exp>1?`^${exp}`:''}`};
+            const factors=[];for(let i=0;i<factorCount;i++){
+                if(i<groupCount){const terms=[];for(let j=0;j<cfg.termsPerParenthesis;j++){const body=variableTerm(i*cfg.termsPerParenthesis+j,true),negative=j>0&&Math.random()<.38;terms.push(`${negative?'-':'+'}${body}`)}let group=terms.join('').replace(/^\+/,'');factors.push(`(${group})`)}
+                else factors.push(variableTerm(i,false));
+            }
+            const expr=factors.join(' * ');const field=document.getElementById('exercise-input');field.value=expr;insertExercise();
+        }
+        function generateExercise(){if(operationMode==='multiplication')generateMultiplicationExercise();else generateAdditionExercise()}
+        // Logo click generates; one-second hold opens the current mode's settings.
         const exerciseBtn=document.getElementById('create-exercise-btn');let exerciseHold=null,exerciseWasLong=false;
         exerciseBtn.addEventListener('pointerdown',()=>{exerciseWasLong=false;exerciseHold=setTimeout(()=>{exerciseWasLong=true;openExerciseSettings()},1000)});
         ['pointerup','pointerleave','pointercancel'].forEach(ev=>exerciseBtn.addEventListener(ev,()=>clearTimeout(exerciseHold)));
         exerciseBtn.addEventListener('click',()=>{if(exerciseWasLong){exerciseWasLong=false;return}generateExercise()});
         // Include custom metadata in undo/redo snapshots.
         const baseGetStateSnapshot=getStateSnapshot;
-        getStateSnapshot=function(){const state=JSON.parse(baseGetStateSnapshot());state.tiles.forEach(t=>{const el=document.querySelector(`.algebra-tile[data-id="${t.id}"]`);if(el){for(const k of ['kind','num','den','format','letter','exponent','color','shape'])if(el.dataset[k]!==undefined)t[k]=el.dataset[k]}});return JSON.stringify(state)};
+        getStateSnapshot=function(){const state=JSON.parse(baseGetStateSnapshot());state.tiles.forEach(t=>{const el=document.querySelector(`.algebra-tile[data-id="${t.id}"]`);if(el){for(const k of ['kind','num','den','format','letter','exponent','color','shape','variables','factorParts','distributionGroup'])if(el.dataset[k]!==undefined)t[k]=el.dataset[k]}});return JSON.stringify(state)};
         const baseLoadState=loadState;
-        loadState=function(str){if(!str)return;const state=JSON.parse(str);container.innerHTML='';state.parens.forEach(d=>{const p=addParenthesisRaw(d.sign,parseFloat(d.left),parseFloat(d.top),d.id);if(d.width)p.style.width=d.width;if(d.height)p.style.height=d.height});state.tiles.forEach(d=>{let parent=container;if(d.parentId!=='container'){const p=container.querySelector(`.parenthesis[data-id="${d.parentId}"]`);if(p)parent=p.querySelector('.paren-content')}createTileElement(d.type,parseFloat(d.left),parseFloat(d.top),d.coeff,parent,d.id,{kind:d.kind,num:Number(d.num??d.coeff),den:Number(d.den||1),format:d.format,letter:d.letter,exponent:Number(d.exponent||1),color:d.color,shape:d.shape})});updateEquation()};
+        loadState=function(str){if(!str)return;const state=JSON.parse(str);container.innerHTML='';state.parens.forEach(d=>{const p=addParenthesisRaw(d.sign,parseFloat(d.left),parseFloat(d.top),d.id);if(d.width)p.style.width=d.width;if(d.height)p.style.height=d.height});state.tiles.forEach(d=>{let parent=container;if(d.parentId!=='container'){const p=container.querySelector(`.parenthesis[data-id="${d.parentId}"]`);if(p)parent=p.querySelector('.paren-content')}createTileElement(d.type,parseFloat(d.left),parseFloat(d.top),d.coeff,parent,d.id,{kind:d.kind,num:Number(d.num??d.coeff),den:Number(d.den||1),format:d.format,letter:d.letter,exponent:Number(d.exponent||1),color:d.color,shape:d.shape,variables:d.variables,factorParts:d.factorParts,distributionGroup:d.distributionGroup})});updateEquation()};
         window.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;if(e.key==='Delete'||e.key==='Backspace')deleteSelected()});
+        function setOperationMode(mode){
+            if(mode!=='addition'&&mode!=='multiplication')return;if(mode===operationMode)return;operationMode=mode;
+            clearTimeout(multiplicationClickTimer);multiplicationClickTimer=null;document.querySelectorAll('.distribution-arrows').forEach(x=>x.remove());container.innerHTML='';document.getElementById('exercise-input').value='';historyStack=[];redoStack=[];clipboard=[];playSound('clear');
+            document.body.classList.toggle('mode-multiplication',mode==='multiplication');
+            const add=document.getElementById('mode-addition'),mul=document.getElementById('mode-multiplication');
+            [[add,'addition'],[mul,'multiplication']].forEach(([btn,key])=>{const active=key===mode;btn.classList.toggle('is-active',active);btn.setAttribute('aria-pressed',String(active))});
+            document.getElementById('program-mode-label').textContent=mode==='addition'?'Addition & Subtraction':'Multiplication';
+            document.getElementById('terms-x-heading').textContent=mode==='addition'?'X Terms':'X Factors';document.getElementById('terms-y-heading').textContent=mode==='addition'?'Y Terms':'Y Factors';document.getElementById('numbers-heading').textContent=mode==='addition'?'Integers':'Number Factors';
+            document.getElementById('dynamic-tip').innerHTML=mode==='addition'?'<b>Tip:</b> Right-click to change sign; double-click a variable to edit its coefficient or exponent. Ctrl+E selects all tiles.':'<b>Multiplication:</b> Enter factors joined by *; sums are allowed only inside parentheses. Place an outside factor within one tile of a parenthesis and click it to distribute.';
+            document.getElementById('exercise-input').placeholder=mode==='addition'?'e.g. 3x^2 + y':'e.g. 3x*(y + 2)';document.getElementById('exercise-input').title=mode==='addition'?'Use addition/subtraction, fractions, decimals, and ^ for powers.':'Multiplication only: connect factors with *. Addition/subtraction is allowed inside parentheses, e.g. 3x*(y+2).';
+            document.querySelectorAll('.algebra-tile.distribution-source').forEach(t=>t.classList.remove('distribution-source'));updateEquation();
+        }
+        document.getElementById('mode-addition').addEventListener('click',()=>setOperationMode('addition'));
+        document.getElementById('mode-multiplication').addEventListener('click',()=>setOperationMode('multiplication'));
+        document.getElementById('mode-division').addEventListener('click',()=>{alert('Coming soon! Division mode is not available yet.')});
         // Clean tile gestures: right-click changes sign; double-left-click opens exponent settings.
         // The final tile factory binds these events on every newly created or restored tile.
         const sidebarToggle=document.getElementById('sidebar-toggle'),sidebarPanel=document.getElementById('sidebar-panel');
@@ -1119,6 +1395,434 @@
         // Add distinct sounds to deletion animations and newly inserted expressions.
         window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise){const mathNodes=Array.from(document.querySelectorAll('.tile-text,#equation-display'));MathJax.typesetPromise(mathNodes).catch(()=>{})}});
 
+
+        // --- Additional multiplication parsing, editing, and distributive workflows ---
+        let distributionLockedV3=false, distributionPendingV3=false;
+        function setDistributionLockV3(locked){
+            distributionLockedV3=locked;container.classList.toggle('distribution-busy',locked);document.body.classList.toggle('distribution-lock-active',locked);
+            ['mode-addition','mode-multiplication'].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=locked});
+            const input=document.getElementById('exercise-input'),insertButton=document.querySelector('#expression-inserter button'),clearButton=document.querySelector('#sidebar-panel button[onclick="clearWorkspace()"]');if(input)input.disabled=locked;if(insertButton)insertButton.disabled=locked;if(clearButton)clearButton.disabled=locked;
+            document.querySelectorAll('.distribution-locked-note').forEach(n=>n.remove());
+            if(locked){const note=document.createElement('div');note.className='distribution-locked-note';note.textContent='Multiplication in progress — the workspace is temporarily locked';document.body.appendChild(note)}
+        }
+        function releaseDistributionLockV3(){distributionPendingV3=false;setDistributionLockV3(false)}
+        ['mousedown','touchstart','click','dblclick','contextmenu'].forEach(type=>container.addEventListener(type,e=>{if(distributionLockedV3){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation()}},true));
+
+        // Parse implicit products such as 2y(3x+6), -3(x+y), and (a+2b)(3x-y),
+        // as well as explicit products using *, ×, or ·. Top-level addition remains invalid in this mode.
+        function scanMultiplicationFactorsV3(expr){
+            const factors=[];let i=0,needFactor=true,afterExplicit=false;
+            const atomRe=/^(?:(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)\s*)?[A-Za-z](?:\^\d+)?|^(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)/;
+            while(i<expr.length){
+                while(/\s/.test(expr[i]||''))i++;
+                if(i>=expr.length)break;
+                const c=expr[i];
+                if(c==='*'||c==='×'||c==='·'){if(needFactor)return {error:'Enter a factor on both sides of each multiplication sign.'};needFactor=true;afterExplicit=true;i++;continue}
+                if((c==='+'||c==='-')&&!needFactor){return {error:'You are in Multiplication mode. Addition and subtraction are allowed only inside parentheses; use * to multiply factors.'}}
+                if(!needFactor && c!=='('){return {error:'Use * between standalone factors. Implicit multiplication is supported before parentheses, for example 2y(3x+6).'}}
+                let sign='';if(c==='+'||c==='-'){sign=c;i++;while(/\s/.test(expr[i]||''))i++}
+                if(i>=expr.length)return {error:'A sign must be followed by a number, variable, or parenthesis.'};
+                if(expr[i]==='('){let depth=0,j=i;for(;j<expr.length;j++){if(expr[j]==='(')depth++;else if(expr[j]===')'){depth--;if(depth===0)break}}if(depth!==0)return {error:'Parentheses are not balanced.'};const body=expr.slice(i+1,j).trim();if(!body)return {error:'Parentheses cannot be empty.'};factors.push({kind:'group',sign:sign==='-'?-1:1,body});i=j+1;needFactor=false;afterExplicit=false;continue}
+                const m=atomRe.exec(expr.slice(i));if(!m)return {error:'Use numbers, variables, exponents, parentheses, and multiplication signs only.'};
+                factors.push({kind:'term',term:`${sign}${m[0].trim()}`});i+=m[0].length;needFactor=false;afterExplicit=false;
+                // A parenthesis immediately after a monomial/number is implicit multiplication.
+                let look=i;while(/\s/.test(expr[look]||''))look++;if(expr[look]==='('){needFactor=true;afterExplicit=false;i=look}
+            }
+            if(!factors.length)return {error:'Enter at least one factor.'};if(needFactor)return {error:'Enter a factor after the multiplication sign.'};return {factors};
+        }
+        function insertMultiplicationExercise(inputField,input){
+            const parsed=scanMultiplicationFactorsV3(input.replace(/\s+/g,' ').trim());
+            if(parsed.error){alert(parsed.error);return false}
+            const expanded=parsed.factors.map(f=>{if(f.kind==='term')return f;const terms=tokenizeAdditiveTerms(f.body);return terms?{...f,terms}:null});
+            if(expanded.some(f=>!f)){alert('Each parenthesis must contain a sum or difference of numbers and monomials, such as (a + 2b) or (3x - y^3x).');return false}
+            saveState();container.innerHTML='';let x=36,y=130;
+            expanded.forEach(f=>{if(f.kind==='term'){parseTermIntoTile(f.term,x,y,container);x+=100}else{const paren=addParenthesisRaw(f.sign<0?'-':'+',x,y),content=paren.querySelector('.paren-content');let ix=12;f.terms.forEach(term=>{ix=parseTermIntoTile(term,ix,28,content)});paren.style.width=`${Math.max(220,ix+25)}px`;paren.dataset.productReady='true';x+=Math.max(245,ix+45)}if(x>container.clientWidth-240){x=30;y+=220}});
+            playSound('expression');updateEquation();inputField.value='';return true;
+        }
+
+        // Double-click numerical/rational tiles to change their value, including its sign.
+        function openNumberValueModalV3(tile){
+            if(!tile||tile.dataset.kind!=='number')return;
+            const root=document.getElementById('exponent-modal'),r=absRat(tile),fmt=tile.dataset.format||'integer';let initial=fmt==='decimal'?(r.n/r.d).toString():fmt==='mixed'&&r.d>1?`${Math.floor(r.n/r.d)} ${r.n%r.d}/${r.d}`:r.d===1?String(r.n):`${r.n}/${r.d}`;
+            if(typeSign(tile)<0)initial='-'+initial;
+            root.classList.remove('hidden');root.innerHTML=`<div class="modal-card"><div class="flex justify-between items-center"><h2 class="text-xl font-bold">Change Number Value</h2><button type="button" onclick="closeModal('exponent-modal')" class="text-2xl text-slate-400">×</button></div><form id="number-value-form"><label class="form-field">New value (positive or negative, integer, decimal, mixed number, or fraction)<input id="number-value-input" type="text" value="${initial}" placeholder="e.g. -3, 0.75, 1 1/2, or -7/4" autocomplete="off" required></label><p class="text-sm text-slate-500">A negative value automatically gives the tile a negative sign.</p><div class="flex justify-end gap-2 mt-5"><button type="button" onclick="closeModal('exponent-modal')" class="px-4 py-2 rounded-lg bg-slate-100">Cancel</button><button class="px-4 py-2 rounded-lg bg-violet-600 text-white font-semibold">Apply Value</button></div></form></div>`;
+            root.querySelector('#number-value-form').onsubmit=e=>{e.preventDefault();const raw=root.querySelector('#number-value-input').value.trim(),value=parseRational(raw);if(!value){alert('Enter a valid integer, decimal, mixed number, or fraction.');return}saveState();if(value.n===0){tile.remove();playSound('disappear');updateEquation();closeModal('exponent-modal');return}tile.dataset.kind='number';tile.dataset.num=Math.abs(value.n);tile.dataset.den=value.d;tile.dataset.coeff=Math.abs(value.n);tile.dataset.format=valueFormat(raw);tile.dataset.type=value.n<0?'-n':'+n';setTileSign(tile,value.n<0?-1:1);updateTileText(tile);playSound('add');updateEquation();closeModal('exponent-modal')};
+        }
+        const createTileElementBeforeNumericEditV3=createTileElement;
+        createTileElement=function(...args){const tile=createTileElementBeforeNumericEditV3(...args);tile.addEventListener('dblclick',e=>{if(distributionLockedV3)return;if(tile.dataset.kind==='number'){e.preventDefault();e.stopPropagation();openNumberValueModalV3(tile)}});tile.addEventListener('dblclick',e=>{if(distributionPendingV3&&(tile.dataset.kind==='variable'||tile.dataset.kind==='number')){clearTimeout(multiplicationClickTimer);multiplicationClickTimer=null;releaseDistributionLockV3()}},true);return tile};
+
+        // The nearest outside factor may be clicked once only: lock the entire work surface before scheduling.
+        function handleMultiplicationTileClick(tile,e){
+            if(operationMode!=='multiplication'||lastGestureMoved||distributionLockedV3||!tile.isConnected||tile.parentElement!==container)return;
+            const paren=nearestParenthesis(tile);if(!paren)return;
+            distributionPendingV3=true;setDistributionLockV3(true);
+            clearTimeout(multiplicationClickTimer);multiplicationClickTimer=setTimeout(()=>{distributionPendingV3=false;if(tile.isConnected&&paren.isConnected)distributeTileOverParenthesis(tile,paren);else releaseDistributionLockV3()},tile.dataset.kind==='variable'?600:60);
+        }
+        function drawParenProductArrowsV3(parenA,parenB,termsA,termsB){
+            const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg'),uid=`paren-product-${Date.now()}-${Math.random().toString(36).slice(2,7)}`;svg.setAttribute('class','distribution-arrows');svg.setAttribute('viewBox',`0 0 ${window.innerWidth} ${window.innerHeight}`);svg.setAttribute('preserveAspectRatio','none');const defs=document.createElementNS(ns,'defs');svg.appendChild(defs);const colors=['#2563eb','#dc2626','#16a34a','#f59e0b','#7c3aed','#0891b2'];
+            termsA.forEach((a,ai)=>termsB.forEach((b,bi)=>{const idx=(ai*termsB.length+bi)%colors.length,color=colors[idx],marker=document.createElementNS(ns,'marker'),head=document.createElementNS(ns,'path'),id=`${uid}-${ai}-${bi}`,ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect(),sx=ra.left+ra.width/2,sy=ra.top+ra.height/2,ex=rb.left+rb.width/2,ey=rb.top+rb.height/2,delta=ex-sx,lift=Math.max(42,Math.min(135,Math.abs(delta)*.2+Math.abs(ey-sy)*.12)),curve=ey<sy?-lift:lift;marker.setAttribute('id',id);marker.setAttribute('markerWidth','10');marker.setAttribute('markerHeight','10');marker.setAttribute('refX','8');marker.setAttribute('refY','4');marker.setAttribute('orient','auto');head.setAttribute('d','M0,0 L9,4 L0,8 z');head.setAttribute('fill',color);marker.appendChild(head);defs.appendChild(marker);const path=document.createElementNS(ns,'path'),c1x=sx+delta*.22,c2x=sx+delta*.78;path.setAttribute('d',`M ${sx} ${sy} C ${c1x} ${sy+curve}, ${c2x} ${ey+curve}, ${ex} ${ey}`);path.setAttribute('class','distribution-arrow');path.style.stroke=color;path.style.color=color;path.style.markerEnd=`url(#${id})`;svg.appendChild(path);const length=path.getTotalLength();path.style.strokeDasharray=String(length);path.style.setProperty('--path-length',String(length));path.style.animationDelay=`${idx*.12}s`}));document.body.appendChild(svg);return svg;
+        }
+        function distributeParenthesesV3(parenA,parenB){
+            if(!parenA?.isConnected||!parenB?.isConnected||parenA===parenB||distributionLockedV3)return;
+            const contentA=parenA.querySelector('.paren-content'),contentB=parenB.querySelector('.paren-content'),termsA=Array.from(contentA.querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left),termsB=Array.from(contentB.querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left);
+            if(!termsA.length||!termsB.length){alert('Both parenthesis containers need at least one tile before multiplying.');return}
+            setDistributionLockV3(true);parenA.classList.add('distribution-target');parenB.classList.add('distribution-target');const svg=drawParenProductArrowsV3(parenA,parenB,termsA,termsB);playSound('distribute');
+            const rectA=parenA.getBoundingClientRect(),rectB=parenB.getBoundingClientRect(),board=container.getBoundingClientRect(),signA=parenA.querySelector('.paren-sign').innerText==='-'?-1:1,signB=parenB.querySelector('.paren-sign').innerText==='-'?-1:1,outerSign=signA*signB,groupId=`distribution-pair-${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
+            const products=[];termsA.forEach(a=>termsB.forEach(b=>{const data=multiplicationPayload(a,b,outerSign);data.meta.distributionGroup=groupId;products.push({a,b,data,preview:null})}));
+            const resultY=Math.min(container.clientHeight-92,Math.max(rectA.bottom,rectB.bottom)-board.top+24);let previewX=22,previewY=Math.max(18,resultY);const positions=[];products.forEach(({data})=>{const estimate=data.meta.kind==='product'?Math.max(88,42+(data.meta.variables||[]).length*18):58;if(previewX+estimate>container.clientWidth-12){previewX=22;previewY+=92}positions.push({x:previewX,y:previewY});previewX+=estimate+14});
+            setTimeout(()=>{termsA.concat(termsB).forEach(t=>t.classList.add('distribution-original','is-separating'));products.forEach(({a,b,data},i)=>{a.classList.add('distribution-source');b.classList.add('distribution-source');const pos=positions[i],preview=createTileElement(data.type,pos.x,pos.y,data.coeff,container,null,data.meta);preview.classList.add('product-preview');preview.style.zIndex='25';products[i].preview=preview;setTimeout(()=>preview.classList.add('is-revealed'),i*90)})},950);
+            setTimeout(()=>{products.forEach(({preview})=>{if(preview){preview.classList.remove('product-preview','is-revealed');preview.classList.add('product-finalizing')}});parenA.remove();parenB.remove();svg.remove();playSound('multiply');updateEquation();setTimeout(()=>{document.querySelectorAll('.product-finalizing').forEach(t=>t.classList.remove('product-finalizing'));releaseDistributionLockV3()},750)},3000);
+        }
+        const addParenthesisRawBeforePairV3=addParenthesisRaw;
+        addParenthesisRaw=function(sign,x,y,forceId=null){const paren=addParenthesisRawBeforePairV3(sign,x,y,forceId);paren.title='Double-click this container header to multiply it by the nearest parenthesis';paren.addEventListener('dblclick',e=>{if(e.target.closest('.algebra-tile,.settings-btn,.paren-settings-menu'))return;e.preventDefault();e.stopPropagation();if(operationMode!=='multiplication'){return}const others=Array.from(container.querySelectorAll(':scope > .parenthesis')).filter(p=>p!==paren);if(!others.length){alert('Add a second parenthesis container, then double-click either one to multiply them.');return}const r=paren.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;others.sort((a,b)=>{const ar=a.getBoundingClientRect(),br=b.getBoundingClientRect();return Math.hypot(cx-(ar.left+ar.width/2),cy-(ar.top+ar.height/2))-Math.hypot(cx-(br.left+br.width/2),cy-(br.top+br.height/2))});distributeParenthesesV3(paren,others[0])});return paren};
+        // Guard the existing one-parenthesis distribution entry point and release the lock on all exits.
+        const distributeOneParenBeforeLockV3=distributeTileOverParenthesis;
+        distributeTileOverParenthesis=function(source,paren){if(!distributionLockedV3)setDistributionLockV3(true);if(!source?.isConnected||!paren?.isConnected){releaseDistributionLockV3();return}const old=window.setTimeout;try{distributeOneParenBeforeLockV3(source,paren);setTimeout(()=>releaseDistributionLockV3(),3900)}catch(err){releaseDistributionLockV3();throw err}};
+
+        // Sign Rules button: outside click and Escape close the compact reference panel.
+        const signRulesBtn=document.getElementById('sign-rules-btn'),signRulesModal=document.getElementById('sign-rules-modal');
+        signRulesBtn.addEventListener('click',()=>signRulesModal.classList.remove('hidden'));
+        document.getElementById('close-sign-rules')?.addEventListener('click',()=>signRulesModal.classList.add('hidden'));
+        signRulesModal.addEventListener('click',e=>{if(e.target===signRulesModal)signRulesModal.classList.add('hidden')});
+        window.addEventListener('keydown',e=>{if(e.key==='Escape')signRulesModal.classList.add('hidden')});
+        document.getElementById('exercise-input').placeholder='e.g. 3x*(y+2), 2y(3x+6), or (a+2b)(3x-y)';
+        document.getElementById('exercise-input').title='Multiplication mode accepts explicit products (*, ×) and implicit products before parentheses. Example: 2y(3x+6), -3(x+y), or (a+2b)(3x-y).';
+
+        // Extend signed-term parsing to monomials with multiple letters (for example y^3x).
+        tokenizeAdditiveTerms=function(expr){
+            const out=[];let i=0;const re=/([+-]?)\s*((?:(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)\s*)?(?:[A-Za-z](?:\^\d+)?)+|(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+))/y;
+            while(i<expr.length){while(/\s/.test(expr[i]||''))i++;if(i>=expr.length)break;re.lastIndex=i;const m=re.exec(expr);if(!m)return null;out.push((m[1]||'')+m[2].replace(/\s+/g,''));i=re.lastIndex;while(/\s/.test(expr[i]||''))i++;if(i<expr.length&&expr[i]!=='+'&&expr[i]!=='-')return null}return out.length?out:null;
+        };
+        parseTermIntoTile=function(raw,x,y,parent){
+            let term=String(raw||'').trim();if(!term)return x;let sign=1;if(term[0]==='-'){sign=-1;term=term.slice(1)}else if(term[0]==='+')term=term.slice(1);term=term.trim();
+            const coeffMatch=term.match(/^((?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)\s*)?(.*)$/);if(!coeffMatch)return x;const coeffText=coeffMatch[1]?.trim()||'1',variableText=(coeffMatch[2]||'').trim(),coefficient=parseRational(coeffText);if(!coefficient)return x;sign*=coefficient.n<0?-1:1;const absCoeff=rational(Math.abs(coefficient.n),coefficient.d);
+            if(variableText){const vars=[],re=/([A-Za-z])(?:\^(\d+))?/g;let match,last=0;while((match=re.exec(variableText))){if(match.index!==last)return x;vars.push({letter:match[1],exponent:Number(match[2]||1)});last=re.lastIndex}if(last!==variableText.length||!vars.length)return x;
+                const powers=new Map();vars.forEach(v=>powers.set(v.letter,(powers.get(v.letter)||0)+v.exponent));const variables=Array.from(powers.entries()).map(([letter,exponent])=>({letter,exponent})).sort((a,b)=>a.letter.localeCompare(b.letter));
+                const colors={x:'bg-green-500',y:'bg-blue-500',a:'bg-violet-500',b:'bg-emerald-500',c:'bg-orange-500',d:'bg-pink-500'},factorParts=variables.map(v=>({letter:v.letter,color:colorValue(tileConfig[signedType(v.letter,1)]?.colorClass||colors[v.letter]||'bg-violet-500'),count:v.exponent}));
+                if(variables.length===1){const v=variables[0],legacy=(v.letter==='x'||v.letter==='y')&&v.exponent===1&&absCoeff.d===1,type=`${sign<0?'-':'+'}${legacy?v.letter:`v_${v.letter}_${v.exponent}`}`,color=tileConfig[signedType(type,1)]?.colorClass||colors[v.letter]||'bg-violet-500',shape=legacy?(v.letter==='x'?'tile-x':'tile-y'):'tile-variable';tileConfig[type]??={colorClass:color,shapeClass:shape,opposite:`${sign<0?'+':'-'}${type.slice(1)}`};tileConfig[tileConfig[type].opposite]??={colorClass:'bg-red-500',shapeClass:shape,opposite:type};createTileElement(type,x,y,Math.abs(absCoeff.n),parent,null,{kind:'variable',letter:v.letter,exponent:v.exponent,num:Math.abs(absCoeff.n),den:absCoeff.d,format:valueFormat(coeffText),color,shape});}
+                else {const type=sign<0?'-product':'+product',meta={kind:'product',num:Math.abs(absCoeff.n),den:absCoeff.d,format:valueFormat(coeffText),color:factorParts[0]?.color||'#8b5cf6',shape:'product-tile',variables,factorParts};tileConfig[type]??={colorClass:meta.color,shapeClass:'product-tile',opposite:sign<0?'+product':'-product'};createTileElement(type,x,y,Math.abs(absCoeff.n),parent,null,meta)}
+                return x+Math.max(85,variables.length*22+60);
+            }
+            const type=sign<0?'-n':'+n';tileConfig[type]??={colorClass:'bg-orange-500',shapeClass:'rational-tile',opposite:sign<0?'+n':'-n'};createTileElement(type,x,y,Math.abs(absCoeff.n),parent,null,{kind:'number',num:Math.abs(absCoeff.n),den:absCoeff.d,format:valueFormat(coeffText),color:'#f97316',shape:'rational-tile'});return x+65;
+        };
+        const originalModeTipV3=document.getElementById('dynamic-tip');
+        if(operationMode==='multiplication')originalModeTipV3.innerHTML='<b>Multiplication:</b> Use 2y(3x+6) or (a+2b)(3x-y). Double-click either parenthesis container to distribute it over the nearest other container. The work area locks until the product is complete.';
+        const clearWorkspaceBeforeDistributionLockV3=clearWorkspace;
+        clearWorkspace=function(){if(distributionLockedV3)return;return clearWorkspaceBeforeDistributionLockV3()};
+        const insertExerciseBeforeDistributionLockV3=insertExercise;
+        insertExercise=function(){if(distributionLockedV3)return false;return insertExerciseBeforeDistributionLockV3()};
+        const setOperationModeBeforeImplicitProductsV3=setOperationMode;
+        setOperationMode=function(mode){if(distributionLockedV3)return;setOperationModeBeforeImplicitProductsV3(mode);if(mode==='multiplication'){document.getElementById('exercise-input').placeholder='e.g. 3x*(y+2), 2y(3x+6), or (a+2b)(3x-y)';document.getElementById('exercise-input').title='Multiplication mode accepts explicit products (*, ×) and implicit products before parentheses. Example: 2y(3x+6), -3(x+y), or (a+2b)(3x-y).';document.getElementById('dynamic-tip').innerHTML='<b>Multiplication:</b> Use 2y(3x+6) or (a+2b)(3x-y). Double-click either parenthesis container to distribute it over the nearest other container. The work area locks until the product is complete.'}}
+
+
+        // Mode-aware sign rules with interactive, visual examples.
+        function renderSignRulesV4(){
+            const root=document.getElementById('sign-rules-content'),isMultiplication=operationMode==='multiplication';
+            const title=isMultiplication?'Multiplication Sign Rules':'Addition & Subtraction Sign Rules';
+            const cards=isMultiplication?[
+                {a:'+',op:'×',b:'+',result:'+','label':'Same signs make a positive result','example':'(+4) × (+2) = +8'},
+                {a:'−',op:'×',b:'−',result:'+','label':'Two negatives make a positive result','example':'(−4) × (−2) = +8'},
+                {a:'+',op:'×',b:'−',result:'−','label':'Different signs make a negative result','example':'(+4) × (−2) = −8'},
+                {a:'−',op:'×',b:'+',result:'−','label':'Different signs make a negative result','example':'(−4) × (+2) = −8'}
+            ]:[
+                {a:'+',op:'+',b:'+',result:'+','label':'Same signs: add and keep the sign','example':'(+5) + (+2) = +7'},
+                {a:'−',op:'+',b:'−',result:'−','label':'Same signs: add and keep the sign','example':'(−5) + (−2) = −7'},
+                {a:'+',op:'+',b:'−',result:'+', 'label':'Different signs: subtract; keep the larger absolute value’s sign','example':'(+5) + (−2) = +3'},
+                {a:'−',op:'+',b:'+',result:'−','label':'Different signs: subtract; keep the larger absolute value’s sign','example':'(−5) + (+2) = −3'}
+            ];
+            root.innerHTML=`<div class="sign-rule-heading"><div><div class="sign-rule-kicker">Interactive reference · ${isMultiplication?'multiplication':'addition and subtraction'}</div><h2 id="sign-rules-title" class="mt-1 text-2xl font-black tracking-tight">${title}</h2><p class="mt-1 text-sm text-slate-500">Select a sign pattern to see the rule in action.</p></div><button id="close-sign-rules" type="button" class="rounded-xl px-3 py-1 text-2xl font-light text-slate-400 hover:bg-slate-100" aria-label="Close">×</button></div><div class="sign-rule-grid">${cards.map((c,i)=>`<button type="button" class="sign-rule-example ${i===0?'is-active':''}" data-rule-index="${i}"><div class="sign-rule-symbols"><span class="sign-symbol">${c.a}</span><span class="text-slate-400">${c.op}</span><span class="sign-symbol">${c.b}</span><span class="ml-auto rounded-full ${c.result==='+'?'bg-emerald-100 text-emerald-700':'bg-rose-100 text-rose-700'} px-3 py-1">${c.result}</span></div><div class="text-sm font-bold text-slate-800">${c.label}</div><div class="mt-1 font-mono text-xs text-slate-500">${c.example}</div></button>`).join('')}</div><div id="sign-rule-feedback" class="sign-rule-feedback">${cards[0].example} <span class="ml-2 text-cyan-200">→ ${cards[0].result}</span></div><p class="mt-4 text-xs text-slate-500">Click outside this panel or press Escape to close.</p>`;
+            root.querySelector('#close-sign-rules').addEventListener('click',()=>signRulesModal.classList.add('hidden'));
+            root.querySelectorAll('.sign-rule-example').forEach((card,i)=>card.addEventListener('click',()=>{root.querySelectorAll('.sign-rule-example').forEach(x=>x.classList.remove('is-active'));card.classList.add('is-active');root.querySelector('#sign-rule-feedback').innerHTML=`${cards[i].example} <span class="ml-2 text-cyan-200">→ ${cards[i].result}</span>`}));
+        }
+        signRulesBtn.addEventListener('click',()=>{renderSignRulesV4();signRulesModal.classList.remove('hidden')});
+        const setOperationModeBeforeSignRulesV4=setOperationMode;
+        setOperationMode=function(mode){setOperationModeBeforeSignRulesV4(mode);signRulesBtn.innerHTML=mode==='multiplication'?'× Sign Rules':'± Sign Rules';signRulesBtn.title=mode==='multiplication'?'Show multiplication sign rules':'Show addition and subtraction sign rules';if(!signRulesModal.classList.contains('hidden'))renderSignRulesV4()};
+
+        // Negative products are filled red, consistently with other negative tiles.
+        const applyProductAppearanceBeforeNegativeRedV4=applyProductAppearance;
+        applyProductAppearance=function(tile){applyProductAppearanceBeforeNegativeRedV4(tile);if(tile&&typeSign(tile)<0){tile.style.backgroundImage='none';tile.style.backgroundColor='#ef4444';tile.style.color='#fff';tile.classList.add('negative-product')}};
+
+        function displayTermV4(tile){const t=termTex(tile);return t.startsWith('+')?t.slice(1):t}
+        function resultTexV4(data){
+            const negative=String(data.type).startsWith('-'),sg=negative?'-':'';const r=rational(Number(data.meta.num||data.coeff||1),Number(data.meta.den||1));
+            const vars=(data.meta.variables||[]).slice().sort((a,b)=>a.letter.localeCompare(b.letter));let coef=ratTex(r,data.meta.format||'fraction');if(vars.length&&r.n===1&&r.d===1)coef='';
+            return `${sg}${coef}${vars.map(v=>`${v.letter}${Number(v.exponent)>1?`^{${v.exponent}}`:''}`).join('')}`;
+        }
+        function createDistributionPanelV4(total){
+            document.querySelectorAll('.distribution-sequence-panel').forEach(n=>n.remove());const panel=document.createElement('div');panel.className='distribution-sequence-panel';panel.innerHTML=`<div class="distribution-sequence-title"><span>Distributive Property · Step-by-step</span><span id="distribution-progress-v4">0 / ${total}</span></div><div id="distribution-steps-v4"></div>`;document.body.appendChild(panel);return panel;
+        }
+        const waitDistributionStepV4=()=>new Promise(resolve=>setTimeout(resolve,1000));
+        async function runDistributionSequenceV4(steps,removeNodes,layoutRect,groupId){
+            const panel=createDistributionPanelV4(steps.length),progress=panel.querySelector('#distribution-progress-v4'),list=panel.querySelector('#distribution-steps-v4');
+            try{
+                for(let i=0;i<steps.length;i++){
+                    const step=steps[i],svg=drawDistributionArrows(step.a, [step.b]);svg.querySelectorAll('.distribution-arrow').forEach(path=>path.style.animationDuration='1s');
+                    progress.textContent=`${i+1} / ${steps.length}`;
+                    await waitDistributionStepV4();svg.remove();
+                    const card=document.createElement('div');card.className='distribution-sequence-step';card.innerHTML=`<span>\\(${displayTermV4(step.a)} \\times ${displayTermV4(step.b)}\\)</span><span class="distribution-step-result">\\(= ${resultTexV4(step.data)}\\)</span>`;list.appendChild(card);
+                    if(window.MathJax?.typesetPromise)MathJax.typesetPromise([card]).catch(()=>{});
+                }
+                await new Promise(resolve=>setTimeout(resolve,700));
+                removeNodes.forEach(node=>node?.remove());
+                let x=Math.max(16,layoutRect.left-container.getBoundingClientRect().left+12),y=layoutRect.top-container.getBoundingClientRect().top+layoutRect.height+24;
+                if(y>container.clientHeight-95)y=Math.max(20,layoutRect.top-container.getBoundingClientRect().top-95);
+                steps.forEach(({data})=>{const made=createTileElement(data.type,x,y,data.coeff,container,null,data.meta);made.dataset.distributionGroup=groupId;const w=Math.max(80,made.getBoundingClientRect().width);x+=w+14;if(x>container.clientWidth-110){x=16;y+=94}});
+                playSound('multiply');updateEquation();
+                setTimeout(()=>panel.remove(),900);
+            }catch(error){panel.remove();throw error}finally{releaseDistributionLockV3()}
+        }
+        distributeTileOverParenthesis=async function(source,paren){
+            if(!source?.isConnected||!paren?.isConnected||source.dataset.distributing==='true'||paren.dataset.distributing==='true'){releaseDistributionLockV3();return}
+            const content=paren.querySelector('.paren-content'),children=Array.from(content.querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left);
+            if(!children.length){releaseDistributionLockV3();return}
+            source.dataset.distributing='true';paren.dataset.distributing='true';saveState();source.classList.add('distribution-source');paren.classList.add('distribution-target');children.forEach(c=>c.classList.add('distribution-original','is-separating'));
+            const sign=paren.querySelector('.paren-sign').innerText==='-'?-1:1,groupId=`distribution-sequence-${Date.now()}`;
+            const steps=children.map(child=>{const data=multiplicationPayload(source,child,sign);data.meta.distributionGroup=groupId;return {a:source,b:child,data}});
+            return runDistributionSequenceV4(steps,[source,paren],paren.getBoundingClientRect(),groupId);
+        };
+        distributeParenthesesV3=async function(parenA,parenB){
+            if(!parenA?.isConnected||!parenB?.isConnected||parenA===parenB||distributionLockedV3)return;
+            const a=parenA.querySelector('.paren-content'),b=parenB.querySelector('.paren-content'),termsA=Array.from(a.querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort((x,y)=>x.getBoundingClientRect().left-y.getBoundingClientRect().left),termsB=Array.from(b.querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort((x,y)=>x.getBoundingClientRect().left-y.getBoundingClientRect().left);
+            if(!termsA.length||!termsB.length){alert('Both parenthesis containers need at least one tile before multiplying.');return}
+            setDistributionLockV3(true);parenA.classList.add('distribution-target');parenB.classList.add('distribution-target');termsA.concat(termsB).forEach(t=>t.classList.add('distribution-original','is-separating'));
+            const outer=(parenA.querySelector('.paren-sign').innerText==='-'?-1:1)*(parenB.querySelector('.paren-sign').innerText==='-'?-1:1),groupId=`distribution-pair-sequence-${Date.now()}`,steps=[];
+            termsA.forEach(ta=>termsB.forEach(tb=>{const data=multiplicationPayload(ta,tb,outer);data.meta.distributionGroup=groupId;steps.push({a:ta,b:tb,data})}));
+            const ra=parenA.getBoundingClientRect(),rb=parenB.getBoundingClientRect(),layout={left:Math.min(ra.left,rb.left),top:Math.max(ra.top,rb.top),height:Math.max(ra.height,rb.height)};
+            return runDistributionSequenceV4(steps,[parenA,parenB],layout,groupId);
+        };
+
+        // Updated multiplication exercise defaults: three integer factors, one variable, degree 1, no parentheses.
+        Object.assign(multiplicationSettings,{factors:3,variables:1,variableMode:'combined',numbers:'integer',parentheses:'none',termsPerParenthesis:3,degree:'1'});
+
+        // Up to four distinct variables may be entered in a custom variable tile, e.g. a^2bc^3.
+        const variableColorPoolV5=['#22c55e','#3b82f6','#f97316','#ec4899','#06b6d4','#6366f1','#14b8a6','#a855f7','#84cc16','#0ea5e9','#f59e0b','#d946ef'];
+        function randomVariableColorsV5(count,excluded){
+            const pool=variableColorPoolV5.filter(c=>c.toLowerCase()!==String(excluded).toLowerCase());
+            for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+            const selected=pool.slice(0,count);while(selected.length<count)selected.push(pool[Math.floor(Math.random()*pool.length)]);return selected;
+        }
+        function parseVariableExpressionV5(raw){
+            const text=String(raw||'').trim();if(!text)return {error:'Enter one or more variables, for example a^2bc^3.'};
+            const vars=[];const re=/([A-Za-z])(?:\^(\d+))?/g;let match,last=0;
+            while((match=re.exec(text))){if(match.index!==last)return {error:'Use letters with optional positive integer exponents, for example a^2bc^3.'};const exp=Number(match[2]||1);if(!Number.isInteger(exp)||exp<1)return {error:'Variable exponents must be positive integers.'};vars.push({letter:match[1],exponent:exp});last=re.lastIndex}
+            if(last!==text.length||!vars.length)return {error:'Use letters with optional positive integer exponents, for example a^2bc^3.'};
+            const powers=new Map();vars.forEach(v=>powers.set(v.letter,(powers.get(v.letter)||0)+v.exponent));
+            if(powers.size>4)return {error:'A tile can contain a maximum of four different letters.'};
+            return {variables:Array.from(powers.entries()).map(([letter,exponent])=>({letter,exponent})).sort((a,b)=>a.letter.localeCompare(b.letter))};
+        }
+        openTileModal=function(kind){
+            const root=document.getElementById('tile-modal');root.classList.remove('hidden');const isVar=kind==='variable';
+            root.innerHTML=`<div class="modal-card"><div class="flex justify-between items-center"><h2 class="text-xl font-bold">Create ${isVar?'Variable':'Number'} Tile</h2><button type="button" onclick="closeModal('tile-modal')" class="text-2xl text-slate-400" aria-label="Close">×</button></div><form id="tile-form">
+                <label class="form-field">${isVar?'Main color':'Tile color'}<input id="tile-color" type="color" value="${isVar?'#8b5cf6':'#06b6d4'}"></label>
+                ${isVar?'<label class="form-field">Variable expression (up to 4 different letters)<input id="tile-variable-expression" value="a" maxlength="32" pattern="[A-Za-z0-9^]+" placeholder="e.g. a^2bc^3" required><small class="font-normal text-slate-500">Each letter can have its own exponent. Other variable colors are randomized in proportion to their exponents.</small></label><label class="form-field">Coefficient (integer, decimal, or fraction)<input id="tile-value" value="1" placeholder="e.g. 2, 0.5, 3/4" required></label>':'<label class="form-field">Number value (integer, decimal, mixed number, or fraction)<input id="tile-value" value="1" placeholder="e.g. 7/4, 1 3/4, 1.75" required></label>'}
+                <label class="form-field">Initial sign<select id="tile-sign"><option value="1">Positive (+)</option><option value="-1">Negative (−)</option></select></label>
+                <div class="flex justify-end gap-2 mt-5"><button type="button" onclick="closeModal('tile-modal')" class="px-4 py-2 rounded-lg bg-slate-100">Cancel</button><button class="px-4 py-2 rounded-lg bg-violet-600 text-white font-semibold">Create Tile</button></div></form></div>`;
+            root.querySelector('#tile-form').onsubmit=e=>{
+                e.preventDefault();const rawValue=root.querySelector('#tile-value').value.trim(),r=parseRational(rawValue);if(!r||r.n===0){alert('Enter a non-zero rational number.');return}
+                const sign=Number(root.querySelector('#tile-sign').value),chosen=root.querySelector('#tile-color').value;
+                let type,meta;
+                if(isVar){
+                    const parsed=parseVariableExpressionV5(root.querySelector('#tile-variable-expression').value);if(parsed.error){alert(parsed.error);return}
+                    const variables=parsed.variables,colours=randomVariableColorsV5(variables.length,chosen),factorParts=variables.map((v,i)=>({letter:v.letter,color:colours[i],count:v.exponent}));
+                    const single=variables.length===1,v=variables[0];
+                    if(single){type=`${sign<0?'-':'+'}v_${v.letter}_${v.exponent}`;meta={kind:'variable',letter:v.letter,exponent:v.exponent,num:Math.abs(r.n),den:r.d,format:valueFormat(rawValue),color:chosen,shape:'tile-variable'}}
+                    else {type=sign<0?'-product':'+product';meta={kind:'product',num:Math.abs(r.n),den:r.d,format:valueFormat(rawValue),color:chosen,shape:'product-tile',variables,factorParts}}
+                } else {type=sign<0?'-n':'+n';meta={kind:'number',num:Math.abs(r.n),den:r.d,format:valueFormat(rawValue),color:chosen,shape:'rational-tile'}}
+                const opposite=sign<0?type.replace(/^-/,'+') : type.replace(/^\+/,'-');tileConfig[type]={colorClass:chosen,shapeClass:meta.shape,opposite};tileConfig[opposite]={colorClass:'bg-red-500',shapeClass:meta.shape,opposite:type};
+                saveState();createTileElement(type,container.clientWidth/2-40,container.clientHeight/2-40,Math.abs(r.n),container,null,meta);playSound('add');updateEquation();closeModal('tile-modal');
+            };
+        };
+
+        // Sign reference: two clean, clickable flip cards for positive and negative outcomes.
+        renderSignRulesV4=function(){
+            const root=document.getElementById('sign-rules-content'),isMul=operationMode==='multiplication',title=isMul?'Multiplication Sign Rules':'Addition & Subtraction Sign Rules';
+            const positiveTitle=isMul?'Same signs → positive':'Positive result';
+            const negativeTitle=isMul?'Different signs → negative':'Negative result';
+            const posExamples=isMul?['(+4) × (+2) = +8','(−4) × (−2) = +8']:['(+5) + (+2) = +7','(+5) + (−2) = +3'];
+            const negExamples=isMul?['(+4) × (−2) = −8','(−4) × (+2) = −8']:['(−5) + (−2) = −7','(−5) + (+2) = −3'];
+            const card=(kind,label,frontHint,examples,backHint)=>`<button type="button" class="sign-rule-flip-card" aria-label="${label}. Click to flip and see examples."><span class="sign-rule-flip-inner"><span class="sign-rule-face sign-rule-face-front ${kind}"><span class="sign-rule-outcome-logo">${kind==='positive'?'+':'−'}</span><strong class="mt-4 text-xl">${label}</strong><span class="mt-2 text-sm opacity-90">${frontHint}</span><span class="mt-5 text-xs font-bold uppercase tracking-widest">Click to flip</span></span><span class="sign-rule-face sign-rule-face-back ${kind}"><strong class="text-lg">${backHint}</strong>${examples.map(ex=>`<span class="sign-rule-example-line">${ex}</span>`).join('')}<span class="mt-4 text-xs font-bold uppercase tracking-widest opacity-80">Click to flip back</span></span></span></button>`;
+            root.innerHTML=`<div class="sign-rule-heading"><div><div class="sign-rule-kicker">Interactive sign guide · ${isMul?'multiplication':'addition and subtraction'}</div><h2 id="sign-rules-title" class="mt-1 text-2xl font-black tracking-tight">${title}</h2><p class="mt-1 text-sm text-slate-500">Choose an outcome panel and click to reveal its sign patterns.</p></div><button id="close-sign-rules" type="button" class="rounded-xl px-3 py-1 text-2xl font-light text-slate-400 hover:bg-slate-100" aria-label="Close">×</button></div><div class="sign-rule-flip-grid">${card('positive',positiveTitle,isMul?'Multiplying two numbers with the same sign':'Adding like signs or a larger positive value',posExamples,isMul?'Same signs make a positive product':'Add same signs, or subtract unlike signs and keep the larger absolute value’s sign')}${card('negative',negativeTitle,isMul?'Multiplying numbers with unlike signs':'A negative sum occurs when the negative magnitude is greater',negExamples,isMul?'Different signs make a negative product':'Add same signs and keep the negative sign, or subtract and keep the larger absolute value’s sign')}</div><p class="mt-4 text-xs text-slate-500">Click outside this window or press Escape to close.</p>`;
+            root.querySelector('#close-sign-rules').addEventListener('click',()=>signRulesModal.classList.add('hidden'));
+            root.querySelectorAll('.sign-rule-flip-card').forEach(btn=>btn.addEventListener('click',()=>btn.classList.toggle('is-flipped')));
+        };
+        signRulesBtn.addEventListener('click',()=>{renderSignRulesV4();signRulesModal.classList.remove('hidden')});
+
+        // Position the expression well below the author/mode controls and wrap long equations.
+        const expressionPanelV5=document.getElementById('expression-panel');
+        if(expressionPanelV5){expressionPanelV5.style.top='5.35rem';expressionPanelV5.style.left='1rem';}
+
+        function centerDistributionInputsV5(nodes,mode){
+            const board=container.getBoundingClientRect(),gap=38,usableY=Math.max(130,container.clientHeight*.27);
+            if(mode==='single'){
+                const source=nodes[0],paren=nodes[1],sw=source.offsetWidth||80,sh=source.offsetHeight||80,pw=paren.offsetWidth||220,ph=paren.offsetHeight||160,total=sw+gap+pw;
+                const left=Math.max(16,(container.clientWidth-total)/2),top=Math.max(95,usableY);
+                source.classList.add('distribution-center-source');source.style.left=`${left}px`;source.style.top=`${top+Math.max(0,(ph-sh)/2)}px`;
+                paren.style.left=`${left+sw+gap}px`;paren.style.top=`${top}px`;
+                return {left:board.left+left,top:board.top+top,width:total,height:ph};
+            }
+            const [a,b]=nodes,aw=a.offsetWidth||220,bw=b.offsetWidth||220,ah=a.offsetHeight||160,bh=b.offsetHeight||160,total=aw+gap+bw,left=Math.max(12,(container.clientWidth-total)/2),top=Math.max(95,usableY);
+            a.style.left=`${left}px`;a.style.top=`${top}px`;b.style.left=`${left+aw+gap}px`;b.style.top=`${top}px`;
+            return {left:board.left+left,top:board.top+top,width:total,height:Math.max(ah,bh)};
+        }
+        function createDistributionPanelV5(total){
+            document.querySelectorAll('.distribution-sequence-panel').forEach(n=>n.remove());const panel=document.createElement('div');panel.className='distribution-sequence-panel';panel.innerHTML=`<div class="distribution-sequence-title"><span>Distributive Property · Step-by-step</span><span id="distribution-progress-v4">0 / ${total}</span></div><div id="distribution-steps-v4"></div>`;document.body.appendChild(panel);
+            const expression=document.getElementById('expression-panel'),rect=expression?.getBoundingClientRect(),top=Math.max(12,(rect?.bottom||240)+12);panel.style.setProperty('--distribution-panel-top',`${top}px`);panel.style.setProperty('--distribution-panel-max-height',`${Math.max(120,window.innerHeight-top-16)}px`);return panel;
+        }
+        const distributionPanelStyleV5=document.createElement('style');distributionPanelStyleV5.textContent='.distribution-sequence-panel{top:var(--distribution-panel-top)!important;bottom:auto!important;height:auto!important;max-height:var(--distribution-panel-max-height)!important}@media(max-width:700px){.distribution-sequence-panel{top:var(--distribution-panel-top)!important;bottom:auto!important;max-height:var(--distribution-panel-max-height)!important}}';document.head.appendChild(distributionPanelStyleV5);
+        async function runDistributionSequenceV5(steps,removeNodes,layoutRect,groupId){
+            const panel=createDistributionPanelV5(steps.length),progress=panel.querySelector('#distribution-progress-v4'),list=panel.querySelector('#distribution-steps-v4'),boardRect=container.getBoundingClientRect();
+            const centerStartX=Math.max(container.clientWidth*.39,Math.min(410,container.clientWidth*.3));let stageX=centerStartX,stageY=Math.min(container.clientHeight-92,layoutRect.top-boardRect.top+layoutRect.height+34),rowHeight=0;
+            try{
+                for(let i=0;i<steps.length;i++){
+                    const step=steps[i],svg=drawDistributionArrows(step.a,[step.b]);svg.querySelectorAll('.distribution-arrow').forEach(path=>{path.style.animationDuration='1s';path.style.animationDelay='0s'});
+                    progress.textContent=`${i+1} / ${steps.length}`;
+                    const row=document.createElement('div');row.className='distribution-sequence-step';
+                    const eq=document.createElement('span');eq.className='distribution-step-equation';eq.innerHTML=`\\(${displayTermV4(step.a)} \\times ${displayTermV4(step.b)}\\)`;
+                    row.appendChild(eq);list.appendChild(row);
+                    if(window.MathJax?.typesetPromise)MathJax.typesetPromise([eq]).catch(()=>{});
+                    await waitDistributionStepV4();svg.remove();
+                    const result=createTileElement(step.data.type,0,0,step.data.coeff,row,null,step.data.meta);result.dataset.distributionGroup=groupId;result.classList.add('distribution-step-result-tile');row.appendChild(result);
+                    if(window.MathJax?.typesetPromise)MathJax.typesetPromise([row]).catch(()=>{});
+                    const ghost=result.cloneNode(true);ghost.classList.remove('distribution-step-result-tile');ghost.classList.add('distribution-result-ghost');ghost.setAttribute('aria-hidden','true');ghost.querySelectorAll('*').forEach(el=>el.removeAttribute('id'));row.replaceChild(ghost,result);
+                    const w=Math.max(78,result.offsetWidth||80);if(stageX+w>container.clientWidth-12){stageX=Math.max(container.clientWidth*.39,Math.min(410,container.clientWidth*.3));stageY+=Math.max(rowHeight,88)+12;rowHeight=0}
+                    container.appendChild(result);result.classList.remove('distribution-step-result-tile');result.style.position='absolute';result.style.left=`${stageX}px`;result.style.top=`${stageY}px`;result.style.transform='';result.style.pointerEvents='auto';result.dataset.distributionGroup=groupId;
+                    stageX+=w+14;rowHeight=Math.max(rowHeight,result.offsetHeight||80);
+                }
+                removeNodes.forEach(node=>node?.remove());playSound('multiply');updateEquation();
+                await new Promise(resolve=>setTimeout(resolve,900));panel.remove();
+            }catch(error){panel.remove();throw error}finally{releaseDistributionLockV3()}
+        }
+        distributeTileOverParenthesis=async function(source,paren){
+            if(!source?.isConnected||!paren?.isConnected||source.dataset.distributing==='true'||paren.dataset.distributing==='true'){releaseDistributionLockV3();return}
+            const content=paren.querySelector('.paren-content'),children=Array.from(content.querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left);
+            if(!children.length){releaseDistributionLockV3();return}
+            source.dataset.distributing='true';paren.dataset.distributing='true';saveState();
+            const layout=centerDistributionInputsV5([source,paren],'single');source.classList.add('distribution-source');paren.classList.add('distribution-target');children.forEach(c=>c.classList.add('distribution-original','is-separating'));
+            const sign=paren.querySelector('.paren-sign').innerText==='-'?-1:1,groupId=`distribution-sequence-v5-${Date.now()}`;
+            const steps=children.map(child=>{const data=multiplicationPayload(source,child,sign);data.meta.distributionGroup=groupId;return {a:source,b:child,data}});
+            return runDistributionSequenceV5(steps,[source,paren],layout,groupId);
+        };
+        distributeParenthesesV3=async function(parenA,parenB){
+            if(!parenA?.isConnected||!parenB?.isConnected||parenA===parenB||distributionLockedV3)return;
+            const termsA=Array.from(parenA.querySelector('.paren-content').querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left),termsB=Array.from(parenB.querySelector('.paren-content').querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left);
+            if(!termsA.length||!termsB.length){alert('Both parenthesis containers need at least one tile before multiplying.');return}
+            setDistributionLockV3(true);const layout=centerDistributionInputsV5([parenA,parenB],'pair');parenA.classList.add('distribution-target');parenB.classList.add('distribution-target');termsA.concat(termsB).forEach(t=>t.classList.add('distribution-original','is-separating'));
+            const outer=(parenA.querySelector('.paren-sign').innerText==='-'?-1:1)*(parenB.querySelector('.paren-sign').innerText==='-'?-1:1),groupId=`distribution-pair-sequence-v5-${Date.now()}`,steps=[];
+            termsA.forEach(a=>termsB.forEach(b=>{const data=multiplicationPayload(a,b,outer);data.meta.distributionGroup=groupId;steps.push({a,b,data})}));
+            return runDistributionSequenceV5(steps,[parenA,parenB],layout,groupId);
+        };
+        // Final layout and distribution workflow update.
+        function centerInsertedExerciseV6(){
+            const items=Array.from(container.children).filter(el=>el.classList.contains('algebra-tile')||el.classList.contains('parenthesis'));
+            if(!items.length)return;
+            const boxes=items.map(el=>({el,x:parseFloat(el.style.left)||0,y:parseFloat(el.style.top)||0,w:el.offsetWidth||80,h:el.offsetHeight||80}));
+            const minX=Math.min(...boxes.map(b=>b.x)),minY=Math.min(...boxes.map(b=>b.y));
+            const maxX=Math.max(...boxes.map(b=>b.x+b.w)),maxY=Math.max(...boxes.map(b=>b.y+b.h));
+            const width=maxX-minX,height=maxY-minY;
+            let dx=(container.clientWidth-width)/2-minX,dy=(container.clientHeight-height)/2-minY;
+            if(minX+dx<12)dx=12-minX;if(maxX+dx>container.clientWidth-12)dx=container.clientWidth-12-maxX;
+            if(minY+dy<12)dy=12-minY;if(maxY+dy>container.clientHeight-12)dy=container.clientHeight-12-maxY;
+            boxes.forEach(({el,x,y})=>{el.style.left=`${x+dx}px`;el.style.top=`${y+dy}px`});
+        }
+        const insertExerciseBeforeCenterV6=insertExercise;
+        insertExercise=function(){
+            const field=document.getElementById('exercise-input'),hadInput=Boolean(field?.value.trim());
+            const result=insertExerciseBeforeCenterV6.apply(this,arguments);
+            if(hadInput&&!field.value.trim())requestAnimationFrame(()=>{centerInsertedExerciseV6();updateEquation()});
+            return result;
+        };
+
+        function distributionPanelMetricsV6(){
+            const board=workspace.getBoundingClientRect(),expression=document.getElementById('expression-panel'),expressionRect=expression?.getBoundingClientRect();
+            const narrow=board.width<720;
+            const width=Math.min(Math.max(200,narrow?board.width*.40:board.width*.34),narrow?300:350,board.width-24);
+            const left=board.left+12,top=Math.max(12,(expressionRect?.bottom||board.top+150)+10);
+            return {board,left,top,width,maxHeight:Math.max(150,window.innerHeight-top-82)};
+        }
+        function centerDistributionInputsV6(nodes,mode){
+            const board=container.getBoundingClientRect(),metrics=distributionPanelMetricsV6(),gap=mode==='single'?34:38;
+            const sizes=nodes.map(el=>({w:el.offsetWidth||220,h:el.offsetHeight||160}));
+            const total=sizes.reduce((sum,item)=>sum+item.w,0)+gap*(sizes.length-1);
+            const reservedRight=board.width-12,areaLeft=Math.max(12,metrics.left-board.left+metrics.width+22),available=Math.max(1,reservedRight-areaLeft);
+            let left=areaLeft+Math.max(0,(available-total)/2);
+            if(left+total>board.width-8)left=Math.max(areaLeft,board.width-total-8);
+            const top=Math.max(105,Math.round(container.clientHeight*.35));
+            let cursor=left,maxHeight=0;
+            nodes.forEach((el,i)=>{el.classList.add('distribution-center-source');el.style.left=`${cursor}px`;el.style.top=`${top+Math.max(0,(Math.max(...sizes.map(s=>s.h))-sizes[i].h)/2)}px`;cursor+=sizes[i].w+gap;maxHeight=Math.max(maxHeight,sizes[i].h)});
+            return {left:board.left+left,top:board.top+top,width:total,height:maxHeight};
+        }
+        function createDistributionPanelV6(total){
+            document.querySelectorAll('.distribution-sequence-panel').forEach(node=>node.remove());
+            const metrics=distributionPanelMetricsV6(),panel=document.createElement('section');
+            panel.className='distribution-sequence-panel';panel.setAttribute('aria-label','Distributive property steps');
+            panel.style.setProperty('--distribution-panel-left',`${metrics.left}px`);panel.style.setProperty('--distribution-panel-top',`${metrics.top}px`);panel.style.setProperty('--distribution-panel-width',`${metrics.width}px`);panel.style.setProperty('--distribution-panel-max-height',`${metrics.maxHeight}px`);
+            panel.innerHTML=`<div class="distribution-sequence-title"><span>Distributive Property · Step-by-step</span><span class="distribution-panel-actions"><span id="distribution-progress-v6">0 / ${total}</span><button type="button" class="distribution-panel-close" aria-label="Close steps panel" title="Close steps panel">×</button></span></div><div id="distribution-steps-v6" class="distribution-steps-list"></div>`;
+            panel.querySelector('.distribution-panel-close').addEventListener('click',()=>panel.remove());
+            document.body.appendChild(panel);return panel;
+        }
+        const distributionPanelStyleV6=document.createElement('style');
+        distributionPanelStyleV6.textContent=`
+            .distribution-sequence-panel{position:fixed!important;left:var(--distribution-panel-left)!important;top:var(--distribution-panel-top)!important;right:auto!important;bottom:auto!important;width:var(--distribution-panel-width)!important;max-height:var(--distribution-panel-max-height)!important;height:auto!important;transform:none!important;display:flex;flex-direction:column;box-sizing:border-box;padding:10px 12px!important;border-radius:14px!important;overflow:hidden!important;z-index:19002!important}
+            .distribution-sequence-title{flex:0 0 auto;margin:0 0 6px!important;font-size:10px!important;letter-spacing:.06em!important}
+            .distribution-panel-actions{display:flex;align-items:center;gap:9px;white-space:nowrap}
+            .distribution-panel-close{display:grid;place-items:center;width:25px;height:25px;border:1px solid rgba(148,163,184,.35);border-radius:8px;background:rgba(255,255,255,.08);color:#f8fafc;font-size:21px;line-height:1;cursor:pointer}
+            .distribution-panel-close:hover{background:rgba(248,113,113,.25);color:#fecaca}
+            .distribution-steps-list{min-height:0;overflow:auto;padding-right:2px}
+            .distribution-sequence-step{display:block;min-height:0!important;margin-top:5px!important;padding:7px 9px!important;border-radius:9px!important;font-size:12px!important;line-height:1.35}
+            .distribution-step-equation{display:block;min-width:0;white-space:normal;overflow-wrap:anywhere;font-size:12px!important}
+            .distribution-step-equation mjx-container{margin:0!important;max-width:100%;color:inherit!important}
+            .distribution-sequence-step mjx-container{max-width:100%;overflow-x:auto}
+            @media(max-width:700px){.distribution-sequence-panel{padding:8px!important}.distribution-sequence-title{font-size:9px!important}.distribution-sequence-step,.distribution-step-equation{font-size:10px!important}}
+        `;
+        document.head.appendChild(distributionPanelStyleV6);
+        const waitDistributionStepV6=()=>new Promise(resolve=>setTimeout(resolve,1500));
+        const waitForCenteredInputsV6=()=>new Promise(resolve=>setTimeout(resolve,700));
+        async function runDistributionSequenceV6(steps,removeNodes,layoutRect,groupId){
+            const panel=createDistributionPanelV6(steps.length),progress=panel.querySelector('#distribution-progress-v6'),list=panel.querySelector('#distribution-steps-v6');
+            const boardRect=container.getBoundingClientRect(),metrics=distributionPanelMetricsV6();
+            let stageX=Math.max(16,metrics.left-boardRect.left+metrics.width+24);
+            let stageY=Math.min(container.clientHeight-94,layoutRect.top-boardRect.top+layoutRect.height+26),rowHeight=0;
+            await waitForCenteredInputsV6();
+            try{
+                for(let i=0;i<steps.length;i++){
+                    const step=steps[i],svg=drawDistributionArrows(step.a,[step.b]);
+                    svg.querySelectorAll('.distribution-arrow').forEach(path=>{path.style.animationDuration='1.35s';path.style.animationDelay='0s'});
+                    if(progress?.isConnected)progress.textContent=`${i+1} / ${steps.length}`;
+                    await waitDistributionStepV6();svg.remove();
+                    const resultTex=resultTexV4(step.data),equation=document.createElement('div');
+                    equation.className='distribution-step-equation';equation.innerHTML=`\\(${displayTermV4(step.a)} \\times ${displayTermV4(step.b)} = ${resultTex}\\)`;
+                    if(list?.isConnected){const card=document.createElement('div');card.className='distribution-sequence-step';const index=document.createElement('span');index.className='mr-2 text-cyan-200 font-bold';index.textContent=`${i+1}. `;card.append(index,equation);list.appendChild(card);if(window.MathJax?.typesetPromise)MathJax.typesetPromise([card]).catch(()=>{});list.scrollTop=list.scrollHeight}
+                    const made=createTileElement(step.data.type,stageX,stageY,step.data.coeff,container,null,step.data.meta);made.dataset.distributionGroup=groupId;
+                    const w=Math.max(80,made.getBoundingClientRect().width),h=Math.max(50,made.getBoundingClientRect().height);
+                    if(stageX+w>container.clientWidth-12){stageX=Math.max(16,metrics.left-boardRect.left+metrics.width+24);stageY+=Math.max(rowHeight,82)+12;rowHeight=0;made.style.left=`${stageX}px`;made.style.top=`${stageY}px`}
+                    stageX+=w+12;rowHeight=Math.max(rowHeight,h);
+                }
+                removeNodes.forEach(node=>node?.remove());playSound('multiply');updateEquation();
+            }catch(error){if(panel.isConnected){const notice=document.createElement('div');notice.className='distribution-sequence-step';notice.textContent='The step sequence stopped unexpectedly. Close this panel to continue.';list?.appendChild(notice)}throw error}
+            finally{releaseDistributionLockV3()}
+        }
+        distributeTileOverParenthesis=async function(source,paren){
+            if(!source?.isConnected||!paren?.isConnected||source.dataset.distributing==='true'||paren.dataset.distributing==='true'){releaseDistributionLockV3();return}
+            const content=paren.querySelector('.paren-content'),children=Array.from(content.querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left);
+            if(!children.length){releaseDistributionLockV3();return}
+            if(!distributionLockedV3)setDistributionLockV3(true);
+            source.dataset.distributing='true';paren.dataset.distributing='true';saveState();
+            const layout=centerDistributionInputsV6([source,paren],'single');source.classList.add('distribution-source');paren.classList.add('distribution-target');children.forEach(child=>child.classList.add('distribution-original','is-separating'));
+            const sign=paren.querySelector('.paren-sign').innerText==='-'?-1:1,groupId=`distribution-sequence-v6-${Date.now()}`;
+            const steps=children.map(child=>{const data=multiplicationPayload(source,child,sign);data.meta.distributionGroup=groupId;return {a:source,b:child,data}});
+            return runDistributionSequenceV6(steps,[source,paren],layout,groupId);
+        };
+        distributeParenthesesV3=async function(parenA,parenB){
+            if(!parenA?.isConnected||!parenB?.isConnected||parenA===parenB||distributionLockedV3)return;
+            const termsA=Array.from(parenA.querySelector('.paren-content').querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left);
+            const termsB=Array.from(parenB.querySelector('.paren-content').querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort((a,b)=>a.getBoundingClientRect().left-b.getBoundingClientRect().left);
+            if(!termsA.length||!termsB.length){alert('Both parenthesis containers need at least one tile before multiplying.');return}
+            setDistributionLockV3(true);const layout=centerDistributionInputsV6([parenA,parenB],'pair');parenA.classList.add('distribution-target');parenB.classList.add('distribution-target');termsA.concat(termsB).forEach(tile=>tile.classList.add('distribution-original','is-separating'));
+            const outer=(parenA.querySelector('.paren-sign').innerText==='-'?-1:1)*(parenB.querySelector('.paren-sign').innerText==='-'?-1:1),groupId=`distribution-pair-sequence-v6-${Date.now()}`,steps=[];
+            termsA.forEach(a=>termsB.forEach(b=>{const data=multiplicationPayload(a,b,outer);data.meta.distributionGroup=groupId;steps.push({a,b,data})}));
+            return runDistributionSequenceV6(steps,[parenA,parenB],layout,groupId);
+        };
+        // Re-center manually entered and randomly generated exercises as one group.
         updateEquation();
     </script>
 </body>
