@@ -143,6 +143,122 @@
             .sign-rule-flip-grid { grid-template-columns:1fr;gap:12px; }
             .sign-rule-flip-card { min-height:215px; }
         }
+
+        /* ================= V7 LAYER ================= */
+        /* --- Groupings, selection, nesting --- */
+        .parenthesis.paren-selected { outline:4px solid #3b82f6; outline-offset:3px; box-shadow:0 10px 24px rgba(59,130,246,.38); }
+        .parenthesis.group-bracket { border-color:#60a5fa; background:rgba(239,246,255,.68); }
+        .parenthesis.group-brace { border-color:#a78bfa; background:rgba(245,243,255,.68); }
+        .parenthesis .parenthesis { min-width:200px; min-height:150px; box-shadow:0 4px 10px rgba(15,23,42,.14); }
+        .parenthesis.annihilate { opacity:0; transform:scale(.92); transition:opacity .25s,transform .25s; pointer-events:none; }
+        .parenthesis .paren-sign { flex-direction:column; line-height:1; }
+        .parenthesis .paren-sign::after { content:'( )'; font-size:.78rem; font-weight:700; opacity:.55; margin-top:6px; letter-spacing:.05em; }
+        .parenthesis.group-bracket > div > .paren-sign::after { content:'[ ]'; }
+        .parenthesis.group-brace > div > .paren-sign::after { content:'{ }'; }
+        .paren-handle { cursor:pointer; }
+        .paren-del-btn { width:22px; height:22px; display:grid; place-items:center; border-radius:6px; color:#64748b; transition:background .15s,color .15s; }
+        .paren-del-btn:hover { background:#fee2e2; color:#dc2626; }
+        .paren-del-btn svg { width:14px; height:14px; pointer-events:none; }
+        .paren-float-menu { position:fixed; z-index:30000; min-width:210px; background:#fff; border:1px solid #cbd5e1; border-radius:12px; box-shadow:0 14px 36px rgba(15,23,42,.3); padding:6px; font-size:.85rem; color:#334155; }
+        .paren-float-menu button { display:flex; align-items:center; gap:8px; width:100%; text-align:left; padding:7px 10px; border-radius:8px; transition:background .15s; }
+        .paren-float-menu button:hover { background:#f1f5f9; }
+        .paren-float-menu button.is-current { background:#eef2ff; font-weight:700; color:#4338ca; }
+        .paren-float-menu button.danger { color:#dc2626; }
+        .paren-float-menu button.danger:hover { background:#fee2e2; }
+        .paren-menu-head { padding:8px 10px 3px; font-size:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:#94a3b8; }
+        .pm-sym { display:inline-grid; place-items:center; min-width:34px; font-family:ui-monospace,Menlo,monospace; font-weight:800; color:#6366f1; }
+        .pm-check { margin-left:auto; color:#4f46e5; }
+        .swap-anim, .arranging { transition:left .45s cubic-bezier(.2,.75,.2,1),top .45s cubic-bezier(.2,.75,.2,1)!important; }
+
+        /* --- Step controls (icon-only) --- */
+        .step-ctl { display:flex; align-items:center; gap:8px; margin:2px 0 9px; flex:0 0 auto; }
+        .step-ctl button { width:36px; height:36px; border-radius:50%; display:grid; place-items:center; border:1px solid rgba(148,163,184,.42); background:rgba(255,255,255,.08); color:#e2e8f0; cursor:pointer; transition:transform .15s,background .15s,box-shadow .15s; }
+        .step-ctl button svg { width:18px; height:18px; pointer-events:none; }
+        .step-ctl button:hover { background:rgba(125,211,252,.24); transform:translateY(-1px); }
+        .step-ctl button.is-active { background:linear-gradient(145deg,#0e7490,#4338ca); color:#fff; border-color:#67e8f9; box-shadow:0 0 12px rgba(34,211,238,.5); }
+        .step-ctl button.is-waiting { animation:ctl-wait 0.9s ease-in-out infinite alternate; }
+        @keyframes ctl-wait { to { box-shadow:0 0 0 5px rgba(103,232,249,.35),0 0 16px rgba(34,211,238,.7); } }
+        .step-active { outline:4px solid #22d3ee!important; outline-offset:4px; animation:factor-pulse .6s infinite alternate; z-index:30; }
+        .step-clone { pointer-events:none!important; z-index:19400; margin:0; box-shadow:0 10px 24px rgba(15,23,42,.35); }
+        .step-merge { filter:drop-shadow(0 0 14px #fde047) brightness(1.15); }
+
+        /* --- Grid multiplication --- */
+        #grid-mode-btn, #grid-exit-btn { position:absolute; top:1rem; left:1rem; z-index:30; width:42px; height:42px; border-radius:12px; display:none; align-items:center; justify-content:center; background:#0e7490; color:#fff; box-shadow:0 5px 12px #0e749055; transition:background .2s,transform .15s; }
+        #grid-mode-btn:hover, #grid-exit-btn:hover { background:#155e75; transform:translateY(-1px); }
+        #grid-mode-btn svg, #grid-exit-btn svg { width:24px; height:24px; }
+        body.mode-multiplication #grid-mode-btn { display:flex; }
+        body.grid-active #grid-mode-btn { display:none!important; }
+        body.grid-active #grid-exit-btn { display:flex; }
+        #grid-exit-btn.is-done { background:#059669; animation:ctl-wait .9s ease-in-out infinite alternate; }
+        #grid-view { position:absolute; inset:0; z-index:8; display:none; gap:18px; padding:0 18px 18px; background-color:#f8fafc; background-size:40px 40px; background-image:linear-gradient(to right,rgba(0,0,0,.07) 1px,transparent 1px),linear-gradient(to bottom,rgba(0,0,0,.07) 1px,transparent 1px); }
+        #grid-view.on { display:flex; animation:grid-in .45s ease both; }
+        @keyframes grid-in { from { opacity:0; transform:scale(.985); } to { opacity:1; transform:none; } }
+        #grid-steps { flex:0 0 min(350px,34%); margin-top:var(--grid-steps-top,14rem); display:flex; flex-direction:column; min-height:0; background:rgba(15,23,42,.96); color:#f8fafc; border:1px solid rgba(129,140,248,.42); border-radius:14px; padding:10px 12px; box-shadow:0 18px 46px rgba(15,23,42,.32); overflow:hidden; }
+        #grid-steps-list { flex:1; min-height:0; overflow:auto; }
+        #grid-stage { flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:4.2rem; overflow:hidden; }
+        #grid-table-wrap { flex:0 0 auto; }
+        #grid-table { border-collapse:separate; border-spacing:0; border:4px solid #f0846f; border-radius:8px; background:#fff6d6; transform-origin:0 0; box-shadow:0 12px 30px rgba(240,132,111,.22); }
+        #grid-table th, #grid-table td { border:3px solid #f0846f; min-width:132px; height:106px; padding:6px; text-align:center; vertical-align:middle; transition:background .3s,box-shadow .3s; }
+        #grid-table .grid-corner { font-size:2.2rem; font-weight:800; color:#f0846f; opacity:.7; background:#fff; }
+        #grid-table th { background:#fffdf3; }
+        #grid-table th.grid-hl { background:#fde68a; }
+        #grid-table td.grid-target { background:#cffafe; box-shadow:inset 0 0 0 4px #22d3ee; }
+        #grid-table td.grid-like { box-shadow:inset 0 0 0 5px var(--like,#a855f7); }
+        .grid-head .algebra-tile, .grid-cell .algebra-tile, #grid-result-tiles .algebra-tile { position:relative!important; left:auto!important; top:auto!important; margin:auto; pointer-events:none; cursor:default; }
+        #grid-result { flex:0 0 auto; margin-top:14px; text-align:center; opacity:0; transform:translateY(12px); transition:opacity .5s,transform .5s; max-width:100%; }
+        #grid-result.on { opacity:1; transform:none; }
+        #grid-result-label { display:inline-block; margin-bottom:6px; padding:3px 12px; border-radius:999px; background:#0f172a; color:#a5f3fc; font-size:11px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
+        #grid-result-tiles { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center; padding:6px; }
+        .grid-hint { margin:6px 0 0; font-size:11px; color:#94a3b8; }
+        @media(max-width:700px) { #grid-steps { flex-basis:42%; margin-top:var(--grid-steps-top,11rem); padding:8px; } }
+
+        /* --- Toast --- */
+        #lab-toast { position:fixed; left:50%; bottom:5.6rem; transform:translate(-50%,16px); opacity:0; z-index:31000; max-width:min(92vw,520px); padding:10px 18px; border-radius:14px; background:#0f172a; color:#e0f2fe; font-size:.85rem; font-weight:600; box-shadow:0 12px 32px rgba(2,6,23,.4); pointer-events:none; transition:opacity .25s,transform .25s; text-align:center; }
+        #lab-toast.show { opacity:1; transform:translate(-50%,0); }
+        #lab-toast.error { background:#7f1d1d; color:#fee2e2; }
+
+        /* --- Sidebar extras --- */
+        .brand-header.is-clickable { cursor:pointer; }
+        .brand-header.is-clickable:hover svg { filter:drop-shadow(0 0 16px rgba(34,211,238,.95)); }
+
+        /* --- Splash screen --- */
+        #splash { position:fixed; inset:0; z-index:30000; display:flex; align-items:center; justify-content:center; padding:16px; overflow:auto; color:#e2e8f0; background:radial-gradient(ellipse at 15% 10%,rgba(14,165,233,.28),transparent 45%),radial-gradient(ellipse at 90% 95%,rgba(124,58,237,.38),transparent 48%),linear-gradient(130deg,#050816 0%,#0f1a3a 55%,#120f2c 100%); transition:opacity .6s ease,transform .6s ease; }
+        #splash::before { content:''; position:absolute; inset:0; opacity:.2; pointer-events:none; background-image:linear-gradient(rgba(125,211,252,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(125,211,252,.18) 1px,transparent 1px); background-size:34px 34px; mask-image:radial-gradient(ellipse at center,black 20%,transparent 80%); -webkit-mask-image:radial-gradient(ellipse at center,black 20%,transparent 80%); }
+        #splash.hide { opacity:0; transform:scale(1.04); pointer-events:none; }
+        #splash.gone { display:none; }
+        .sp-float { position:absolute; border-radius:10px; opacity:.16; animation:sp-drift linear infinite; pointer-events:none; display:grid; place-items:center; font-weight:800; color:#fff; }
+        @keyframes sp-drift { from { transform:translateY(0) rotate(0deg); } 50% { transform:translateY(-34px) rotate(8deg); } to { transform:translateY(0) rotate(0deg); } }
+        .splash-card { position:relative; z-index:2; width:min(640px,100%); text-align:center; padding:clamp(18px,4vw,34px); border-radius:28px; border:1px solid rgba(103,232,249,.3); background:linear-gradient(160deg,rgba(15,23,42,.78),rgba(30,27,75,.62)); backdrop-filter:blur(14px); box-shadow:0 30px 90px rgba(2,6,23,.6),inset 0 1px rgba(255,255,255,.08); }
+        .sp-stage { position:relative; width:440px; max-width:100%; height:150px; margin:0 auto 6px; }
+        .sp-tile { position:absolute; left:0; top:34px; width:76px; height:76px; margin-left:-38px; border-radius:14px; display:grid; place-items:center; font-size:1.6rem; font-weight:800; color:#fff; border:2px solid rgba(255,255,255,.75); box-shadow:0 10px 22px rgba(0,0,0,.35); transition:transform .85s cubic-bezier(.2,.75,.2,1),opacity .5s ease; will-change:transform; }
+        .sp-green { background:linear-gradient(145deg,#16a34a,#22c55e); } .sp-red { background:linear-gradient(145deg,#dc2626,#ef4444); } .sp-violet { background:linear-gradient(145deg,#6d28d9,#a855f7); width:100px; margin-left:-50px; }
+        .sp-spark { position:absolute; left:0; top:34px; width:76px; height:76px; margin-left:-38px; border-radius:50%; background:radial-gradient(circle,#fff,rgba(253,224,71,.85) 35%,transparent 70%); opacity:0; pointer-events:none; transition:transform .6s ease,opacity .6s ease; }
+        .sp-caption { height:26px; font:700 15px ui-monospace,SFMono-Regular,Menlo,monospace; color:#67e8f9; letter-spacing:.04em; }
+        .splash-kicker { margin-top:4px; font-size:10px; font-weight:800; letter-spacing:.3em; text-transform:uppercase; color:#67e8f9; }
+        #splash-title { margin:6px 0 0; font-size:clamp(2rem,6vw,3.1rem); line-height:1.05; font-weight:900; color:#fff; text-shadow:0 0 28px rgba(125,211,252,.4); }
+        .splash-sub { margin:6px 0 0; font-size:1.05rem; font-weight:700; letter-spacing:.24em; text-transform:uppercase; color:#c4b5fd; }
+        .splash-desc { margin:14px auto 0; max-width:500px; font-size:.92rem; line-height:1.55; color:#cbd5e1; }
+        .splash-version { display:inline-block; margin-top:14px; padding:3px 14px; border-radius:999px; border:1px solid rgba(103,232,249,.5); color:#a5f3fc; font-size:12px; font-weight:800; letter-spacing:.12em; }
+        .splash-actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
+        .splash-btn { min-width:150px; padding:12px 22px; border-radius:14px; font-weight:800; font-size:.95rem; letter-spacing:.04em; cursor:pointer; transition:transform .16s,box-shadow .16s,background .16s; }
+        .splash-btn:hover { transform:translateY(-2px); }
+        .splash-btn.secondary { border:1px solid rgba(148,163,184,.5); background:rgba(255,255,255,.07); color:#e2e8f0; }
+        .splash-btn.secondary:hover { background:rgba(255,255,255,.14); }
+        .splash-btn.primary { border:0; background:linear-gradient(135deg,#0891b2,#6366f1 60%,#a855f7); color:#fff; box-shadow:0 10px 26px rgba(99,102,241,.5); }
+        .splash-btn.primary:hover { box-shadow:0 14px 34px rgba(99,102,241,.7); }
+        .splash-author { display:flex; align-items:center; justify-content:center; gap:8px; margin-top:22px; padding-top:14px; border-top:1px solid rgba(148,163,184,.22); font-size:.78rem; font-weight:600; color:#94a3b8; }
+        .splash-author svg { width:18px; height:18px; color:#67e8f9; }
+        @media(prefers-reduced-motion:reduce) { .sp-float { animation:none; } }
+
+        /* --- Instructions modal --- */
+        #help-modal { z-index:30500; }
+        .help-card { background:#fff; color:#1e293b; width:min(760px,96vw); max-height:90vh; overflow:auto; border-radius:20px; box-shadow:0 28px 80px rgba(2,6,23,.4); padding:clamp(16px,3vw,28px); }
+        .help-card h2 { font-size:1.4rem; font-weight:900; }
+        .help-card h3 { margin:18px 0 6px; font-size:.72rem; font-weight:900; letter-spacing:.18em; text-transform:uppercase; color:#6366f1; }
+        .help-card ul { margin:0; padding-left:1.1rem; list-style:disc; font-size:.88rem; line-height:1.6; color:#334155; }
+        .help-card kbd { padding:1px 7px; border:1px solid #cbd5e1; border-bottom-width:2px; border-radius:6px; background:#f8fafc; font:700 .78rem ui-monospace,Menlo,monospace; color:#0f172a; }
+        .help-ico { display:inline-grid; place-items:center; width:22px; height:22px; border-radius:50%; background:#0e7490; color:#fff; vertical-align:middle; }
+        .help-ico svg { width:13px; height:13px; }
     </style>
 </head>
 <body class="bg-gray-100 h-screen overflow-hidden flex font-sans">
@@ -151,7 +267,7 @@
         <div id="author-badge" class="absolute top-2 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur px-3 py-1.5 rounded-full shadow border border-gray-200 z-20 author-collapsed">
             <span id="author-info" class="text-xs font-semibold text-gray-600">Designed by David Beleño · Math Education · 2026</span>
             <button id="author-logo" type="button" title="Show author information" aria-label="Show author information" aria-expanded="false">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5c3.2-1.1 5.2-3.7 6.8-7.1L15 3.8l3.2 2.1-4.9 8.7c-1.8 3.2-4.6 5.1-9.3 5.9Z"/><path d="m10.7 12.3 4.8 2.8M6.1 18.7l-1.9 1.9M17.2 4.5l2.3-1.1 2 1.3-1.1 2.3"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6" fill="currentColor"/><ellipse cx="12" cy="12" rx="9.5" ry="3.8"/><ellipse cx="12" cy="12" rx="9.5" ry="3.8" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.5" ry="3.8" transform="rotate(120 12 12)"/></svg>
             </button>
             <div id="operator-mode-controls" role="group" aria-label="Operation mode">
                 <button id="mode-addition" class="operator-button operator-addition is-active" type="button" title="Addition and subtraction mode" aria-label="Addition and subtraction" aria-pressed="true"><span class="flex flex-col leading-[9px] text-[11px]"><b>+</b><b>−</b></span></button>
@@ -165,6 +281,21 @@
             <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/><path d="m16 17 2 2 4-5"/></svg>
         </button>
         <div id="selection-box"></div>
+        <!-- V7: grid multiplication button (top-left corner, multiplication mode only) -->
+        <button id="grid-mode-btn" type="button" title="Grid multiplication: select two parentheses, then press" aria-label="Grid multiplication"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16M15 4v16"/></svg></button>
+        <div id="grid-view" aria-live="polite">
+            <button id="grid-exit-btn" type="button" title="Exit grid mode" aria-label="Exit grid mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+            <aside id="grid-steps" aria-label="Grid multiplication steps">
+                <div class="distribution-sequence-title"><span>Grid Multiplication · Step-by-step</span><span id="grid-progress">0 / 0</span></div>
+                <div id="grid-ctl-slot"></div>
+                <div id="grid-steps-list"></div>
+            </aside>
+            <section id="grid-stage">
+                <div id="grid-table-wrap"><table id="grid-table"></table></div>
+                <div id="grid-result"><span id="grid-result-label">Result</span><div id="grid-result-tiles"></div></div>
+            </section>
+        </div>
+
         <div id="expression-panel" class="absolute top-4 left-4 bg-white/90 backdrop-blur px-6 py-3 rounded-xl shadow-lg border border-gray-200 z-10">
             <h2 class="text-sm text-gray-500 font-semibold uppercase tracking-wider mb-1">Current Expression</h2>
             <div id="equation-display" class="text-3xl font-bold text-gray-800 font-mono">0</div>
@@ -190,7 +321,7 @@
     </main>
 
     <aside id="sidebar-panel" class="sidebar-panel w-80 bg-white border-l border-gray-200 shadow-xl flex flex-col z-20" onmousedown="event.stopPropagation()">
-        <div class="brand-header p-6 text-white flex items-center gap-3">
+        <div id="brand-header" class="brand-header is-clickable p-6 text-white flex items-center gap-3" title="Back to the start screen">
             <!-- Math Logo SVG -->
             <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
@@ -262,6 +393,9 @@
                 </svg>
                 Clear Board
             </button>
+            <button id="sidebar-help-btn" type="button" class="mt-2 w-full py-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-semibold rounded-lg transition flex justify-center items-center gap-2">
+                <span class="inline-grid place-items-center w-5 h-5 rounded-full bg-cyan-700 text-white text-xs font-black">?</span> Instructions
+            </button>
         </div>
     </aside>
     <button id="sidebar-toggle" type="button" aria-controls="sidebar-panel" aria-expanded="true" title="Collapse tile panel">‹</button>
@@ -272,6 +406,69 @@
     <div id="tile-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true"></div>
     <div id="exponent-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true"></div>
     <div id="exercise-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true"></div>
+
+
+    <!-- V7: presentation window -->
+    <div id="splash" role="dialog" aria-modal="true" aria-labelledby="splash-title">
+        <div id="sp-floaters" aria-hidden="true"></div>
+        <div class="splash-card">
+            <div class="sp-stage" aria-hidden="true">
+                <div id="sp-a" class="sp-tile sp-green">x</div>
+                <div id="sp-b" class="sp-tile sp-green">x</div>
+                <div id="sp-n" class="sp-tile sp-red">−x</div>
+                <div id="sp-m" class="sp-tile sp-violet">2x</div>
+                <div id="sp-z" class="sp-spark"></div>
+            </div>
+            <div id="sp-caption" class="sp-caption" aria-live="off">x + x</div>
+            <div class="splash-kicker">Interactive math · lab</div>
+            <h1 id="splash-title">Algebraic Laboratory</h1>
+            <h2 class="splash-sub">Basic Operations</h2>
+            <p class="splash-desc">Explore algebra with your hands. Build expressions with algebra tiles, combine and cancel terms to add and subtract, multiply with the distributive property or a grid, and group everything with nested parentheses, brackets and braces.</p>
+            <span class="splash-version">Version V1.0</span>
+            <div class="splash-actions">
+                <button id="splash-help" type="button" class="splash-btn secondary">Instructions</button>
+                <button id="splash-enter" type="button" class="splash-btn primary">Enter</button>
+            </div>
+            <div class="splash-author"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6" fill="currentColor"/><ellipse cx="12" cy="12" rx="9.5" ry="3.8"/><ellipse cx="12" cy="12" rx="9.5" ry="3.8" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.5" ry="3.8" transform="rotate(120 12 12)"/></svg><span>Designed by David Beleño · Math Education · 2026</span></div>
+        </div>
+    </div>
+    <div id="help-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="help-title">
+        <div class="help-card">
+            <div class="flex justify-between items-start gap-4">
+                <div><div class="sign-rule-kicker">How to use it</div><h2 id="help-title">Instructions</h2></div>
+                <button type="button" id="help-close" class="text-3xl leading-none text-slate-400 hover:text-slate-700" aria-label="Close">×</button>
+            </div>
+            <h3>Tiles</h3>
+            <ul>
+                <li>Add tiles from the right panel (or create custom variables and numbers). Drag to move; drag several at once with a selection box or <kbd>Ctrl</kbd>+<kbd>E</kbd> (select all).</li>
+                <li>Drop a tile on a like tile to add them; drop it on its opposite to cancel. Right-click changes the sign; double-click edits exponent, coefficient or value; hold a tile for one second to split or gather it.</li>
+                <li><kbd>C</kbd> swaps the positions of two selected tiles. <kbd>O</kbd> orders the selected tiles from the highest to the lowest degree (then by letter) and centers them in the work area, in one line or several.</li>
+                <li><kbd>Ctrl</kbd>+<kbd>C</kbd> / <kbd>Ctrl</kbd>+<kbd>V</kbd> copy and paste, <kbd>Ctrl</kbd>+<kbd>Z</kbd> undo, <kbd>Ctrl</kbd>+<kbd>X</kbd> redo, <kbd>Delete</kbd> removes the selection.</li>
+            </ul>
+            <h3>Containers and nested groupings</h3>
+            <ul>
+                <li>Click a container header to select it (click again to deselect); <kbd>Delete</kbd> or the trash icon removes it with everything inside.</li>
+                <li>The gear menu offers Apply Signs, Separator, the grouping symbol — ( ) parentheses, [ ] brackets or { } braces — Add nested group, Select and Delete.</li>
+                <li>Drag a container inside another one to nest it, or drag it out to un-nest it. Nested groupings are shown in the expression display.</li>
+                <li>Type expressions such as <kbd>2x - [3 - (y + 1)]</kbd> (addition mode) or <kbd>2{x + [y - (z + 1)]}</kbd> and <kbd>(a+2b)(3x-y)</kbd> (multiplication mode).</li>
+            </ul>
+            <h3>Multiplication and the distributive property</h3>
+            <ul>
+                <li>Switch to × mode. Place an outside factor next to a container and click it, or double-click a container header to multiply it by the nearest container.</li>
+                <li>Step controls (icons only): <span class="help-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span> automatic, <span class="help-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 5v14l10-7zM17 5h2.5v14H17z"/></svg></span> manual (next step), <span class="help-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="3.5" width="10" height="10" rx="2"/><rect x="11" y="10.5" width="10" height="10" rx="2"/></svg></span> tile interaction on/off (copies of the factors fly down and merge into the new term), <span class="help-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 5v14l8-7zM12 5v14l8-7z"/></svg></span> skip to the result.</li>
+            </ul>
+            <h3>Grid multiplication</h3>
+            <ul>
+                <li>In × mode, select two containers (click their headers) and press the table button in the top-left corner. Their terms move into a grid: the first container across the top, the second down the side.</li>
+                <li>Use the same step controls to fill the cells. The left panel lists every action; at the end like terms are combined and the result appears below as tiles ordered by degree and letter. Press ✕ to leave the grid and send the result to the work area.</li>
+            </ul>
+            <h3>More</h3>
+            <ul>
+                <li>The violet logo (top-right) generates an exercise; hold it to configure. <b>± Sign Rules</b> shows the sign reference. Click the sidebar title to return to the start screen.</li>
+            </ul>
+            <div class="flex justify-end mt-5"><button type="button" id="help-ok" class="px-5 py-2 rounded-lg bg-violet-600 text-white font-semibold">Got it</button></div>
+        </div>
+    </div>
 
     <script>
         const container = document.getElementById('tiles-container');
@@ -1823,6 +2020,506 @@
             return runDistributionSequenceV6(steps,[parenA,parenB],layout,groupId);
         };
         // Re-center manually entered and randomly generated exercises as one group.
+
+        /* ======================================================================
+           V7 LAYER — nested groupings, selection/delete, swap (C), order (O),
+           step-by-step controller, grid multiplication, presentation window
+           ====================================================================== */
+        const V7_META_KEYS=['kind','num','den','format','letter','exponent','color','shape','variables','factorParts','distributionGroup'];
+        const sleepV7=ms=>new Promise(r=>setTimeout(r,ms));
+        const gridV7={active:false,done:false,cancelled:false,snapshot:null,final:null,run:0,scale:1};
+        function toastV7(msg,isError=false){let t=document.getElementById('lab-toast');if(!t){t=document.createElement('div');t.id='lab-toast';t.setAttribute('role','status');document.body.appendChild(t)}t.textContent=msg;t.classList.toggle('error',isError);t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),3400)}
+        function metaFromTileV7(t){const m={};for(const k of V7_META_KEYS)if(t.dataset[k]!==undefined)m[k]=t.dataset[k];return m}
+        function descV7(t){return {type:t.dataset.type,coeff:Number(t.dataset.coeff||1),meta:{...metaFromTileV7(t),num:Number(t.dataset.num??t.dataset.coeff??1),den:Number(t.dataset.den||1),exponent:Number(t.dataset.exponent||1)}}}
+
+        // ---------- Grouping symbols ----------
+        const GROUPS_V7={paren:{o:'(',c:')',to:'\\left(',tc:'\\right)',label:'Parentheses'},bracket:{o:'[',c:']',to:'\\left[',tc:'\\right]',label:'Brackets'},brace:{o:'{',c:'}',to:'\\left\\{',tc:'\\right\\}',label:'Braces'}};
+        const GROUP_BY_CHAR_V7={'(':'paren','[':'bracket','{':'brace'};
+        const OPEN_V7='([{',CLOSE_V7=')]}';
+        const TRASH_SVG_V7='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>';
+        const contentOfV7=p=>p.querySelector(':scope > div > .paren-content');
+        const parenSignV7=p=>p.querySelector(':scope > div > .paren-sign').innerText.trim()==='-'?-1:1;
+        const eqSortV7=(a,b)=>(a.dataset.ord!==undefined&&b.dataset.ord!==undefined)?Number(a.dataset.ord)-Number(b.dataset.ord):a.getBoundingClientRect().left-b.getBoundingClientRect().left;
+        const directTilesV7=content=>Array.from(content.querySelectorAll(':scope > .algebra-tile:not(.annihilate)')).sort(eqSortV7);
+        const directItemsV7=content=>Array.from(content.children).filter(c=>(c.classList.contains('algebra-tile')&&!c.classList.contains('annihilate'))||c.classList.contains('parenthesis'));
+        function setGroupV7(paren,group){paren.dataset.group=group;paren.classList.remove('group-paren','group-bracket','group-brace');paren.classList.add('group-'+group);const g=GROUPS_V7[group],l=paren.querySelector(':scope > .paren-handle > .paren-label');if(l)l.textContent=`${g.o} ${g.c}  Container`}
+        function fitParenToChildrenV7(p){let cur=p;while(cur&&cur.classList?.contains('parenthesis')){const content=contentOfV7(cur);let w=0,h=0;Array.from(content.children).forEach(el=>{w=Math.max(w,(parseFloat(el.style.left)||0)+(el.offsetWidth||80)+16);h=Math.max(h,(parseFloat(el.style.top)||0)+(el.offsetHeight||80)+16)});const needW=w+52,needH=h+32;if(cur.offsetWidth<needW)cur.style.width=needW+'px';if(cur.offsetHeight<needH)cur.style.height=needH+'px';cur=cur.parentElement?.closest('.parenthesis')}}
+
+        const addParenthesisBaseV7=addParenthesisRaw;
+        addParenthesisRaw=function(sign,x,y,forceId=null,opts={}){
+            const paren=addParenthesisBaseV7(sign,x,y,forceId),handle=paren.querySelector(':scope > .paren-handle');
+            handle.querySelector('span').classList.add('paren-label');
+            const gearWrap=handle.querySelector('.relative');gearWrap.querySelector('.paren-settings-menu')?.remove();
+            const right=document.createElement('div');right.className='flex items-center gap-1';
+            const del=document.createElement('button');del.type='button';del.className='settings-btn paren-del-btn';del.title='Delete this container';del.setAttribute('aria-label','Delete container');del.innerHTML=TRASH_SVG_V7;
+            del.addEventListener('click',e=>{e.stopPropagation();deleteParenV7(paren)});
+            gearWrap.parentNode.insertBefore(right,gearWrap);right.append(del,gearWrap);
+            setGroupV7(paren,opts.group||'paren');
+            if(opts.parent&&opts.parent!==container)opts.parent.appendChild(paren);
+            return paren;
+        };
+
+        // ---------- Floating gear menu ----------
+        let parenMenuV7=null;
+        function closeParenMenuV7(){parenMenuV7?.remove();parenMenuV7=null}
+        toggleSettings=function(btn,e){
+            if(e){e.stopPropagation();if(e.type==='touchstart')e.preventDefault()}
+            const paren=btn.closest('.parenthesis');if(!paren)return;
+            if(parenMenuV7&&parenMenuV7._paren===paren){closeParenMenuV7();return}
+            closeParenMenuV7();
+            const menu=document.createElement('div');menu.className='paren-float-menu';menu._paren=paren;
+            const cur=paren.dataset.group||'paren',isSel=paren.classList.contains('paren-selected');
+            const item=(label,fn,cls='')=>{const b=document.createElement('button');b.type='button';b.className=cls;b.innerHTML=label;b.addEventListener('click',ev=>{ev.stopPropagation();closeParenMenuV7();fn()});menu.appendChild(b)};
+            const head=t=>{const h=document.createElement('div');h.className='paren-menu-head';h.textContent=t;menu.appendChild(h)};
+            item('Apply Signs',()=>applyParenSignsV7(paren));
+            item('Separator',()=>separatorParenV7(paren));
+            head('Grouping symbol');
+            Object.entries(GROUPS_V7).forEach(([k,g])=>item(`<span class="pm-sym">${g.o} ${g.c}</span> ${g.label}${k===cur?'<span class="pm-check">✓</span>':''}`,()=>{saveState();setGroupV7(paren,k);playSound('paren');updateEquation()},k===cur?'is-current':''));
+            head('Container');
+            item('Add nested group',()=>addNestedGroupV7(paren));
+            item(isSel?'Deselect':'Select',()=>toggleParenSelectV7(paren));
+            item('Delete',()=>deleteParenV7(paren),'danger');
+            document.body.appendChild(menu);
+            const r=btn.getBoundingClientRect();
+            menu.style.left=Math.max(8,Math.min(window.innerWidth-menu.offsetWidth-8,r.right-menu.offsetWidth))+'px';
+            menu.style.top=Math.max(8,Math.min(window.innerHeight-menu.offsetHeight-8,r.bottom+4))+'px';
+            parenMenuV7=menu;
+        };
+        window.addEventListener('mousedown',e=>{if(parenMenuV7&&!e.target.closest('.paren-float-menu')&&!e.target.closest('.settings-btn'))closeParenMenuV7()},true);
+        window.addEventListener('keydown',e=>{if(e.key==='Escape')closeParenMenuV7()});
+
+        // ---------- Container operations ----------
+        function releaseParenV7(paren){
+            const target=paren.parentElement,tr=target.getBoundingClientRect();
+            const info=Array.from(paren.querySelectorAll('.algebra-tile:not(.annihilate)')).map(t=>{let s=1,el=t.parentElement;while(el&&el!==target){if(el.classList.contains('parenthesis'))s*=parenSignV7(el);el=el.parentElement}return {t,s,r:t.getBoundingClientRect()}});
+            info.forEach(({t,s,r})=>{if(s<0){setTileSign(t,-typeSign(t));updateTileText(t)}target.appendChild(t);t.style.left=`${r.left-tr.left}px`;t.style.top=`${r.top-tr.top}px`});
+            paren.remove();
+        }
+        function applyParenSignsV7(paren){saveState();releaseParenV7(paren);playSound('parenSign');updateEquation()}
+        applyParenSigns=function(btn,e){e?.stopPropagation?.();const p=btn.closest('.parenthesis');if(p)applyParenSignsV7(p)};
+        function separatorParenV7(paren){
+            saveState();const content=contentOfV7(paren),items=directItemsV7(content).sort(eqSortV7);let x=16;
+            items.forEach(el=>{el.style.left=`${x}px`;el.style.top=`${Math.max(10,(content.clientHeight-(el.offsetHeight||80))/2)}px`;x+=(el.offsetWidth||80)+15;delete el.dataset.ord});
+            if(paren.offsetWidth<x+60)paren.style.width=`${x+60}px`;playSound('paren');updateEquation();
+        }
+        separatorParen=function(btn,e){e?.stopPropagation?.();const p=btn.closest('.parenthesis');if(p)separatorParenV7(p)};
+        function addNestedGroupV7(paren){
+            saveState();const content=contentOfV7(paren),pg=paren.dataset.group||'paren',ng=pg==='brace'?'bracket':'paren';
+            if(pg==='paren')setGroupV7(paren,'bracket');
+            let x=14;directItemsV7(content).forEach(el=>{x=Math.max(x,(parseFloat(el.style.left)||0)+(el.offsetWidth||80)+14)});
+            const np=addParenthesisRaw('+',x,16,null,{parent:content,group:ng});np.style.width='230px';np.style.height='170px';
+            fitParenToChildrenV7(paren);playSound('paren');updateEquation();
+        }
+        function toggleParenSelectV7(p,force){const on=force??!p.classList.contains('paren-selected');p.classList.toggle('paren-selected',on);return on}
+        const selectedParensV7=()=>Array.from(container.querySelectorAll('.parenthesis.paren-selected'));
+        const selectedTilesV7=()=>Array.from(container.querySelectorAll('.algebra-tile.selected:not(.annihilate)'));
+        function deleteParenV7(p){saveState();p.classList.add('annihilate');playSound('disappear');setTimeout(()=>{p.remove();updateEquation()},250)}
+        function flattenInsideV7(paren){const nested=Array.from(contentOfV7(paren).querySelectorAll(':scope > .parenthesis'));if(!nested.length)return false;nested.forEach(n=>releaseParenV7(n));relayoutRowV7(paren);return true}
+        function relayoutRowV7(paren){let x=14;directTilesV7(contentOfV7(paren)).forEach(t=>{t.style.left=x+'px';t.style.top='24px';x+=(t.offsetWidth||80)+14});if(paren.offsetWidth<x+58)paren.style.width=(x+58)+'px'}
+
+        // Header click selects / deselects a container (drag does not).
+        let handleDownV7=null;
+        const handleDownFn=e=>{const h=e.target.closest?.('.paren-handle');if(!h||e.target.closest('.settings-btn'))return;if(e.type==='mousedown'&&e.button!==0)return;const pt=e.touches?e.touches[0]:e;handleDownV7={p:h.closest('.parenthesis'),x:pt.clientX,y:pt.clientY}};
+        container.addEventListener('mousedown',handleDownFn,true);container.addEventListener('touchstart',handleDownFn,{capture:true,passive:true});
+        const handleUpFn=e=>{const d=handleDownV7;handleDownV7=null;if(!d||distributionLockedV3||gridV7.active||!d.p?.isConnected)return;const pt=e.changedTouches?e.changedTouches[0]:e;if(Math.hypot(pt.clientX-d.x,pt.clientY-d.y)<5){toggleParenSelectV7(d.p);playSound('parenSign')}};
+        window.addEventListener('mouseup',handleUpFn);window.addEventListener('touchend',handleUpFn);
+        workspace.addEventListener('mousedown',e=>{if((e.target===container||e.target===workspace)&&!e.shiftKey)selectedParensV7().forEach(p=>p.classList.remove('paren-selected'))});
+
+        // Drop a container inside (or out of) another one.
+        let dragParensV7=[];
+        const captureDragV7=()=>{dragParensV7=isDragging?dragGroup.filter(i=>i.el.classList?.contains('parenthesis')).map(i=>i.el):[];if(isDragging&&dragMoved)dragGroup.forEach(i=>{i.el.parentElement?.querySelectorAll(':scope > .algebra-tile').forEach(t=>delete t.dataset.ord)})};
+        window.addEventListener('mouseup',captureDragV7,true);window.addEventListener('touchend',captureDragV7,true);
+        const postDropV7=()=>{const ps=dragParensV7;dragParensV7=[];if(!ps.length)return;ps.forEach(reparentParenV7);updateEquation()};
+        window.addEventListener('mouseup',postDropV7);window.addEventListener('touchend',postDropV7);
+        function reparentParenV7(p){
+            if(!p.isConnected)return;const r=p.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+            const cands=Array.from(container.querySelectorAll('.parenthesis')).filter(o=>o!==p&&!p.contains(o));let target=container;
+            for(let i=cands.length-1;i>=0;i--){const c=contentOfV7(cands[i]).getBoundingClientRect();if(cx>=c.left&&cx<=c.right&&cy>=c.top&&cy<=c.bottom){target=contentOfV7(cands[i]);break}}
+            if(p.parentElement===target)return;
+            const tr=target.getBoundingClientRect();target.appendChild(p);p.style.left=`${r.left-tr.left}px`;p.style.top=`${r.top-tr.top}px`;
+            if(target!==container){p.style.left=Math.max(4,parseFloat(p.style.left))+'px';p.style.top=Math.max(4,parseFloat(p.style.top))+'px';fitParenToChildrenV7(target.closest('.parenthesis'))}
+            playSound('paren');
+        }
+
+        // ---------- Keyboard: Delete (containers), C = swap, O = order ----------
+        function cmpMonoV7(va,vb){
+            const da=va.reduce((n,v)=>n+Number(v.exponent||1),0),db=vb.reduce((n,v)=>n+Number(v.exponent||1),0);if(da!==db)return db-da;
+            const letters=Array.from(new Set([...va.map(v=>v.letter),...vb.map(v=>v.letter)])).sort(),get=(vs,l)=>Number(vs.find(v=>v.letter===l)?.exponent||0);
+            for(const l of letters){const ea=get(va,l),eb=get(vb,l);if(ea!==eb)return eb-ea}return 0;
+        }
+        const compareTilesV7=(a,b)=>cmpMonoV7(variablesFromTile(a),variablesFromTile(b))||typeSign(b)-typeSign(a);
+        function swapElementsV7(a,b){
+            saveState();const ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect(),pa=a.parentElement,pb=b.parentElement;
+            [a,b].forEach(el=>el.classList.add('swap-anim'));
+            if(pa===pb){
+                const ax=parseFloat(a.style.left)||0,ay=parseFloat(a.style.top)||0,bx=parseFloat(b.style.left)||0,by=parseFloat(b.style.top)||0,aw=a.offsetWidth,bw=b.offsetWidth;
+                if(ax<=bx){b.style.left=`${ax}px`;a.style.left=`${bx+bw-aw}px`}else{a.style.left=`${bx}px`;b.style.left=`${ax+aw-bw}px`}
+                a.style.top=`${by}px`;b.style.top=`${ay}px`;
+            }else{
+                const pra=pa.getBoundingClientRect(),prb=pb.getBoundingClientRect(),acx=ra.left+ra.width/2,acy=ra.top+ra.height/2,bcx=rb.left+rb.width/2,bcy=rb.top+rb.height/2;
+                pb.appendChild(a);pa.appendChild(b);
+                a.style.left=`${bcx-ra.width/2-prb.left}px`;a.style.top=`${bcy-ra.height/2-prb.top}px`;
+                b.style.left=`${acx-rb.width/2-pra.left}px`;b.style.top=`${acy-rb.height/2-pra.top}px`;
+            }
+            if(a.dataset.ord!==undefined&&b.dataset.ord!==undefined){const t=a.dataset.ord;a.dataset.ord=b.dataset.ord;b.dataset.ord=t}
+            playSound('flip');setTimeout(()=>{[a,b].forEach(el=>el.classList.remove('swap-anim'));updateEquation()},480);updateEquation();
+        }
+        function arrangeTilesV7(tiles,parent){
+            const sorted=tiles.slice().sort(compareTilesV7),isC=parent===container,areaW=parent.clientWidth,areaH=parent.clientHeight,gap=18,pad=isC?40:14,maxW=isC?areaW-pad*2:Infinity;
+            const rows=[];let cur={items:[],w:0,h:0};
+            sorted.forEach(t=>{const w=t.offsetWidth||80,h=t.offsetHeight||80,add=(cur.items.length?gap:0)+w;if(cur.items.length&&cur.w+add>maxW){rows.push(cur);cur={items:[],w:0,h:0}}cur.w+=add;cur.h=Math.max(cur.h,h);cur.items.push({t,w,h})});rows.push(cur);
+            const totalH=rows.reduce((s,r)=>s+r.h,0)+gap*(rows.length-1);let y=Math.max(isC?90:8,(areaH-totalH)/2),ord=0;
+            rows.forEach(row=>{let x=Math.max(isC?12:14,(areaW-row.w)/2);row.items.forEach(({t,w,h})=>{t.classList.add('arranging');t.style.left=`${x}px`;t.style.top=`${y+(row.h-h)/2}px`;t.dataset.ord=ord++;x+=w+gap;setTimeout(()=>t.classList.remove('arranging'),600)});y+=row.h+gap});
+            if(!isC)fitParenToChildrenV7(parent.closest('.parenthesis'));
+        }
+        function orderSelectedV7(){
+            const sel=selectedTilesV7();if(sel.length<2){toastV7('Select two or more tiles and press O to order them.');return}
+            saveState();const groups=new Map();sel.forEach(t=>{if(!groups.has(t.parentElement))groups.set(t.parentElement,[]);groups.get(t.parentElement).push(t)});
+            groups.forEach((tiles,parent)=>arrangeTilesV7(tiles,parent));playSound('expression');setTimeout(updateEquation,60);updateEquation();
+        }
+        window.addEventListener('keydown',e=>{
+            if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)||e.target.isContentEditable)return;
+            if(document.querySelector('.modal-backdrop:not(.hidden)')||document.body.classList.contains('splash-open')||gridV7.active||distributionLockedV3)return;
+            if(e.key==='Delete'||e.key==='Backspace'){const ps=selectedParensV7();if(ps.length){saveState();ps.forEach(p=>p.remove());playSound('disappear');updateEquation()}return}
+            if(e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key.toLowerCase();
+            if(k==='c'){const t=selectedTilesV7(),p=selectedParensV7();if(t.length===2)swapElementsV7(t[0],t[1]);else if(!t.length&&p.length===2)swapElementsV7(p[0],p[1]);else if(t.length||p.length)toastV7('Select exactly two tiles and press C to swap them.')}
+            else if(k==='o')orderSelectedV7();
+        });
+
+        // ---------- Nested expression parser (all modes) ----------
+        sanitizeExerciseInput=function(input){const allowed=(input.value||'').replace(/[^A-Za-z0-9.+\-/^()\[\]{}×·*\s]/g,'');if(input.value!==allowed){const pos=input.selectionStart;input.value=allowed;if(pos!==null)input.setSelectionRange(Math.min(pos,allowed.length),Math.min(pos,allowed.length))}};
+        const ATOM_V7=/^(?:(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)\s*)?(?:[A-Za-z](?:\^\d+)?)+|^(?:\d+\s+\d+\/\d+|\d+\/\d+|\d*\.?\d+)/;
+        function validateGroupingV7(s){const st=[];for(const c of s){if(OPEN_V7.includes(c))st.push(c);else if(CLOSE_V7.includes(c)){const o=st.pop();if(!o||OPEN_V7.indexOf(o)!==CLOSE_V7.indexOf(c))return 'Grouping symbols are not balanced or do not match (for example, an opening ( closed with ]).'}}return st.length?'Grouping symbols are not balanced.':null}
+        function findCloseV7(s,i){const st=[];for(let j=i;j<s.length;j++){const c=s[j];if(OPEN_V7.includes(c))st.push(c);else if(CLOSE_V7.includes(c)){st.pop();if(!st.length)return j}}return -1}
+        function parseSumV7(s){
+            const items=[],n=s.length;let i=0;const ws=()=>{while(i<n&&/\s/.test(s[i]))i++};
+            while(true){
+                ws();if(i>=n)break;let sign=1;
+                if(s[i]==='+'||s[i]==='-'){sign=s[i]==='-'?-1:1;i++;ws()}else if(items.length)return {error:'Use + or − between terms and groupings.'};
+                if(i>=n)return {error:'A sign must be followed by a term or a grouping symbol.'};
+                if(OPEN_V7.includes(s[i])){const j=findCloseV7(s,i);if(j<0)return {error:'Grouping symbols are not balanced.'};const inner=parseSumV7(s.slice(i+1,j));if(inner.error)return inner;if(!inner.items.length)return {error:'Grouping symbols cannot be empty.'};items.push({type:'group',sign,shape:GROUP_BY_CHAR_V7[s[i]],items:inner.items});i=j+1}
+                else{const m=ATOM_V7.exec(s.slice(i));if(!m)return {error:'Use numbers, variables, exponents and grouping symbols only.'};items.push({type:'term',text:(sign<0?'-':'+')+m[0].replace(/\s+/g,' ').trim()});i+=m[0].length}
+                ws();if(i<n&&s[i]!=='+'&&s[i]!=='-')return {error:OPEN_V7.includes(s[i])?'Implicit multiplication of groupings is available in Multiplication mode (×).':'Use + or − between terms and groupings.'};
+            }
+            return {items};
+        }
+        function parseProductV7(s){
+            const factors=[],n=s.length;let i=0,need=true;const ws=()=>{while(i<n&&/\s/.test(s[i]))i++};
+            while(i<n){
+                ws();if(i>=n)break;const c=s[i];
+                if(c==='*'||c==='×'||c==='·'){if(need)return {error:'Enter a factor on both sides of each multiplication sign.'};need=true;i++;continue}
+                if((c==='+'||c==='-')&&!need)return {error:'You are in Multiplication mode. Addition and subtraction are allowed only inside grouping symbols; use * to multiply factors.'};
+                if(!need&&!OPEN_V7.includes(c))return {error:'Use * between standalone factors. Implicit multiplication works before grouping symbols, for example 2y(3x+6).'};
+                let sign=1;if(c==='+'||c==='-'){sign=c==='-'?-1:1;i++;ws()}
+                if(i>=n)return {error:'A sign must be followed by a number, variable or grouping symbol.'};
+                if(OPEN_V7.includes(s[i])){const j=findCloseV7(s,i);if(j<0)return {error:'Grouping symbols are not balanced.'};const inner=parseSumV7(s.slice(i+1,j));if(inner.error)return inner;if(!inner.items.length)return {error:'Grouping symbols cannot be empty.'};factors.push({type:'group',sign,shape:GROUP_BY_CHAR_V7[s[i]],items:inner.items});i=j+1;need=false}
+                else{const m=ATOM_V7.exec(s.slice(i));if(!m)return {error:'Use numbers, variables, exponents, grouping symbols and multiplication signs only.'};factors.push({type:'term',text:(sign<0?'-':'+')+m[0].replace(/\s+/g,' ').trim()});i+=m[0].length;need=false;let k=i;while(k<n&&/\s/.test(s[k]))k++;if(k<n&&OPEN_V7.includes(s[k])){need=true;i=k}}
+            }
+            if(!factors.length)return {error:'Enter at least one factor.'};if(need)return {error:'Enter a factor after the multiplication sign.'};return {factors};
+        }
+        function buildGroupV7(g,parent,x,y){
+            const p=addParenthesisRaw(g.sign<0?'-':'+',x,y,null,{parent:parent===container?null:parent,group:g.shape}),content=contentOfV7(p);
+            let cx=14,maxH=0;
+            g.items.forEach(it=>{
+                if(it.type==='term'){const before=content.children.length;cx=parseTermIntoTile(it.text,cx,26,content);if(content.children.length>before)maxH=Math.max(maxH,26+(content.lastElementChild.offsetHeight||80))}
+                else{const np=buildGroupV7(it,content,cx,16);cx+=(np.offsetWidth||230)+16;maxH=Math.max(maxH,16+(np.offsetHeight||170))}
+            });
+            p.style.width=`${Math.max(230,cx+62)}px`;p.style.height=`${Math.max(170,maxH+28+24)}px`;return p;
+        }
+        function layoutTopItemsV7(items,startX,startY){
+            let x=startX,y=startY,rowH=0;
+            items.forEach(it=>{
+                let el;if(it.type==='term'){const before=container.children.length;parseTermIntoTile(it.text,x,y,container);if(container.children.length===before)return;el=container.lastElementChild}else el=buildGroupV7(it,container,x,y);
+                const w=(el.offsetWidth||80)+16,h=el.offsetHeight||80;
+                if(x>startX&&x+w>container.clientWidth-40){x=startX;y+=rowH+24;rowH=0;el.style.left=`${x}px`;el.style.top=`${y}px`}
+                x+=w+6;rowH=Math.max(rowH,h);
+            });
+        }
+        insertExercise=function(){
+            if(distributionLockedV3||gridV7.active)return false;
+            const field=document.getElementById('exercise-input');sanitizeExerciseInput(field);const raw=field.value.trim();if(!raw)return;
+            const expr=raw.replace(/\s+/g,' '),bad=validateGroupingV7(expr);if(bad){toastV7(bad,true);return false}
+            const mult=operationMode==='multiplication';
+            if(!mult&&/[*×·]/.test(expr)){toastV7('Products are available in Multiplication mode (×).',true);return false}
+            const parsed=mult?parseProductV7(expr):parseSumV7(expr);if(parsed.error){toastV7(parsed.error,true);return false}
+            saveState();container.innerHTML='';layoutTopItemsV7(mult?parsed.factors:parsed.items,36,mult?130:120);
+            playSound('expression');centerInsertedExerciseV6();updateEquation();field.value='';return true;
+        };
+        const setOperationModeBeforeV7=setOperationMode;
+        setOperationMode=function(mode){
+            if(distributionLockedV3)return;if(gridV7.active)exitGridV7(true);
+            const before=operationMode;setOperationModeBeforeV7(mode);closeParenMenuV7();
+            if(operationMode!==before||mode===operationMode){const inp=document.getElementById('exercise-input');
+                inp.placeholder=operationMode==='multiplication'?'e.g. 3x*(y+2), (a+2b)(3x-y) or 2[x-(y+1)]':'e.g. 3x^2 + y or 2x - [3 - (y + 1)]';
+                inp.title='Grouping symbols ( ), [ ] and { } may be nested. '+(operationMode==='multiplication'?'Factors use * or implicit multiplication before a group; sums only inside groups.':'Use addition and subtraction, fractions, decimals and ^ for powers.')}
+        };
+        document.getElementById('exercise-input').placeholder='e.g. 3x^2 + y or 2x - [3 - (y + 1)]';
+
+        // ---------- Expression display with nested groupings ----------
+        function eqItemsV7(parent){return Array.from(parent.children).filter(c=>(c.classList.contains('algebra-tile')&&!c.classList.contains('annihilate'))||c.classList.contains('parenthesis')).sort(eqSortV7)}
+        function parenTexV7(p){const g=GROUPS_V7[p.dataset.group||'paren'];return `${g.to}${sumTexV7(eqItemsV7(contentOfV7(p)))||'0'}${g.tc}`}
+        function sumTexV7(items){let out='';items.forEach(el=>{const s=el.classList.contains('algebra-tile')?termTex(el):`${parenSignV7(el)<0?'-':'+'}${parenTexV7(el)}`;out+=!out?(s[0]==='+'?s.slice(1):s):(s[0]==='-'?` - ${s.slice(1)}`:` + ${s.slice(1)}`)});return out}
+        updateEquation=function(){
+            const top=eqItemsV7(container);
+            if(!top.length){equationDisplay.textContent='0';equationDisplay.classList.replace('text-gray-800','text-gray-400');return}
+            equationDisplay.classList.replace('text-gray-400','text-gray-800');
+            if(operationMode==='multiplication'){
+                const topTiles=top.filter(el=>el.classList.contains('algebra-tile')),groups=new Set(topTiles.map(t=>t.dataset.distributionGroup).filter(Boolean));
+                if(top.length>1&&groups.size===1&&topTiles.length===top.length){const gid=[...groups][0];if(topTiles.every(t=>t.dataset.distributionGroup===gid)){renderMath(equationDisplay,joinTerms(topTiles));return}}
+                const consumed=new Set(),factors=[];
+                top.forEach(el=>{
+                    if(el.classList.contains('algebra-tile')&&el.dataset.distributionGroup){const gid=el.dataset.distributionGroup;if(consumed.has(gid))return;consumed.add(gid);factors.push(`(${joinTerms(topTiles.filter(t=>t.dataset.distributionGroup===gid))})`);return}
+                    if(el.classList.contains('algebra-tile')){const term=termTex(el);factors.push(term.startsWith('+')?term.slice(1):term.startsWith('-')?`(${term})`:term)}
+                    else factors.push((parenSignV7(el)<0?'-':'')+parenTexV7(el));
+                });
+                renderMath(equationDisplay,factors.join(String.raw` \times `)||'1');return;
+            }
+            renderMath(equationDisplay,sumTexV7(top)||'0');
+        };
+
+        // ---------- Undo / redo with nested containers ----------
+        getStateSnapshot=function(){
+            const state={tiles:[],parens:[]};
+            container.querySelectorAll('.parenthesis').forEach(p=>state.parens.push({id:p.dataset.id,left:p.style.left,top:p.style.top,width:p.style.width,height:p.style.height,sign:p.querySelector(':scope > div > .paren-sign').innerText.trim(),group:p.dataset.group||'paren',parentId:p.parentElement.classList.contains('paren-content')?p.parentElement.closest('.parenthesis').dataset.id:'container',selected:p.classList.contains('paren-selected')}));
+            container.querySelectorAll('.algebra-tile:not(.annihilate)').forEach(t=>{const d={id:t.dataset.id,type:t.dataset.type,coeff:parseInt(t.dataset.coeff),left:t.style.left,top:t.style.top,parentId:t.parentElement.classList.contains('paren-content')?t.closest('.parenthesis').dataset.id:'container'};for(const k of V7_META_KEYS)if(t.dataset[k]!==undefined)d[k]=t.dataset[k];if(t.dataset.ord!==undefined)d.ord=t.dataset.ord;state.tiles.push(d)});
+            return JSON.stringify(state);
+        };
+        loadState=function(str){
+            if(!str)return;const state=JSON.parse(str);container.innerHTML='';
+            state.parens.forEach(d=>{let parent=null;if(d.parentId&&d.parentId!=='container'){const pp=container.querySelector(`.parenthesis[data-id="${d.parentId}"]`);if(pp)parent=contentOfV7(pp)}const p=addParenthesisRaw(d.sign,parseFloat(d.left),parseFloat(d.top),d.id,{parent,group:d.group||'paren'});if(d.width)p.style.width=d.width;if(d.height)p.style.height=d.height;if(d.selected)p.classList.add('paren-selected')});
+            state.tiles.forEach(d=>{let parent=container;if(d.parentId!=='container'){const pp=container.querySelector(`.parenthesis[data-id="${d.parentId}"]`);if(pp)parent=contentOfV7(pp)}const el=createTileElement(d.type,parseFloat(d.left),parseFloat(d.top),d.coeff,parent,d.id,{kind:d.kind,num:Number(d.num??d.coeff),den:Number(d.den||1),format:d.format,letter:d.letter,exponent:Number(d.exponent||1),color:d.color,shape:d.shape,variables:d.variables,factorParts:d.factorParts,distributionGroup:d.distributionGroup});if(d.ord!==undefined)el.dataset.ord=d.ord});
+            updateEquation();
+        };
+
+        // ---------- Step-by-step controller (auto / manual / tile interaction / skip) ----------
+        const stepCtlV7={mode:'auto',interact:true,skip:false,next:null,cancelWait:null,timer:null};
+        const CTL_ICONS_V7={
+            auto:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
+            manual:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 5v14l10-7zM17 5h2.5v14H17z"/></svg>',
+            interact:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="3" y="3.5" width="10" height="10" rx="2"/><rect x="11" y="10.5" width="10" height="10" rx="2"/></svg>',
+            skip:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 5v14l8-7zM12 5v14l8-7z"/></svg>'
+        };
+        function refreshCtlV7(){document.querySelectorAll('.step-ctl').forEach(r=>{r.querySelector('.ctl-auto')?.classList.toggle('is-active',stepCtlV7.mode==='auto');r.querySelector('.ctl-manual')?.classList.toggle('is-active',stepCtlV7.mode==='manual');r.querySelector('.ctl-interact')?.classList.toggle('is-active',stepCtlV7.interact)})}
+        function setWaitingV7(on){document.querySelectorAll('.ctl-manual').forEach(b=>b.classList.toggle('is-waiting',on))}
+        function releaseNextV7(){const f=stepCtlV7.next;if(f){stepCtlV7.next=null;f()}}
+        function ctlAutoV7(){stepCtlV7.mode='auto';refreshCtlV7();releaseNextV7()}
+        function ctlManualV7(){if(stepCtlV7.mode==='auto'){stepCtlV7.mode='manual';stepCtlV7.cancelWait?.();refreshCtlV7();return}releaseNextV7()}
+        function ctlInteractV7(){stepCtlV7.interact=!stepCtlV7.interact;refreshCtlV7()}
+        function ctlSkipV7(){stepCtlV7.skip=true;stepCtlV7.cancelWait?.();releaseNextV7()}
+        function buildCtlRowV7(){
+            const row=document.createElement('div');row.className='step-ctl';row.setAttribute('role','group');row.setAttribute('aria-label','Step controls');
+            const mk=(cls,icon,title,fn)=>{const b=document.createElement('button');b.type='button';b.className=cls;b.title=title;b.setAttribute('aria-label',title);b.innerHTML=icon;b.addEventListener('click',fn);row.appendChild(b)};
+            mk('ctl-auto',CTL_ICONS_V7.auto,'Automatic step-by-step',ctlAutoV7);mk('ctl-manual',CTL_ICONS_V7.manual,'Manual: go to the next step',ctlManualV7);
+            mk('ctl-interact',CTL_ICONS_V7.interact,'Tile interaction: show / hide the tiles merging',ctlInteractV7);mk('ctl-skip',CTL_ICONS_V7.skip,'Skip to the result',ctlSkipV7);
+            setTimeout(refreshCtlV7,0);return row;
+        }
+        function beginRunV7(){const c=stepCtlV7;c.skip=false;c.next=null;c.cancelWait=null;clearTimeout(c.timer);setWaitingV7(false)}
+        const waitV7=ms=>stepCtlV7.skip?Promise.resolve():sleepV7(ms);
+        async function gateV7(first=false){
+            const c=stepCtlV7;if(c.skip)return;
+            if(c.mode==='auto'){await new Promise(res=>{c.cancelWait=res;c.timer=setTimeout(res,first?600:1050)});clearTimeout(c.timer);c.cancelWait=null;if(c.skip||c.mode==='auto')return}
+            setWaitingV7(true);await new Promise(res=>{c.next=res});c.next=null;setWaitingV7(false);
+        }
+        function cloneForFlightV7(el,fixed=false){
+            const r=el.getBoundingClientRect(),c=el.cloneNode(true);c.removeAttribute('id');
+            c.classList.remove('selected','dragging','step-active','distribution-source','is-separating','distribution-original','product-preview','is-revealed');c.classList.add('step-clone');c.style.transition='none';c.style.margin='0';
+            if(fixed){c.style.position='fixed';c.style.left=`${r.left}px`;c.style.top=`${r.top}px`;c.style.transformOrigin='0 0';c.style.transform=`scale(${gridV7.scale||1})`;c.style.zIndex=31500;document.body.appendChild(c)}
+            else{const cr=container.getBoundingClientRect();c.style.left=`${r.left-cr.left}px`;c.style.top=`${r.top-cr.top}px`;c.style.transform='';container.appendChild(c)}
+            c.getBoundingClientRect();return c;
+        }
+        async function flyV7(el,x,y,ms){const e='cubic-bezier(.2,.75,.2,1)';el.style.transition=`left ${ms}ms ${e},top ${ms}ms ${e},opacity .45s ease,transform .45s ease`;el.style.left=`${x}px`;el.style.top=`${y}px`;await waitV7(ms)}
+
+        // ---------- Distributive property with step control and tile interaction ----------
+        async function runDistributionSequenceV7(steps,removeNodes,layoutRect,groupId){
+            beginRunV7();
+            const panel=createDistributionPanelV6(steps.length),progress=panel.querySelector('#distribution-progress-v6'),list=panel.querySelector('#distribution-steps-v6');
+            panel.insertBefore(buildCtlRowV7(),list);panel.querySelector('.distribution-panel-close')?.addEventListener('click',ctlSkipV7);
+            const boardRect=container.getBoundingClientRect(),metrics=distributionPanelMetricsV6(),startX=Math.max(16,metrics.left-boardRect.left+metrics.width+24);
+            let stageX=startX,stageY=Math.min(container.clientHeight-94,layoutRect.top-boardRect.top+layoutRect.height+26),rowH=0;
+            await waitForCenteredInputsV6();
+            try{
+                for(let i=0;i<steps.length;i++){
+                    await gateV7(i===0);const st=steps[i];
+                    if(progress?.isConnected)progress.textContent=`${i+1} / ${steps.length}`;
+                    st.a.classList.add('step-active');st.b.classList.add('step-active');
+                    const svg=drawDistributionArrows(st.a,[st.b]);svg.querySelectorAll('.distribution-arrow').forEach(p=>{p.style.animationDuration=stepCtlV7.skip?'.01s':'.9s';p.style.animationDelay='0s'});
+                    await waitV7(950);svg.remove();
+                    const made=createTileElement(st.data.type,stageX,stageY,st.data.coeff,container,null,st.data.meta);made.dataset.distributionGroup=groupId;made.classList.add('product-preview');
+                    const w=Math.max(80,made.offsetWidth),h=Math.max(50,made.offsetHeight),fly=stepCtlV7.interact&&!stepCtlV7.skip,clones=fly?[cloneForFlightV7(st.a),cloneForFlightV7(st.b)]:[];
+                    const need=clones.length?Math.max(w,clones[0].offsetWidth+clones[1].offsetWidth+16):w;
+                    if(stageX>startX&&stageX+need>container.clientWidth-12){stageX=startX;stageY+=Math.max(rowH,82)+14;rowH=0}
+                    made.style.left=`${stageX}px`;made.style.top=`${stageY}px`;
+                    if(clones.length){
+                        const [ca,cb]=clones,wa=ca.offsetWidth;
+                        await Promise.all([flyV7(ca,stageX,stageY,750),flyV7(cb,stageX+wa+16,stageY,750)]);
+                        await flyV7(cb,stageX+Math.round(wa*.35),stageY,320);
+                        ca.classList.add('step-merge');cb.classList.add('step-merge');made.classList.add('is-revealed');
+                        ca.style.opacity='0';cb.style.opacity='0';ca.style.transform='scale(.6)';cb.style.transform='scale(.6)';playSound('multiply');await waitV7(650);ca.remove();cb.remove();
+                    }else{made.classList.add('is-revealed');playSound('multiply');await waitV7(650)}
+                    made.classList.remove('product-preview','is-revealed');st.a.classList.remove('step-active');st.b.classList.remove('step-active');
+                    if(list?.isConnected){
+                        const card=document.createElement('div'),eq=document.createElement('div'),idx=document.createElement('span');card.className='distribution-sequence-step';eq.className='distribution-step-equation';idx.className='mr-2 text-cyan-200 font-bold';idx.textContent=`${i+1}. `;
+                        eq.innerHTML=`\\(${displayTermV4(st.a)} \\times ${displayTermV4(st.b)} = ${resultTexV4(st.data)}\\)`;card.append(idx,eq);list.appendChild(card);if(window.MathJax?.typesetPromise)MathJax.typesetPromise([card]).catch(()=>{});list.scrollTop=list.scrollHeight;
+                    }
+                    stageX+=w+14;rowH=Math.max(rowH,h);
+                }
+                removeNodes.forEach(n=>n?.remove());playSound('multiply');updateEquation();
+            }catch(err){if(panel.isConnected){const n=document.createElement('div');n.className='distribution-sequence-step';n.textContent='The step sequence stopped unexpectedly. Close this panel to continue.';list?.appendChild(n)}throw err}
+            finally{document.querySelectorAll('.step-clone').forEach(c=>c.remove());document.querySelectorAll('.step-active').forEach(c=>c.classList.remove('step-active'));setWaitingV7(false);releaseDistributionLockV3()}
+        }
+        distributeTileOverParenthesis=async function(source,paren){
+            if(!source?.isConnected||!paren?.isConnected||source.dataset.distributing==='true'||paren.dataset.distributing==='true'){releaseDistributionLockV3();return}
+            if(flattenInsideV7(paren))toastV7('Nested groupings were simplified (signs applied) before multiplying.');
+            const children=directTilesV7(contentOfV7(paren));if(!children.length){releaseDistributionLockV3();return}
+            if(!distributionLockedV3)setDistributionLockV3(true);
+            source.dataset.distributing='true';paren.dataset.distributing='true';saveState();
+            const layout=centerDistributionInputsV6([source,paren],'single');source.classList.add('distribution-source');paren.classList.add('distribution-target');
+            const sign=parenSignV7(paren),groupId=`distribution-sequence-v7-${Date.now()}`;
+            const steps=children.map(child=>{const data=multiplicationPayload(source,child,sign);data.meta.distributionGroup=groupId;return {a:source,b:child,data}});
+            return runDistributionSequenceV7(steps,[source,paren],layout,groupId);
+        };
+        distributeParenthesesV3=async function(parenA,parenB){
+            if(!parenA?.isConnected||!parenB?.isConnected||parenA===parenB||distributionLockedV3||gridV7.active)return;
+            const nested=flattenInsideV7(parenA)|flattenInsideV7(parenB);if(nested)toastV7('Nested groupings were simplified (signs applied) before multiplying.');
+            const termsA=directTilesV7(contentOfV7(parenA)),termsB=directTilesV7(contentOfV7(parenB));
+            if(!termsA.length||!termsB.length){alert('Both parenthesis containers need at least one tile before multiplying.');return}
+            setDistributionLockV3(true);const layout=centerDistributionInputsV6([parenA,parenB],'pair');parenA.classList.add('distribution-target');parenB.classList.add('distribution-target');
+            const outer=parenSignV7(parenA)*parenSignV7(parenB),groupId=`distribution-pair-sequence-v7-${Date.now()}`,steps=[];
+            termsA.forEach(a=>termsB.forEach(b=>{const data=multiplicationPayload(a,b,outer);data.meta.distributionGroup=groupId;steps.push({a,b,data})}));
+            return runDistributionSequenceV7(steps,[parenA,parenB],layout,groupId);
+        };
+
+        // ---------- Grid multiplication ----------
+        const gridView=document.getElementById('grid-view'),gridTable=document.getElementById('grid-table'),gridResult=document.getElementById('grid-result'),gridResultTiles=document.getElementById('grid-result-tiles'),gridList=document.getElementById('grid-steps-list'),gridProgress=document.getElementById('grid-progress'),gridExitBtn=document.getElementById('grid-exit-btn');
+        function combineLikeV7(products){
+            const map=new Map();
+            products.forEach(d=>{const vars=(d.meta.variables||[]).slice().sort((a,b)=>a.letter.localeCompare(b.letter)),sig=vars.map(v=>`${v.letter}^${v.exponent}`).join('*'),val=rational((String(d.type).startsWith('-')?-1:1)*Number(d.meta.num),Number(d.meta.den||1)),e=map.get(sig);
+                if(e){e.sum=rational(e.sum.n*val.d+val.n*e.sum.d,e.sum.d*val.d);e.count++;e.sigs.push(sig)}else map.set(sig,{sig,vars,sum:val,parts:d.meta.factorParts||[],fmt:d.meta.format,color:d.meta.color,count:1,sigs:[sig]})});
+            return Array.from(map.values());
+        }
+        function dataFromEntryV7(e){const r=e.sum,sign=r.n<0?-1:1,ar=rational(Math.abs(r.n),r.d),kind=e.vars.length?'product':'number';
+            return {type:kind==='product'?(sign<0?'-product':'+product'):(sign<0?'-n':'+n'),coeff:ar.n,meta:{kind,num:ar.n,den:ar.d,format:ar.d===1?'integer':(e.fmt==='decimal'||e.fmt==='mixed'?e.fmt:'fraction'),color:kind==='product'?colorValue(e.parts[0]?.color||e.color):'#f97316',shape:kind==='product'?'product-tile':'rational-tile',variables:e.vars,factorParts:e.parts}}}
+        const sumFromDataV7=list=>{let out='';list.forEach(d=>{const t=resultTexV4(d);out+=!out?t:(t[0]==='-'?` - ${t.slice(1)}`:` + ${t}`)});return out||'0'};
+        function fitGridV7(){
+            const stage=document.getElementById('grid-stage'),wrap=document.getElementById('grid-table-wrap');gridTable.style.transform='none';wrap.style.width='';wrap.style.height='';
+            const w=gridTable.offsetWidth,h=gridTable.offsetHeight,resH=gridResult.classList.contains('on')?gridResult.offsetHeight:150,s=Math.max(.3,Math.min(1,(stage.clientWidth-30)/w,(stage.clientHeight-resH-110)/h));
+            gridV7.scale=s;gridTable.style.transform=`scale(${s})`;wrap.style.width=`${w*s}px`;wrap.style.height=`${h*s}px`;
+        }
+        window.addEventListener('resize',()=>{if(gridV7.active)fitGridV7()});
+        function placeGridPanelV7(){const exp=document.getElementById('expression-panel').getBoundingClientRect(),ws=workspace.getBoundingClientRect();gridView.style.setProperty('--grid-steps-top',`${Math.max(70,exp.bottom-ws.top+10)}px`)}
+        async function enterGridV7(){
+            if(gridV7.active||distributionLockedV3)return;
+            if(operationMode!=='multiplication'){toastV7('Grid multiplication is available in Multiplication mode.');return}
+            const ps=selectedParensV7();
+            if(ps.length!==2){toastV7('Select exactly two parentheses (click their headers), then press the grid button.');return}
+            const snapshot=getStateSnapshot();saveState();
+            const nested=ps.map(p=>flattenInsideV7(p)).some(Boolean);
+            const [pa,pb]=ps.slice().sort((x,y)=>x.getBoundingClientRect().left-y.getBoundingClientRect().left);
+            const colTiles=directTilesV7(contentOfV7(pa)),rowTiles=directTilesV7(contentOfV7(pb));
+            if(!colTiles.length||!rowTiles.length){historyStack.pop();loadState(snapshot);toastV7('Both parentheses need at least one tile.');return}
+            const outer=parenSignV7(pa)*parenSignV7(pb),cols=colTiles.map(descV7),rows=rowTiles.map(descV7);
+            const products=rows.map((_,r)=>cols.map((_,c)=>{const d=multiplicationPayload(rowTiles[r],colTiles[c],outer);return d}));
+            const fa=(parenSignV7(pa)<0?'-':'')+`(${joinTerms(colTiles)})`,fb=(parenSignV7(pb)<0?'-':'')+`(${joinTerms(rowTiles)})`,headTex=`${fa} \\times ${fb.startsWith('-')?`(${fb})`:fb}`;
+            const myRun=++gridV7.run;Object.assign(gridV7,{active:true,done:false,cancelled:false,snapshot,final:null});
+            [pa,pb].forEach(p=>p.classList.add('annihilate'));playSound('multiply');await sleepV7(300);if(gridV7.run!==myRun)return;[pa,pb].forEach(p=>p.remove());
+            if(nested)toastV7('Nested groupings were simplified (signs applied) before building the grid.');
+            document.body.classList.add('grid-active');gridExitBtn.classList.remove('is-done');gridResult.classList.remove('on');gridResultTiles.innerHTML='';gridList.innerHTML='';
+            document.getElementById('grid-ctl-slot').replaceChildren(buildCtlRowV7());
+            const hint=document.createElement('p');hint.className='grid-hint';hint.textContent='Manual mode: press the next-step button to fill each cell.';document.getElementById('grid-ctl-slot').appendChild(hint);
+            renderMath(equationDisplay,headTex);placeGridPanelV7();
+            // build table
+            gridTable.innerHTML='';const head=document.createElement('tr'),corner=document.createElement('th');corner.className='grid-corner';corner.textContent='×';head.appendChild(corner);
+            const colHeads=cols.map(d=>{const th=document.createElement('th');th.className='grid-head';createTileElement(d.type,0,0,d.coeff,th,null,d.meta);head.appendChild(th);return th});gridTable.appendChild(head);
+            const rowHeads=[],cells=rows.map((d,r)=>{const tr=document.createElement('tr'),th=document.createElement('th');th.className='grid-head grid-side';createTileElement(d.type,0,0,d.coeff,th,null,d.meta);tr.appendChild(th);rowHeads.push(th);const line=cols.map(()=>{const td=document.createElement('td');td.className='grid-cell';tr.appendChild(td);return td});gridTable.appendChild(tr);return line});
+            gridView.classList.add('on');fitGridV7();
+            const total=rows.length*cols.length;gridProgress.textContent=`0 / ${total}`;beginRunV7();
+            const alive=()=>gridV7.active&&gridV7.run===myRun&&!gridV7.cancelled;
+            const addCard=(html)=>{const card=document.createElement('div');card.className='distribution-sequence-step';card.innerHTML=html;gridList.appendChild(card);if(window.MathJax?.typesetPromise)MathJax.typesetPromise([card]).catch(()=>{});gridList.scrollTop=gridList.scrollHeight};
+            await sleepV7(450);let n=0;
+            try{
+                for(let r=0;r<rows.length;r++)for(let c=0;c<cols.length;c++){
+                    await gateV7(n===0);if(!alive())return;
+                    const th=colHeads[c],sd=rowHeads[r],cell=cells[r][c],tileA=th.querySelector('.algebra-tile'),tileB=sd.querySelector('.algebra-tile'),data=products[r][c];
+                    th.classList.add('grid-hl');sd.classList.add('grid-hl');cell.classList.add('grid-target');
+                    const made=createTileElement(data.type,0,0,data.coeff,cell,null,data.meta);made.classList.add('product-preview');
+                    if(stepCtlV7.interact&&!stepCtlV7.skip){
+                        const ca=cloneForFlightV7(tileA,true),cb=cloneForFlightV7(tileB,true),cr=cell.getBoundingClientRect(),cx=cr.left+cr.width/2,cy=cr.top+cr.height/2,wa=ca.getBoundingClientRect().width,wb=cb.getBoundingClientRect().width,ha=ca.getBoundingClientRect().height,hb=cb.getBoundingClientRect().height;
+                        await Promise.all([flyV7(ca,cx-wa-6,cy-ha/2,700),flyV7(cb,cx+6,cy-hb/2,700)]);if(!alive()){ca.remove();cb.remove();return}
+                        await Promise.all([flyV7(ca,cx-wa/2,cy-ha/2,320),flyV7(cb,cx-wb/2,cy-hb/2,320)]);
+                        ca.classList.add('step-merge');cb.classList.add('step-merge');made.classList.add('is-revealed');ca.style.opacity='0';cb.style.opacity='0';playSound('multiply');await waitV7(620);ca.remove();cb.remove();
+                    }else{made.classList.add('is-revealed');playSound('multiply');await waitV7(560)}
+                    if(!alive())return;made.classList.remove('product-preview','is-revealed');th.classList.remove('grid-hl');sd.classList.remove('grid-hl');cell.classList.remove('grid-target');
+                    n++;gridProgress.textContent=`${n} / ${total}`;
+                    addCard(`<span class="mr-2 text-cyan-200 font-bold">${n}.</span><span class="distribution-step-equation">\\(${displayTermV4(rowTiles[r])} \\times ${displayTermV4(colTiles[c])} = ${resultTexV4(data)}\\)</span>`);
+                }
+                // Combine like terms and order by degree, then letters.
+                await gateV7();if(!alive())return;
+                const flat=products.flat(),entries=combineLikeV7(flat).filter(e=>e.sum.n!==0).sort((a,b)=>cmpMonoV7(a.vars,b.vars)),palette=['#a855f7','#f97316','#0ea5e9','#ec4899','#22c55e'];let pi=0;
+                const merged=combineLikeV7(flat).filter(e=>e.count>1);
+                merged.forEach(e=>{const col=palette[pi++%palette.length];cells.forEach(line=>line.forEach((cell,ci)=>{const t=cell.querySelector('.algebra-tile');if(t&&e.sigs[0]===(variablesFromTile(t).slice().sort((a,b)=>a.letter.localeCompare(b.letter)).map(v=>`${v.letter}^${v.exponent}`).join('*'))){cell.classList.add('grid-like');cell.style.setProperty('--like',col)}}))});
+                const finalData=entries.map(dataFromEntryV7),gid=`grid-result-${Date.now()}`;finalData.forEach(d=>d.meta.distributionGroup=gid);gridV7.final=finalData;
+                addCard(merged.length?`<span class="mr-2 text-amber-300 font-bold">+</span><span class="distribution-step-equation">Combine like terms: ${merged.map(e=>`\\(${sumFromDataV7(flat.filter(d=>combineLikeV7([d])[0].sig===e.sig))} = ${resultTexV4(dataFromEntryV7(e))}\\)`).join(', ')}</span>`:`<span class="mr-2 text-amber-300 font-bold">+</span><span class="distribution-step-equation">There are no like terms to combine.</span>`);
+                await waitV7(500);if(!alive())return;
+                finalData.forEach(d=>createTileElement(d.type,0,0,d.coeff,gridResultTiles,null,d.meta));
+                if(!finalData.length){gridResultTiles.textContent='0'}
+                gridResult.classList.add('on');fitGridV7();playSound('expression');
+                const resTex=sumFromDataV7(finalData);addCard(`<span class="mr-2 text-emerald-300 font-bold">=</span><span class="distribution-step-result distribution-step-equation" style="white-space:normal">\\(${resTex}\\)</span>`);
+                renderMath(equationDisplay,`${headTex} = ${resTex}`);gridV7.done=true;gridExitBtn.classList.add('is-done');setWaitingV7(false);
+            }catch(err){console.error(err);if(alive())toastV7('The grid steps stopped unexpectedly.',true)}
+        }
+        function exitGridV7(fromModeSwitch=false){
+            if(!gridV7.active)return;const wasDone=gridV7.done;gridV7.cancelled=!wasDone;ctlSkipV7();
+            document.querySelectorAll('.step-clone').forEach(c=>c.remove());
+            gridView.classList.remove('on');document.body.classList.remove('grid-active');gridV7.active=false;gridV7.run++;setWaitingV7(false);
+            if(wasDone&&gridV7.final&&!fromModeSwitch){
+                const made=gridV7.final.map(d=>createTileElement(d.type,container.clientWidth/2-40,container.clientHeight/2-40,d.coeff,container,null,d.meta));
+                made.forEach(t=>t.style.opacity='0');requestAnimationFrame(()=>{arrangeTilesV7(made,container);made.forEach(t=>t.style.opacity='');updateEquation()});
+            }else if(!wasDone&&gridV7.snapshot){historyStack.pop();loadState(gridV7.snapshot)}
+            playSound('expression');updateEquation();
+        }
+        document.getElementById('grid-mode-btn').addEventListener('click',enterGridV7);
+        gridExitBtn.addEventListener('click',()=>exitGridV7());
+        window.addEventListener('keydown',e=>{if(e.key==='Escape'&&gridV7.active&&!document.querySelector('.modal-backdrop:not(.hidden)'))exitGridV7()});
+
+        // ---------- Presentation window, instructions, and wiring ----------
+        const splashV7=document.getElementById('splash'),helpModalV7=document.getElementById('help-modal'),spV7={run:false},spCap=document.getElementById('sp-caption'),spEl={a:document.getElementById('sp-a'),b:document.getElementById('sp-b'),n:document.getElementById('sp-n'),m:document.getElementById('sp-m'),z:document.getElementById('sp-z')};
+        (function buildFloaters(){
+            const host=document.getElementById('sp-floaters'),cols=['#22c55e','#ef4444','#f97316','#3b82f6','#a855f7'],labs=['x','−x','+1','y','x²','−1','2x','y²'];
+            for(let i=0;i<18;i++){const d=document.createElement('div'),s=34+Math.random()*44;d.className='sp-float';d.style.cssText=`left:${Math.random()*96}%;top:${Math.random()*92}%;width:${s}px;height:${s}px;background:${cols[i%5]};font-size:${s*.34}px;animation-duration:${6+Math.random()*8}s;animation-delay:${-Math.random()*8}s`;d.textContent=labs[i%labs.length];host.appendChild(d)}
+        })();
+        function spPlace(el,x,o=1,s=1,instant=false){if(instant)el.style.transition='none';el.style.transform=`translateX(${x}px) scale(${s})`;el.style.opacity=o;if(instant){el.getBoundingClientRect();el.style.transition=''}}
+        function spSpark(x){const z=spEl.z;z.style.transition='none';z.style.transform=`translateX(${x}px) scale(.3)`;z.style.opacity=1;z.getBoundingClientRect();z.style.transition='';z.style.transform=`translateX(${x}px) scale(2.4)`;z.style.opacity=0}
+        // Tiles slide together and merge (addition), split apart again, then +x and −x cancel and reappear (subtraction).
+        async function splashLoopV7(){
+            const L=70,R=370,C=220,{a,b,n,m,z}=spEl,wait=async ms=>{await sleepV7(ms);return spV7.run};
+            while(spV7.run){
+                [m,n,z].forEach(e=>spPlace(e,C,0,.6,true));spPlace(a,L,1,1,true);spPlace(b,R,1,1,true);spCap.textContent='x + x';if(!await wait(1000))break;
+                spPlace(a,C-38);spPlace(b,C+38);if(!await wait(1100))break;
+                spPlace(a,C,0,.7);spPlace(b,C,0,.7);spPlace(m,C,1,1);spCap.textContent='x + x = 2x';if(!await wait(1700))break;
+                spPlace(m,C,0,.7);spPlace(a,C-38,1,1);spPlace(b,C+38,1,1);spCap.textContent='2x = x + x';if(!await wait(750))break;
+                spPlace(a,L);spPlace(b,R);if(!await wait(1500))break;
+                spPlace(n,R,0,.6,true);spPlace(b,R,0,.6);spPlace(n,R,1,1);spCap.textContent='x + (−x)';if(!await wait(1100))break;
+                spPlace(a,C-38);spPlace(n,C+38);if(!await wait(1100))break;
+                spPlace(a,C,0,.3);spPlace(n,C,0,.3);spSpark(C);spCap.textContent='x + (−x) = 0';if(!await wait(1700))break;
+                spPlace(a,C,0,.3,true);spPlace(n,C,0,.3,true);spPlace(a,C-38,1,1);spPlace(n,C+38,1,1);spCap.textContent='0 = x + (−x)';if(!await wait(900))break;
+                spPlace(a,L);spPlace(n,R);if(!await wait(1500))break;
+            }
+        }
+        function showSplashV7(){if(distributionLockedV3||gridV7.active)return;splashV7.classList.remove('gone');requestAnimationFrame(()=>splashV7.classList.remove('hide'));document.body.classList.add('splash-open');if(!spV7.run){spV7.run=true;splashLoopV7()}}
+        function enterLabV7(){
+            playSound('expression');document.body.classList.remove('splash-open');splashV7.classList.add('hide');spV7.run=false;
+            setTimeout(()=>{if(splashV7.classList.contains('hide'))splashV7.classList.add('gone')},650);setTimeout(updateEquation,100);
+        }
+        const openHelpV7=()=>helpModalV7.classList.remove('hidden'),closeHelpV7=()=>helpModalV7.classList.add('hidden');
+        document.getElementById('splash-enter').addEventListener('click',enterLabV7);
+        document.getElementById('splash-help').addEventListener('click',openHelpV7);
+        document.getElementById('sidebar-help-btn').addEventListener('click',openHelpV7);
+        document.getElementById('help-close').addEventListener('click',closeHelpV7);document.getElementById('help-ok').addEventListener('click',closeHelpV7);
+        helpModalV7.addEventListener('click',e=>{if(e.target===helpModalV7)closeHelpV7()});
+        window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!helpModalV7.classList.contains('hidden'))closeHelpV7();else if(e.key==='Enter'&&document.body.classList.contains('splash-open')&&helpModalV7.classList.contains('hidden')&&!['BUTTON'].includes(e.target.tagName))enterLabV7()});
+        const brandHeaderV7=document.getElementById('brand-header');if(brandHeaderV7)brandHeaderV7.addEventListener('click',showSplashV7);
+        document.body.classList.add('splash-open');spV7.run=true;splashLoopV7();
+
         updateEquation();
     </script>
 </body>
