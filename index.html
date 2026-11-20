@@ -259,6 +259,74 @@
         .help-card kbd { padding:1px 7px; border:1px solid #cbd5e1; border-bottom-width:2px; border-radius:6px; background:#f8fafc; font:700 .78rem ui-monospace,Menlo,monospace; color:#0f172a; }
         .help-ico { display:inline-grid; place-items:center; width:22px; height:22px; border-radius:50%; background:#0e7490; color:#fff; vertical-align:middle; }
         .help-ico svg { width:13px; height:13px; }
+
+        /* ===== V8: factor button, factoring animations ===== */
+        #factor-btn { position:absolute; top:4.1rem; right:1rem; z-index:30; width:42px; height:42px; border-radius:12px; display:none; align-items:center; justify-content:center; background:#d97706; color:#fff; box-shadow:0 5px 12px #d9770655; transition:background .2s,transform .15s; }
+        #factor-btn:hover { background:#b45309; transform:translateY(-1px); }
+        #factor-btn:disabled { opacity:.55; cursor:wait; transform:none; }
+        #factor-btn svg { width:26px; height:26px; }
+        body:not(.mode-multiplication) #factor-btn { display:flex; }
+        @media(max-width:640px) { #factor-btn { top:6.6rem; right:.65rem; } }
+        .fv8-chip { position:fixed; z-index:19450; pointer-events:none; padding:2px 11px; border-radius:999px; background:#0f172a; color:#e0f2fe; border:2px solid #38bdf8; font-weight:800; font-size:14px; line-height:1.5; white-space:nowrap; box-shadow:0 6px 16px rgba(15,23,42,.35); transform:translate(-50%,-50%) scale(.4); opacity:0; transition:opacity .35s ease,transform .35s ease,left .8s cubic-bezier(.2,.75,.2,1),top .8s cubic-bezier(.2,.75,.2,1); }
+        .fv8-chip.on { opacity:1; transform:translate(-50%,-50%) scale(1); }
+        .fv8-chip.good { background:#065f46; border-color:#34d399; color:#ecfdf5; }
+        .fv8-chip.min { box-shadow:0 0 0 4px rgba(52,211,153,.45),0 6px 16px rgba(15,23,42,.35); }
+        .fv8-chip.bad { background:#7f1d1d; border-color:#f87171; color:#fee2e2; }
+        .fv8-chip.bad.on { opacity:.6; }
+        .fv8-chip.miss { background:#334155; border-color:#64748b; border-style:dashed; color:#cbd5e1; }
+        .fv8-chip.miss.on { opacity:.7; }
+        .fv8-chip.gcf { background:#9a3412; border-color:#fb923c; color:#fff7ed; font-size:16px; }
+        .fv8-chip.fade, .fv8-chip.fade.on { opacity:0!important; }
+        .fv8-chip mjx-container { margin:0!important; color:inherit!important; }
+        .fv8-title { font-weight:800; color:#a5f3fc; margin-bottom:3px; }
+        .fv8-ok { color:#86efac; font-weight:800; }
+        .fv8-no { color:#fca5a5; font-weight:800; }
+        .fv8-note { display:block; margin-top:4px; font-size:11px; color:#cbd5e1; }
+        .distribution-sequence-step.fv8-card.is-good { border-color:rgba(74,222,128,.55)!important; }
+        .distribution-sequence-step.fv8-card.is-bad { border-color:rgba(248,113,113,.7)!important; }
+        @keyframes fv8-shake { 0%,100% { transform:translateX(0); } 20%,60% { transform:translateX(-7px); } 40%,80% { transform:translateX(7px); } }
+        .fv8-shake { animation:fv8-shake .5s ease 2; outline:4px solid #ef4444!important; outline-offset:4px; }
+        .fv8-appear { opacity:0; transform:scale(.82); }
+        .fv8-appear.on { opacity:1!important; transform:none!important; transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)!important; }
+
+        /* ===== V9: like terms, elements overlay, factoring bench ===== */
+        .algebra-tile.lt-mark { outline:4px solid var(--lt,#a855f7)!important; outline-offset:3px; }
+        .algebra-tile.lt-solo { outline:3px dashed #94a3b8!important; outline-offset:3px; }
+        .fv9-bench { position:absolute; z-index:7; box-sizing:border-box; padding:10px 16px 14px; border-radius:18px; background:rgba(15,23,42,.94); color:#f8fafc; border:2px solid #38bdf8; box-shadow:0 12px 28px rgba(15,23,42,.35); text-align:center; transition:opacity .3s ease,border-color .3s ease; pointer-events:none; overflow-x:auto; }
+        .fv9-bench.dim { opacity:.25; }
+        .fv9-bench.good { border-color:#34d399; }
+        .fv9-bench.gone { opacity:0; }
+        .fv9-bench-title { font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7dd3fc; margin-bottom:4px; }
+        .fv9-bench-expr { font-size:1.55rem; min-height:2.2rem; }
+        .fv9-bench-expr mjx-container { color:#f8fafc!important; margin:0!important; }
+        @keyframes el-fade { from { opacity:0; } to { opacity:1; } }
+        @keyframes el-pop { from { opacity:0; transform:translateY(14px) scale(.9); } to { opacity:1; transform:none; } }
+        #elements-overlay { position:fixed; inset:0; z-index:33000; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(15,23,42,.8); backdrop-filter:blur(6px); cursor:pointer; animation:el-fade .25s ease both; }
+        #elements-overlay.closing { opacity:0; transition:opacity .2s ease; }
+        #elements-overlay .el-card { max-width:min(1100px,96vw); max-height:92vh; overflow:auto; background:#fff; border-radius:24px; padding:26px 32px 18px; box-shadow:0 30px 80px rgba(0,0,0,.45); text-align:center; }
+        .el-close { position:fixed; top:14px; right:16px; width:46px; height:46px; border-radius:50%; background:#fff; color:#0f172a; font-size:30px; line-height:1; font-weight:700; box-shadow:0 6px 18px rgba(0,0,0,.35); display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:2; }
+        .el-close:hover { background:#fee2e2; color:#b91c1c; }
+        .el-title { font-size:1.5rem; font-weight:800; color:#0f172a; }
+        .el-sub { color:#475569; margin-top:2px; font-size:.95rem; }
+        .el-terms { display:flex; flex-wrap:wrap; gap:26px 40px; justify-content:center; margin:22px 0 14px; }
+        .el-term { display:flex; flex-direction:column; align-items:center; padding:16px 18px 12px; border-radius:18px; background:#f8fafc; border:2px solid #e2e8f0; opacity:0; animation:el-pop .55s ease forwards; }
+        .el-glyphs { display:flex; align-items:flex-start; gap:8px; }
+        .el-part { --c:#64748b; display:flex; flex-direction:column; align-items:center; min-width:40px; opacity:0; animation:el-pop .5s ease forwards; animation-delay:var(--d,0s); }
+        .el-part b { font:800 58px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color:var(--c); }
+        .el-part i { display:block; width:100%; height:9px; margin-top:7px; border:3px solid var(--c); border-top:none; border-radius:0 0 9px 9px; }
+        .el-part small { margin-top:6px; font-size:11px; font-weight:800; color:var(--c); line-height:1.25; max-width:104px; text-align:center; }
+        .el-sign { --c:#dc2626; } .el-coef { --c:#2563eb; } .el-var { --c:#16a34a; } .el-exp { --c:#9333ea; } .el-const { --c:#ea580c; }
+        .el-exp b { font-size:32px; margin-top:-4px; }
+        .el-part.implied b { opacity:.4; }
+        .el-frac { display:inline-flex; flex-direction:column; align-items:center; font-size:34px; line-height:1.1; }
+        .el-frac span:first-child { border-bottom:3px solid currentColor; padding:0 6px; }
+        .el-info { margin-top:10px; font-size:12px; color:#475569; line-height:1.45; }
+        .el-info b { color:#0f172a; }
+        .el-summary { margin:6px auto 0; max-width:720px; text-align:left; border-top:2px dashed #cbd5e1; padding-top:12px; }
+        .el-row { display:flex; justify-content:space-between; gap:18px; padding:5px 4px; font-size:.92rem; color:#334155; border-bottom:1px solid #f1f5f9; }
+        .el-row > span:first-child { font-weight:800; color:#0f172a; }
+        .el-row > span:last-child { text-align:right; }
+        .el-foot { margin-top:12px; font-size:11px; color:#94a3b8; }
     </style>
 </head>
 <body class="bg-gray-100 h-screen overflow-hidden flex font-sans">
@@ -280,9 +348,11 @@
         <button id="create-exercise-btn" class="absolute top-4 right-4 z-30 exercise-logo hover:bg-violet-700 transition" title="Create exercise (hold to configure)" aria-label="Create exercise">
             <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/><path d="m16 17 2 2 4-5"/></svg>
         </button>
+        <!-- Factoring button (top-right corner, Addition mode only) -->
+        <button id="factor-btn" type="button" title="Factor: select a sum (two or more terms, or a container) and press to factor it step by step (shortcut: F)" aria-label="Factor the selected expression"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="3.6" cy="12" r="1.7" fill="currentColor" stroke="none"/><path d="M9.6 4.5C6.4 8.5 6.4 15.5 9.6 19.5"/><path d="M20 4.5c3.2 4 3.2 11 0 15"/><path d="M12.2 12h4.6M14.5 9.7v4.6"/></svg></button>
         <div id="selection-box"></div>
         <!-- V7: grid multiplication button (top-left corner, multiplication mode only) -->
-        <button id="grid-mode-btn" type="button" title="Grid multiplication: select two parentheses, then press" aria-label="Grid multiplication"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16M15 4v16"/></svg></button>
+        <button id="grid-mode-btn" type="button" title="Grid multiplication: a parenthesis with a number or variable outside, or several parentheses" aria-label="Grid multiplication"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16M15 4v16"/></svg></button>
         <div id="grid-view" aria-live="polite">
             <button id="grid-exit-btn" type="button" title="Exit grid mode" aria-label="Exit grid mode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
             <aside id="grid-steps" aria-label="Grid multiplication steps">
@@ -423,7 +493,7 @@
             <div class="splash-kicker">Interactive math · lab</div>
             <h1 id="splash-title">Algebraic Laboratory</h1>
             <h2 class="splash-sub">Basic Operations</h2>
-            <p class="splash-desc">Explore algebra with your hands. Build expressions with algebra tiles, combine and cancel terms to add and subtract, multiply with the distributive property or a grid, and group everything with nested parentheses, brackets and braces.</p>
+            <p class="splash-desc">Explore algebra with your hands. Build expressions with algebra tiles, combine and cancel terms to add and subtract, factor, combine like terms, multiply with the distributive property or a grid, and group everything with nested parentheses, brackets and braces.</p>
             <span class="splash-version">Version V1.0</span>
             <div class="splash-actions">
                 <button id="splash-help" type="button" class="splash-btn secondary">Instructions</button>
@@ -452,6 +522,18 @@
                 <li>Drag a container inside another one to nest it, or drag it out to un-nest it. Nested groupings are shown in the expression display.</li>
                 <li>Type expressions such as <kbd>2x - [3 - (y + 1)]</kbd> (addition mode) or <kbd>2{x + [y - (z + 1)]}</kbd> and <kbd>(a+2b)(3x-y)</kbd> (multiplication mode).</li>
             </ul>
+            <h3>Factoring (Addition mode)</h3>
+            <ul>
+                <li>Select a sum — two or more tiles (drag a selection box) or a container (click its header) — and press the <b>factor button</b> (amber logo, top-right) or <kbd>F</kbd>. The lab first tells you whether the sum is factorable.</li>
+                <li>It follows the general strategy: <b>1)</b> common factor (numbers, then variables with the lowest exponent; the minus sign too if the first term is negative); <b>2)</b> count the terms: two terms → difference of squares, sum or difference of cubes; three terms → perfect square trinomial, <i>x²+bx+c</i> or <i>ax²+bx+c</i> (ac method); four terms → grouping, perfect cube, or a trinomial square minus a square; <b>3)</b> keep factoring every new factor until it is prime; <b>4)</b> multiply back to check.</li>
+                <li>Every step explains what to look for and what to do, with a card and a live expression. Use the step controls (automatic, manual, tile interaction, skip) to go at your own pace. If nothing applies, it explains why the sum is not factorable.</li>
+            </ul>
+            <h3>Like terms (<kbd>T</kbd>) and elements (<kbd>E</kbd>)</h3>
+            <ul>
+                <li>Select several terms and press <kbd>T</kbd> (Addition and Multiplication modes). The lab marks which terms are alike and which are not, then merges the like ones tile by tile, showing how the coefficients add or subtract, and finally orders the result.</li>
+                <li>After a multiplication (distributive property or grid) the like terms of the result are also combined slowly, tile by tile.</li>
+                <li>Select terms and press <kbd>E</kbd> to see the elements of the expression centred on the screen: sign, coefficient, variable, exponent, constant term, degree, and a summary. Click anywhere, press Esc or use the ✕ to close it.</li>
+            </ul>
             <h3>Multiplication and the distributive property</h3>
             <ul>
                 <li>Switch to × mode. Place an outside factor next to a container and click it, or double-click a container header to multiply it by the nearest container.</li>
@@ -459,12 +541,12 @@
             </ul>
             <h3>Grid multiplication</h3>
             <ul>
-                <li>In × mode, select two containers (click their headers) and press the table button in the top-left corner. Their terms move into a grid: the first container across the top, the second down the side.</li>
-                <li>Use the same step controls to fill the cells. The left panel lists every action; at the end like terms are combined and the result appears below as tiles ordered by degree and letter. Press ✕ to leave the grid and send the result to the work area.</li>
+                <li>In × mode, press the table button in the top-left corner. It works with <b>a parenthesis and a number or variable outside it</b> (for example <kbd>3x(y+2)</kbd>), with <b>two or more parentheses</b>, and with negative signs. If you select factors first (click a header, or drag a selection box around tiles) only those are used; otherwise everything on the board is multiplied.</li>
+                <li>The factor with more terms goes across the top and the other down the side. With three or more factors the grid is built in stages, one factor at a time. Use the same step controls to fill the cells; then like terms fly into the result area and merge pair by pair, and the result appears as tiles ordered by degree. Press ✕ to leave the grid and send the result to the work area.</li>
             </ul>
             <h3>More</h3>
             <ul>
-                <li>The violet logo (top-right) generates an exercise; hold it to configure. <b>± Sign Rules</b> shows the sign reference. Click the sidebar title to return to the start screen.</li>
+                <li>The violet logo (top-right) generates an exercise; hold it to configure. The amber logo below it factors a selected sum. <b>± Sign Rules</b> shows the sign reference. Click the sidebar title to return to the start screen.</li>
             </ul>
             <div class="flex justify-end mt-5"><button type="button" id="help-ok" class="px-5 py-2 rounded-lg bg-violet-600 text-white font-semibold">Got it</button></div>
         </div>
@@ -2204,16 +2286,16 @@
             return {items};
         }
         function parseProductV7(s){
-            const factors=[],n=s.length;let i=0,need=true;const ws=()=>{while(i<n&&/\s/.test(s[i]))i++};
+            const factors=[],n=s.length;let i=0,need=true,prevGroup=false;const ws=()=>{while(i<n&&/\s/.test(s[i]))i++};
             while(i<n){
                 ws();if(i>=n)break;const c=s[i];
                 if(c==='*'||c==='×'||c==='·'){if(need)return {error:'Enter a factor on both sides of each multiplication sign.'};need=true;i++;continue}
                 if((c==='+'||c==='-')&&!need)return {error:'You are in Multiplication mode. Addition and subtraction are allowed only inside grouping symbols; use * to multiply factors.'};
-                if(!need&&!OPEN_V7.includes(c))return {error:'Use * between standalone factors. Implicit multiplication works before grouping symbols, for example 2y(3x+6).'};
+                if(!need&&!OPEN_V7.includes(c)){if(prevGroup&&/[A-Za-z0-9.]/.test(c))need=true;else return {error:'Use * between standalone factors. Implicit multiplication works next to grouping symbols, for example 2y(3x+6) or (x+1)3y.'}};
                 let sign=1;if(c==='+'||c==='-'){sign=c==='-'?-1:1;i++;ws()}
                 if(i>=n)return {error:'A sign must be followed by a number, variable or grouping symbol.'};
-                if(OPEN_V7.includes(s[i])){const j=findCloseV7(s,i);if(j<0)return {error:'Grouping symbols are not balanced.'};const inner=parseSumV7(s.slice(i+1,j));if(inner.error)return inner;if(!inner.items.length)return {error:'Grouping symbols cannot be empty.'};factors.push({type:'group',sign,shape:GROUP_BY_CHAR_V7[s[i]],items:inner.items});i=j+1;need=false}
-                else{const m=ATOM_V7.exec(s.slice(i));if(!m)return {error:'Use numbers, variables, exponents, grouping symbols and multiplication signs only.'};factors.push({type:'term',text:(sign<0?'-':'+')+m[0].replace(/\s+/g,' ').trim()});i+=m[0].length;need=false;let k=i;while(k<n&&/\s/.test(s[k]))k++;if(k<n&&OPEN_V7.includes(s[k])){need=true;i=k}}
+                if(OPEN_V7.includes(s[i])){const j=findCloseV7(s,i);if(j<0)return {error:'Grouping symbols are not balanced.'};const inner=parseSumV7(s.slice(i+1,j));if(inner.error)return inner;if(!inner.items.length)return {error:'Grouping symbols cannot be empty.'};factors.push({type:'group',sign,shape:GROUP_BY_CHAR_V7[s[i]],items:inner.items});i=j+1;need=false;prevGroup=true}
+                else{const m=ATOM_V7.exec(s.slice(i));if(!m)return {error:'Use numbers, variables, exponents, grouping symbols and multiplication signs only.'};factors.push({type:'term',text:(sign<0?'-':'+')+m[0].replace(/\s+/g,' ').trim()});i+=m[0].length;need=false;prevGroup=false;let k=i;while(k<n&&/\s/.test(s[k]))k++;if(k<n&&OPEN_V7.includes(s[k])){need=true;i=k}}
             }
             if(!factors.length)return {error:'Enter at least one factor.'};if(need)return {error:'Enter a factor after the multiplication sign.'};return {factors};
         }
@@ -2335,7 +2417,7 @@
             const panel=createDistributionPanelV6(steps.length),progress=panel.querySelector('#distribution-progress-v6'),list=panel.querySelector('#distribution-steps-v6');
             panel.insertBefore(buildCtlRowV7(),list);panel.querySelector('.distribution-panel-close')?.addEventListener('click',ctlSkipV7);
             const boardRect=container.getBoundingClientRect(),metrics=distributionPanelMetricsV6(),startX=Math.max(16,metrics.left-boardRect.left+metrics.width+24);
-            let stageX=startX,stageY=Math.min(container.clientHeight-94,layoutRect.top-boardRect.top+layoutRect.height+26),rowH=0;
+            let stageX=startX,stageY=Math.min(container.clientHeight-94,layoutRect.top-boardRect.top+layoutRect.height+26),rowH=0;const madeListV9=[];
             await waitForCenteredInputsV6();
             try{
                 for(let i=0;i<steps.length;i++){
@@ -2344,7 +2426,7 @@
                     st.a.classList.add('step-active');st.b.classList.add('step-active');
                     const svg=drawDistributionArrows(st.a,[st.b]);svg.querySelectorAll('.distribution-arrow').forEach(p=>{p.style.animationDuration=stepCtlV7.skip?'.01s':'.9s';p.style.animationDelay='0s'});
                     await waitV7(950);svg.remove();
-                    const made=createTileElement(st.data.type,stageX,stageY,st.data.coeff,container,null,st.data.meta);made.dataset.distributionGroup=groupId;made.classList.add('product-preview');
+                    const made=createTileElement(st.data.type,stageX,stageY,st.data.coeff,container,null,st.data.meta);made.dataset.distributionGroup=groupId;made.classList.add('product-preview');madeListV9.push(made);
                     const w=Math.max(80,made.offsetWidth),h=Math.max(50,made.offsetHeight),fly=stepCtlV7.interact&&!stepCtlV7.skip,clones=fly?[cloneForFlightV7(st.a),cloneForFlightV7(st.b)]:[];
                     const need=clones.length?Math.max(w,clones[0].offsetWidth+clones[1].offsetWidth+16):w;
                     if(stageX>startX&&stageX+need>container.clientWidth-12){stageX=startX;stageY+=Math.max(rowH,82)+14;rowH=0}
@@ -2364,6 +2446,7 @@
                     stageX+=w+14;rowH=Math.max(rowH,h);
                 }
                 removeNodes.forEach(n=>n?.remove());playSound('multiply');updateEquation();
+                await combineAfterDistributionV9(madeListV9,list,progress);updateEquation();
             }catch(err){if(panel.isConnected){const n=document.createElement('div');n.className='distribution-sequence-step';n.textContent='The step sequence stopped unexpectedly. Close this panel to continue.';list?.appendChild(n)}throw err}
             finally{document.querySelectorAll('.step-clone').forEach(c=>c.remove());document.querySelectorAll('.step-active').forEach(c=>c.classList.remove('step-active'));setWaitingV7(false);releaseDistributionLockV3()}
         }
@@ -2407,64 +2490,140 @@
         }
         window.addEventListener('resize',()=>{if(gridV7.active)fitGridV7()});
         function placeGridPanelV7(){const exp=document.getElementById('expression-panel').getBoundingClientRect(),ws=workspace.getBoundingClientRect();gridView.style.setProperty('--grid-steps-top',`${Math.max(70,exp.bottom-ws.top+10)}px`)}
+        // ---------- Grid multiplication (V8: any mix of parentheses, numbers and variables) ----------
+        // Shared helpers (descriptor based, so the same code works for DOM tiles and for computed terms).
+        const shimV8=d=>({dataset:{...d.meta,type:d.type,coeff:d.coeff}});
+        const mulV8=(a,b,outer=1)=>multiplicationPayload(shimV8(a),shimV8(b),outer);
+        const wrapNegV8=t=>String(t).startsWith('-')?`(${t})`:t;
+        function texV8(d){
+            const sh=shimV8(d),vars=variablesFromTile(sh).slice().sort((a,b)=>a.letter.localeCompare(b.letter)),neg=String(d.type).startsWith('-'),r=rational(Number(d.meta.num??d.coeff??1),Number(d.meta.den||1));
+            let coef=ratTex(r,d.meta.format||'fraction');if(vars.length&&r.n===1&&r.d===1)coef='';
+            return `${neg?'-':''}${coef}${vars.map(v=>`${v.letter}${Number(v.exponent)>1?`^{${v.exponent}}`:''}`).join('')}`;
+        }
+        const sumTexDescsV8=list=>{let out='';list.forEach(d=>{const t=texV8(d);out+=!out?t:(t[0]==='-'?` - ${t.slice(1)}`:` + ${t}`)});return out||'0'};
+        function gridFactorTexV8(f,i){
+            if(f.kind==='tile'){const t=termTex(f.nodes[0]);return t.startsWith('+')?t.slice(1):t.startsWith('-')?`(${t})`:t}
+            if(f.kind==='group')return `(${sumTexDescsV8(f.descs)})`;
+            const s=(f.sign<0?'-':'')+parenTexV7(f.el);return i>0&&f.sign<0?`(${s})`:s;
+        }
+        // Decide which board items take part: the current selection if it is usable, otherwise everything on the board.
+        function collectGridFactorsV8(){
+            const board=eqItemsV7(container),isTile=e=>e.classList.contains('algebra-tile');
+            const build=items=>{
+                const sorted=board.filter(e=>items.includes(e)),out=[],used=new Set();
+                sorted.forEach(el=>{
+                    if(used.has(el))return;
+                    if(isTile(el)){
+                        const g=el.dataset.distributionGroup;
+                        if(g){const members=sorted.filter(o=>isTile(o)&&o.dataset.distributionGroup===g);members.forEach(m=>used.add(m));out.push({kind:members.length>1?'group':'tile',nodes:members})}
+                        else{used.add(el);out.push({kind:'tile',nodes:[el]})}
+                    }else{used.add(el);out.push({kind:'paren',el,nodes:[el]})}
+                });
+                return out;
+            };
+            const multi=f=>f.kind==='paren'||f.kind==='group',ok=fs=>fs.length>=2&&fs.some(multi);
+            const selP=selectedParensV7().filter(p=>p.parentElement===container),selT=selectedTilesV7().filter(t=>t.parentElement===container);
+            let factors=null;
+            if(selP.length+selT.length){
+                const set=new Set([...selP,...selT]);
+                selT.forEach(t=>{const g=t.dataset.distributionGroup;if(g)board.forEach(o=>{if(isTile(o)&&o.dataset.distributionGroup===g)set.add(o)})});
+                factors=build(Array.from(set));
+            }
+            if(!factors||!ok(factors))factors=build(board);
+            if(!ok(factors))return {error:'The grid needs at least one parenthesis with a term inside, plus another factor: a number, a variable or a second parenthesis.'};
+            return {factors};
+        }
         async function enterGridV7(){
             if(gridV7.active||distributionLockedV3)return;
             if(operationMode!=='multiplication'){toastV7('Grid multiplication is available in Multiplication mode.');return}
-            const ps=selectedParensV7();
-            if(ps.length!==2){toastV7('Select exactly two parentheses (click their headers), then press the grid button.');return}
-            const snapshot=getStateSnapshot();saveState();
-            const nested=ps.map(p=>flattenInsideV7(p)).some(Boolean);
-            const [pa,pb]=ps.slice().sort((x,y)=>x.getBoundingClientRect().left-y.getBoundingClientRect().left);
-            const colTiles=directTilesV7(contentOfV7(pa)),rowTiles=directTilesV7(contentOfV7(pb));
-            if(!colTiles.length||!rowTiles.length){historyStack.pop();loadState(snapshot);toastV7('Both parentheses need at least one tile.');return}
-            const outer=parenSignV7(pa)*parenSignV7(pb),cols=colTiles.map(descV7),rows=rowTiles.map(descV7);
-            const products=rows.map((_,r)=>cols.map((_,c)=>{const d=multiplicationPayload(rowTiles[r],colTiles[c],outer);return d}));
-            const fa=(parenSignV7(pa)<0?'-':'')+`(${joinTerms(colTiles)})`,fb=(parenSignV7(pb)<0?'-':'')+`(${joinTerms(rowTiles)})`,headTex=`${fa} \\times ${fb.startsWith('-')?`(${fb})`:fb}`;
+            const picked=collectGridFactorsV8();if(picked.error){toastV7(picked.error,true);return}
+            const factors=picked.factors,snapshot=getStateSnapshot();saveState();
+            let nested=false;factors.forEach(f=>{if(f.kind==='paren'&&flattenInsideV7(f.el))nested=true});
+            factors.forEach(f=>{if(f.kind==='paren'){f.sign=parenSignV7(f.el);f.terms=directTilesV7(contentOfV7(f.el))}else{f.sign=1;f.terms=f.nodes.slice().sort(eqSortV7)}f.descs=f.terms.map(descV7)});
+            if(factors.some(f=>!f.descs.length)){historyStack.pop();loadState(snapshot);toastV7('Every parenthesis needs at least one term before the grid can be built.',true);return}
+            const headTex=factors.map((f,i)=>gridFactorTexV8(f,i)).join(String.raw` \times `);
+            // Outside numbers/variables are merged into one term first; then every multi-term factor is multiplied in turn.
+            const singles=factors.filter(f=>f.kind==='tile'),multis=factors.filter(f=>f.kind!=='tile'),pre=[];
+            let leftDescs,leftSign=1,rest;
+            if(singles.length){let acc=singles[0].descs[0];for(let i=1;i<singles.length;i++){const nx=singles[i].descs[0],data=mulV8(acc,nx,1);pre.push({a:acc,b:nx,data});acc={type:data.type,coeff:data.coeff,meta:data.meta}}leftDescs=[acc];rest=multis}
+            else{leftDescs=multis[0].descs;leftSign=multis[0].sign;rest=multis.slice(1)}
+            const stages=rest.length;
             const myRun=++gridV7.run;Object.assign(gridV7,{active:true,done:false,cancelled:false,snapshot,final:null});
-            [pa,pb].forEach(p=>p.classList.add('annihilate'));playSound('multiply');await sleepV7(300);if(gridV7.run!==myRun)return;[pa,pb].forEach(p=>p.remove());
+            const allNodes=factors.flatMap(f=>f.nodes);allNodes.forEach(n=>n.classList.add('annihilate'));playSound('multiply');await sleepV7(300);if(gridV7.run!==myRun)return;allNodes.forEach(n=>n.remove());
             if(nested)toastV7('Nested groupings were simplified (signs applied) before building the grid.');
             document.body.classList.add('grid-active');gridExitBtn.classList.remove('is-done');gridResult.classList.remove('on');gridResultTiles.innerHTML='';gridList.innerHTML='';
+            document.getElementById('grid-result-label').textContent='Result';
             document.getElementById('grid-ctl-slot').replaceChildren(buildCtlRowV7());
             const hint=document.createElement('p');hint.className='grid-hint';hint.textContent='Manual mode: press the next-step button to fill each cell.';document.getElementById('grid-ctl-slot').appendChild(hint);
             renderMath(equationDisplay,headTex);placeGridPanelV7();
-            // build table
-            gridTable.innerHTML='';const head=document.createElement('tr'),corner=document.createElement('th');corner.className='grid-corner';corner.textContent='×';head.appendChild(corner);
-            const colHeads=cols.map(d=>{const th=document.createElement('th');th.className='grid-head';createTileElement(d.type,0,0,d.coeff,th,null,d.meta);head.appendChild(th);return th});gridTable.appendChild(head);
-            const rowHeads=[],cells=rows.map((d,r)=>{const tr=document.createElement('tr'),th=document.createElement('th');th.className='grid-head grid-side';createTileElement(d.type,0,0,d.coeff,th,null,d.meta);tr.appendChild(th);rowHeads.push(th);const line=cols.map(()=>{const td=document.createElement('td');td.className='grid-cell';tr.appendChild(td);return td});gridTable.appendChild(tr);return line});
-            gridView.classList.add('on');fitGridV7();
-            const total=rows.length*cols.length;gridProgress.textContent=`0 / ${total}`;beginRunV7();
             const alive=()=>gridV7.active&&gridV7.run===myRun&&!gridV7.cancelled;
-            const addCard=(html)=>{const card=document.createElement('div');card.className='distribution-sequence-step';card.innerHTML=html;gridList.appendChild(card);if(window.MathJax?.typesetPromise)MathJax.typesetPromise([card]).catch(()=>{});gridList.scrollTop=gridList.scrollHeight};
-            await sleepV7(450);let n=0;
+            const addCard=html=>{const card=document.createElement('div');card.className='distribution-sequence-step';card.innerHTML=html;gridList.appendChild(card);if(window.MathJax?.typesetPromise)MathJax.typesetPromise([card]).catch(()=>{});gridList.scrollTop=gridList.scrollHeight};
+            const stageLabel=s=>stages>1?`Stage ${s+1}/${stages} · `:'';
+            // Build the table of one stage: the factor with more terms goes across the top, a single term goes down the side.
+            const buildStage=s=>{
+                const L=leftDescs,R=rest[s].descs,swap=L.length===1&&R.length>1,colD=swap?R:L,rowD=swap?L:R,outer=(s===0?leftSign:1)*rest[s].sign;
+                gridTable.innerHTML='';const head=document.createElement('tr'),corner=document.createElement('th');corner.className='grid-corner';corner.textContent='×';head.appendChild(corner);
+                const colHeads=colD.map(d=>{const th=document.createElement('th');th.className='grid-head';createTileElement(d.type,0,0,d.coeff,th,null,d.meta);head.appendChild(th);return th});gridTable.appendChild(head);
+                const rowHeads=[],cells=rowD.map((d,r)=>{const tr=document.createElement('tr'),th=document.createElement('th');th.className='grid-head grid-side';createTileElement(d.type,0,0,d.coeff,th,null,d.meta);tr.appendChild(th);rowHeads.push(th);const line=colD.map(()=>{const td=document.createElement('td');td.className='grid-cell';tr.appendChild(td);return td});gridTable.appendChild(tr);return line});
+                const products=rowD.map((rd,r)=>colD.map((cd,c)=>{const a=swap?rd:cd,b=swap?cd:rd;return {a,b,data:mulV8(a,b,outer)}}));
+                gridView.classList.add('on');fitGridV7();
+                return {colHeads,rowHeads,cells,products,rows:rowD.length,cols:colD.length,outer};
+            };
+            let st=buildStage(0);beginRunV7();
+            await sleepV7(450);if(!alive())return;
             try{
-                for(let r=0;r<rows.length;r++)for(let c=0;c<cols.length;c++){
-                    await gateV7(n===0);if(!alive())return;
-                    const th=colHeads[c],sd=rowHeads[r],cell=cells[r][c],tileA=th.querySelector('.algebra-tile'),tileB=sd.querySelector('.algebra-tile'),data=products[r][c];
-                    th.classList.add('grid-hl');sd.classList.add('grid-hl');cell.classList.add('grid-target');
-                    const made=createTileElement(data.type,0,0,data.coeff,cell,null,data.meta);made.classList.add('product-preview');
-                    if(stepCtlV7.interact&&!stepCtlV7.skip){
-                        const ca=cloneForFlightV7(tileA,true),cb=cloneForFlightV7(tileB,true),cr=cell.getBoundingClientRect(),cx=cr.left+cr.width/2,cy=cr.top+cr.height/2,wa=ca.getBoundingClientRect().width,wb=cb.getBoundingClientRect().width,ha=ca.getBoundingClientRect().height,hb=cb.getBoundingClientRect().height;
-                        await Promise.all([flyV7(ca,cx-wa-6,cy-ha/2,700),flyV7(cb,cx+6,cy-hb/2,700)]);if(!alive()){ca.remove();cb.remove();return}
-                        await Promise.all([flyV7(ca,cx-wa/2,cy-ha/2,320),flyV7(cb,cx-wb/2,cy-hb/2,320)]);
-                        ca.classList.add('step-merge');cb.classList.add('step-merge');made.classList.add('is-revealed');ca.style.opacity='0';cb.style.opacity='0';playSound('multiply');await waitV7(620);ca.remove();cb.remove();
-                    }else{made.classList.add('is-revealed');playSound('multiply');await waitV7(560)}
-                    if(!alive())return;made.classList.remove('product-preview','is-revealed');th.classList.remove('grid-hl');sd.classList.remove('grid-hl');cell.classList.remove('grid-target');
-                    n++;gridProgress.textContent=`${n} / ${total}`;
-                    addCard(`<span class="mr-2 text-cyan-200 font-bold">${n}.</span><span class="distribution-step-equation">\\(${displayTermV4(rowTiles[r])} \\times ${displayTermV4(colTiles[c])} = ${resultTexV4(data)}\\)</span>`);
+                if(pre.length){
+                    for(const p of pre){await gateV7(p===pre[0]);if(!alive())return;addCard(`<span class="mr-2 text-sky-300 font-bold">•</span><span>Outside factors are multiplied first: <span class="distribution-step-equation">\\(${wrapNegV8(texV8(p.a))}\\cdot ${wrapNegV8(texV8(p.b))} = ${resultTexV4(p.data)}\\)</span></span>`);playSound('multiply');await waitV7(600)}
                 }
-                // Combine like terms and order by degree, then letters.
-                await gateV7();if(!alive())return;
-                const flat=products.flat(),entries=combineLikeV7(flat).filter(e=>e.sum.n!==0).sort((a,b)=>cmpMonoV7(a.vars,b.vars)),palette=['#a855f7','#f97316','#0ea5e9','#ec4899','#22c55e'];let pi=0;
-                const merged=combineLikeV7(flat).filter(e=>e.count>1);
-                merged.forEach(e=>{const col=palette[pi++%palette.length];cells.forEach(line=>line.forEach((cell,ci)=>{const t=cell.querySelector('.algebra-tile');if(t&&e.sigs[0]===(variablesFromTile(t).slice().sort((a,b)=>a.letter.localeCompare(b.letter)).map(v=>`${v.letter}^${v.exponent}`).join('*'))){cell.classList.add('grid-like');cell.style.setProperty('--like',col)}}))});
-                const finalData=entries.map(dataFromEntryV7),gid=`grid-result-${Date.now()}`;finalData.forEach(d=>d.meta.distributionGroup=gid);gridV7.final=finalData;
-                addCard(merged.length?`<span class="mr-2 text-amber-300 font-bold">+</span><span class="distribution-step-equation">Combine like terms: ${merged.map(e=>`\\(${sumFromDataV7(flat.filter(d=>combineLikeV7([d])[0].sig===e.sig))} = ${resultTexV4(dataFromEntryV7(e))}\\)`).join(', ')}</span>`:`<span class="mr-2 text-amber-300 font-bold">+</span><span class="distribution-step-equation">There are no like terms to combine.</span>`);
-                await waitV7(500);if(!alive())return;
-                finalData.forEach(d=>createTileElement(d.type,0,0,d.coeff,gridResultTiles,null,d.meta));
-                if(!finalData.length){gridResultTiles.textContent='0'}
-                gridResult.classList.add('on');fitGridV7();playSound('expression');
-                const resTex=sumFromDataV7(finalData);addCard(`<span class="mr-2 text-emerald-300 font-bold">=</span><span class="distribution-step-result distribution-step-equation" style="white-space:normal">\\(${resTex}\\)</span>`);
-                renderMath(equationDisplay,`${headTex} = ${resTex}`);gridV7.done=true;gridExitBtn.classList.add('is-done');setWaitingV7(false);
+                let finalData=[];
+                for(let s=0;s<stages;s++){
+                    if(s>0){
+                        await gateV7();if(!alive())return;
+                        gridResult.classList.remove('on');await waitV7(350);gridResultTiles.innerHTML='';
+                        st=buildStage(s);await waitV7(350);if(!alive())return;
+                    }
+                    if(stages>1)addCard(`<span class="mr-2 text-sky-300 font-bold">▦</span><span>Stage ${s+1} of ${stages}: <span class="distribution-step-equation">\\((${sumTexDescsV8(leftDescs)}) \\times (${sumTexDescsV8(rest[s].descs)})\\)</span>${st.outer<0?'<br><small class="text-slate-300">The minus sign in front of the parenthesis changes the sign of every product.</small>':''}</span>`);
+                    const total=st.rows*st.cols;let n=0;gridProgress.textContent=`${stageLabel(s)}0 / ${total}`;
+                    for(let r=0;r<st.rows;r++)for(let c=0;c<st.cols;c++){
+                        await gateV7(n===0&&s===0&&!pre.length);if(!alive())return;
+                        const th=st.colHeads[c],sd=st.rowHeads[r],cell=st.cells[r][c],tileA=th.querySelector('.algebra-tile'),tileB=sd.querySelector('.algebra-tile'),{a,b,data}=st.products[r][c];
+                        th.classList.add('grid-hl');sd.classList.add('grid-hl');cell.classList.add('grid-target');
+                        const made=createTileElement(data.type,0,0,data.coeff,cell,null,data.meta);made.classList.add('product-preview');
+                        if(stepCtlV7.interact&&!stepCtlV7.skip){
+                            const ca=cloneForFlightV7(tileA,true),cb=cloneForFlightV7(tileB,true),cr=cell.getBoundingClientRect(),cx=cr.left+cr.width/2,cy=cr.top+cr.height/2,wa=ca.getBoundingClientRect().width,wb=cb.getBoundingClientRect().width,ha=ca.getBoundingClientRect().height,hb=cb.getBoundingClientRect().height;
+                            await Promise.all([flyV7(ca,cx-wa-6,cy-ha/2,700),flyV7(cb,cx+6,cy-hb/2,700)]);if(!alive()){ca.remove();cb.remove();return}
+                            await Promise.all([flyV7(ca,cx-wa/2,cy-ha/2,320),flyV7(cb,cx-wb/2,cy-hb/2,320)]);
+                            ca.classList.add('step-merge');cb.classList.add('step-merge');made.classList.add('is-revealed');ca.style.opacity='0';cb.style.opacity='0';playSound('multiply');await waitV7(620);ca.remove();cb.remove();
+                        }else{made.classList.add('is-revealed');playSound('multiply');await waitV7(560)}
+                        if(!alive())return;made.classList.remove('product-preview','is-revealed');th.classList.remove('grid-hl');sd.classList.remove('grid-hl');cell.classList.remove('grid-target');
+                        n++;gridProgress.textContent=`${stageLabel(s)}${n} / ${total}`;
+                        addCard(`<span class="mr-2 text-cyan-200 font-bold">${n}.</span><span class="distribution-step-equation">\\(${wrapNegV8(texV8(a))} \\times ${wrapNegV8(texV8(b))} = ${resultTexV4(data)}\\)</span>`);
+                    }
+                    // Combine like terms and order by degree, then letters.
+                    await gateV7();if(!alive())return;
+                    const flat=st.products.flat().map(p=>p.data),all=combineLikeV7(flat),entries=all.filter(e=>e.sum.n!==0).sort((x,y)=>cmpMonoV7(x.vars,y.vars)),palette=['#a855f7','#f97316','#0ea5e9','#ec4899','#22c55e'];let pi=0;
+                    const merged=all.filter(e=>e.count>1);
+                    merged.forEach(e=>{const col=palette[pi++%palette.length];st.cells.forEach(line=>line.forEach(cell=>{const t=cell.querySelector('.algebra-tile');if(t&&e.sigs[0]===(variablesFromTile(t).slice().sort((x,y)=>x.letter.localeCompare(y.letter)).map(v=>`${v.letter}^${v.exponent}`).join('*'))){cell.classList.add('grid-like');cell.style.setProperty('--like',col)}}))});
+                    finalData=entries.map(dataFromEntryV7);const gid=`grid-result-${Date.now()}`;finalData.forEach(d=>d.meta.distributionGroup=gid);
+                    addCard(merged.length?`<span class="mr-2 text-amber-300 font-bold">+</span><span class="distribution-step-equation">Combine like terms: ${merged.map(e=>`\\(${sumFromDataV7(flat.filter(d=>combineLikeV7([d])[0].sig===e.sig))} = ${resultTexV4(dataFromEntryV7(e))}\\)`).join(', ')}</span>`:`<span class="mr-2 text-amber-300 font-bold">+</span><span class="distribution-step-equation">There are no like terms to combine.</span>`);
+                    await waitV7(500);if(!alive())return;
+                    const last=s===stages-1;document.getElementById('grid-result-label').textContent=last?'Result':'Stage result';
+                    gridResultTiles.innerHTML='';
+                    if(merged.length){await gridCombineAnimV9(st,all,finalData,addCard,alive);if(!alive())return}
+                    else{finalData.forEach(d=>createTileElement(d.type,0,0,d.coeff,gridResultTiles,null,d.meta));gridResult.classList.add('on');fitGridV7()}
+                    if(!finalData.length)gridResultTiles.textContent='0';
+                    playSound('expression');
+                    const resTex=sumFromDataV7(finalData);
+                    if(last){
+                        addCard(`<span class="mr-2 text-emerald-300 font-bold">=</span><span class="distribution-step-result distribution-step-equation" style="white-space:normal">\\(${resTex}\\)</span>`);
+                        renderMath(equationDisplay,`${headTex} = ${resTex}`);
+                    }else{
+                        addCard(`<span class="mr-2 text-emerald-300 font-bold">=</span><span class="distribution-step-equation" style="white-space:normal">Stage ${s+1} result: \\(${resTex}\\)</span>`);
+                        if(!finalData.length){renderMath(equationDisplay,`${headTex} = 0`);break}
+                        leftDescs=finalData;
+                    }
+                }
+                gridV7.final=finalData;gridV7.done=true;gridExitBtn.classList.add('is-done');setWaitingV7(false);
             }catch(err){console.error(err);if(alive())toastV7('The grid steps stopped unexpectedly.',true)}
         }
         function exitGridV7(fromModeSwitch=false){
@@ -2519,6 +2678,782 @@
         window.addEventListener('keydown',e=>{if(e.key==='Escape'&&!helpModalV7.classList.contains('hidden'))closeHelpV7();else if(e.key==='Enter'&&document.body.classList.contains('splash-open')&&helpModalV7.classList.contains('hidden')&&!['BUTTON'].includes(e.target.tagName))enterLabV7()});
         const brandHeaderV7=document.getElementById('brand-header');if(brandHeaderV7)brandHeaderV7.addEventListener('click',showSplashV7);
         document.body.classList.add('splash-open');spV7.run=true;splashLoopV7();
+
+        /* ======================================================================
+           V9 — Pure polynomial engine used by the factoring lesson.
+           Terms are {c:{n,d} (signed), v:{letter:exponent}}; no DOM is touched here.
+           Strategy (general factoring strategy): GCF first (including a negative sign),
+           then count the terms: 2 -> difference of squares / sum or difference of cubes,
+           3 -> perfect square trinomial / x²+bx+c / ax²+bx+c (ac method),
+           4 -> grouping / perfect cube / trinomial square minus a square.
+           Every factor is examined again until it is prime, and the product is checked.
+           ====================================================================== */
+        const rMulV9=(a,b)=>rational(a.n*b.n,a.d*b.d),rAddV9=(a,b)=>rational(a.n*b.d+b.n*a.d,a.d*b.d),rNegV9=a=>rational(-a.n,a.d),rEqV9=(a,b)=>a.n===b.n&&a.d===b.d;
+        const isqrtV9=n=>{const r=Math.round(Math.sqrt(n));return r*r===n?r:null};
+        const icbrtV9=n=>{const r=Math.round(Math.cbrt(Math.abs(n)));return r*r*r===Math.abs(n)?r*(n<0?-1:1):null};
+        const ratSqrtV9=r=>{if(r.n<=0)return null;const a=isqrtV9(r.n),b=isqrtV9(r.d);return a&&b?rational(a,b):null};
+        const ratCbrtV9=r=>{const a=icbrtV9(r.n),b=icbrtV9(r.d);return a!==null&&b!==null&&b!==0?rational(a,b):null};
+        const vDegV9=v=>Object.values(v).reduce((s,e)=>s+e,0);
+        const vKeyV9=v=>Object.keys(v).filter(l=>v[l]>0).sort().map(l=>`${l}^${v[l]}`).join('*');
+        const vMulV9=(a,b)=>{const o={...a};Object.keys(b).forEach(l=>{o[l]=(o[l]||0)+b[l]});return o};
+        const vDivV9=(a,b)=>{const o={};Object.keys(a).forEach(l=>{const e=a[l]-(b[l]||0);if(e>0)o[l]=e});return o};
+        const vPartV9=(v,k)=>{const o={};for(const l of Object.keys(v)){if(v[l]%k)return null;o[l]=v[l]/k}return o};
+        const vCmpV9=(a,b)=>{const da=vDegV9(a),db=vDegV9(b);if(da!==db)return db-da;const ls=Array.from(new Set([...Object.keys(a),...Object.keys(b)])).sort();for(const l of ls){const ea=a[l]||0,eb=b[l]||0;if(ea!==eb)return eb-ea}return 0};
+        const tMulV9=(a,b)=>({c:rMulV9(a.c,b.c),v:vMulV9(a.v,b.v)}),tNegV9=a=>({c:rNegV9(a.c),v:{...a.v}}),tEqV9=(a,b)=>rEqV9(a.c,b.c)&&vKeyV9(a.v)===vKeyV9(b.v);
+        const tAbsV9=a=>({c:rational(Math.abs(a.c.n),a.c.d),v:{...a.v}});
+        const tSqrtV9=t=>{if(t.c.n<=0)return null;const c=ratSqrtV9(t.c),v=vPartV9(t.v,2);return c&&v?{c,v}:null};
+        const tCbrtV9=t=>{const c=ratCbrtV9(t.c),v=vPartV9(t.v,3);return c&&v?{c,v}:null};
+        const pSortV9=P=>P.slice().sort((x,y)=>vCmpV9(x.v,y.v)||(y.c.n>0?1:0)-(x.c.n>0?1:0));
+        function pCombineV9(P){const m=new Map();P.forEach(t=>{const k=vKeyV9(t.v),e=m.get(k);if(e)e.c=rAddV9(e.c,t.c);else m.set(k,{c:t.c,v:{...t.v}})});return Array.from(m.values()).filter(t=>t.c.n!==0)}
+        const pMulV9=(A,B)=>pCombineV9(A.flatMap(a=>B.map(b=>tMulV9(a,b))));
+        const pEqV9=(A,B)=>{const a=pSortV9(pCombineV9(A)),b=pSortV9(pCombineV9(B));return a.length===b.length&&a.every((t,i)=>tEqV9(t,b[i]))};
+        const pNegV9=P=>P.map(tNegV9);
+        // TeX
+        const vTexV9=v=>Object.keys(v).filter(l=>v[l]>0).sort().map(l=>`${l}${v[l]>1?`^{${v[l]}}`:''}`).join('');
+        function tTexV9(t,fmt='fraction',abs=false){
+            const hasV=vKeyV9(t.v)!=='',ar=rational(Math.abs(t.c.n),t.c.d);let coef=ratTex(ar,fmt);if(hasV&&ar.n===1&&ar.d===1)coef='';
+            return `${!abs&&t.c.n<0?'-':''}${coef}${vTexV9(t.v)}`;
+        }
+        const pTexV9=(P,fmt='fraction')=>{let out='';P.forEach(t=>{const s=tTexV9(t,fmt);out+=!out?s:(s[0]==='-'?` - ${s.slice(1)}`:` + ${s}`)});return out||'0'};
+        const colV9=(tex,color='#7dd3fc')=>`{\\color{${color}}{${tex}}}`;
+        const mkTermV9=(n,d,v={})=>({c:rational(n,d),v});
+        // GCF of terms (positive); used by the grouping methods.
+        function gcfOfTermsV9(Ts){
+            let gn=0,ld=1;Ts.forEach(t=>{gn=gcd(gn,Math.abs(t.c.n));ld=lcmV8(ld,t.c.d)});
+            const v={};Object.keys(Ts[0].v).forEach(l=>{const m=Math.min(...Ts.map(t=>t.v[l]||0));if(m>0)v[l]=m});
+            return {c:rational(gn||1,ld),v};
+        }
+        const tDivV9=(t,g)=>({c:rational(t.c.n*g.c.d,t.c.d*g.c.n),v:vDivV9(t.v,g.v)});
+        const polyItemV9=p=>({kind:'poly',p});
+        // ---------- Methods: each returns {id,name,steps:[{title,html,local}],parts:[poly,...]} or null ----------
+        function methodDOS(P,f){
+            if(P.length!==2)return null;const [t1,t2]=P;if((t1.c.n>0)===(t2.c.n>0))return null;
+            const pos=t1.c.n>0?t1:t2,neg=t1.c.n>0?t2:t1,a=tSqrtV9(pos),b=tSqrtV9(tAbsV9(neg));if(!a||!b)return null;
+            const aT=tTexV9(a,f),bT=tTexV9(b,f);
+            return {id:'dos',name:'Difference of squares',parts:[[a,tNegV9(b)],[a,b]],steps:[
+                {title:'Difference of squares',html:`Two terms with a minus sign between them. Check that <b>both</b> are perfect squares:<br>\\(${tTexV9(pos,f)}=(${aT})^{2}\\) and \\(${tTexV9(tAbsV9(neg),f)}=(${bT})^{2}\\)<span class="fv8-note">Pattern: a² − b² = (a − b)(a + b), with a = ${'\\('+aT+'\\)'} and b = ${'\\('+bT+'\\)'}.</span>`,local:`(${aT})^{2}-(${bT})^{2}`},
+                {title:'Write the conjugate pair',html:`Replace a and b in <b>(a − b)(a + b)</b>:<br>\\((${aT}-${bT})(${aT}+${bT})\\)`,local:`(${aT}-${bT})(${aT}+${bT})`}]};
+        }
+        function methodCubes(P,f){
+            if(P.length!==2)return null;const [t1,t2]=P;if(t1.c.n<0&&t2.c.n<0)return null;
+            let pos,other;if(t1.c.n>0){pos=t1;other=t2}else{pos=t2;other=t1}
+            const a=tCbrtV9(pos),bAbs=tCbrtV9(tAbsV9(other));if(!a||!bAbs)return null;
+            const sum=other.c.n>0,b=bAbs,aT=tTexV9(a,f),bT=tTexV9(b,f),a2=tMulV9(a,a),b2=tMulV9(b,b),ab=tMulV9(a,b);
+            const f1=[a,sum?b:tNegV9(b)],f2=sum?[a2,tNegV9(ab),b2]:[a2,ab,b2];
+            const name=sum?'Sum of cubes':'Difference of cubes';
+            return {id:sum?'sumcubes':'diffcubes',name,parts:[f1,f2],steps:[
+                {title:name,html:`Check that both terms are perfect cubes:<br>\\(${tTexV9(pos,f)}=(${aT})^{3}\\) and \\(${tTexV9(tAbsV9(other),f)}=(${bT})^{3}\\)<span class="fv8-note">Pattern: ${sum?'a³ + b³ = (a + b)(a² − ab + b²)':'a³ − b³ = (a − b)(a² + ab + b²)'}, with a = \\(${aT}\\) and b = \\(${bT}\\).</span>`,local:`(${aT})^{3}${sum?'+':'-'}(${bT})^{3}`},
+                {title:'Apply the cubes pattern',html:`Binomial: \\((${aT}${sum?'+':'-'}${bT})\\)<br>Trinomial: \\(a^{2}${sum?'-':'+'}ab+b^{2}=${pTexV9(f2,f)}\\)<span class="fv8-note">Careful with the signs: the trinomial has the <b>opposite</b> sign in the middle for a sum of cubes and the <b>same</b> sign for a difference.</span>`,local:`(${pTexV9(f1,f)})(${pTexV9(f2,f)})`}]};
+        }
+        function methodPST(P,f){
+            if(P.length!==3)return null;
+            for(let mid=0;mid<3;mid++){
+                const out=[0,1,2].filter(i=>i!==mid),a=tSqrtV9(P[out[0]]),b=tSqrtV9(P[out[1]]);if(!a||!b)continue;
+                const ab=tMulV9(a,b),two={c:rMulV9(ab.c,rational(2,1)),v:ab.v};let sg=0;
+                if(tEqV9(P[mid],two))sg=1;else if(tEqV9(P[mid],tNegV9(two)))sg=-1;if(!sg)continue;
+                const aT=tTexV9(a,f),bT=tTexV9(b,f),bin=[a,sg>0?b:tNegV9(b)],sgT=sg>0?'+':'-';
+                return {id:'pst',name:'Perfect square trinomial',parts:[bin,bin.map(t=>({...t,v:{...t.v}}))],steps:[
+                    {title:'Perfect square trinomial',html:`Three terms: check that the first and last terms are perfect squares:<br>\\(${tTexV9(P[out[0]],f)}=(${aT})^{2}\\) and \\(${tTexV9(P[out[1]],f)}=(${bT})^{2}\\)<span class="fv8-note">Pattern: a² ${sgT} 2ab + b² = (a ${sgT} b)²</span>`,local:`(${aT})^{2}${P[mid].c.n>0?'+':'-'}\\,${tTexV9(tAbsV9(P[mid]),f)}+(${bT})^{2}`},
+                    {title:'Check the middle term',html:`The middle term must be 2ab:<br>\\(2\\cdot(${aT})\\cdot(${bT})=${tTexV9(two,f)}\\) ✓ — it matches \\(${tTexV9(P[mid],f)}\\) (sign ${sgT}).`,local:`(${aT})^{2}${sgT}\\,2(${aT})(${bT})+(${bT})^{2}`},
+                    {title:'Write the binomial squared',html:`\\((${aT}${sgT}${bT})^{2}=(${aT}${sgT}${bT})(${aT}${sgT}${bT})\\)`,local:`(${aT}${sgT}${bT})(${aT}${sgT}${bT})`}]};
+            }
+            return null;
+        }
+        const divisorsV9=n=>{const out=[];for(let i=1;i*i<=n;i++)if(n%i===0){out.push(i);if(i*i!==n)out.push(n/i)}return out.sort((a,b)=>a-b)};
+        function methodTrinomial(P,f){
+            if(P.length!==3)return null;
+            for(let mid=0;mid<3;mid++){
+                const out=[0,1,2].filter(i=>i!==mid),o1=P[out[0]],o2=P[out[1]],p=vPartV9(o1.v,2),q=vPartV9(o2.v,2);if(!p||!q)continue;
+                if(vKeyV9(vMulV9(p,q))!==vKeyV9(P[mid].v))continue;
+                if(![o1,o2,P[mid]].every(t=>t.c.d===1))continue;
+                const al=o1.c.n,be=P[mid].c.n,ga=o2.c.n,ac=al*ga;if(!ac)continue;
+                const pairs=[];divisorsV9(Math.abs(ac)).forEach(d=>{const e=Math.abs(ac)/d;if(d>e)return;(ac>0?[[d,e],[-d,-e]]:[[d,-e],[-d,e]]).forEach(pr=>pairs.push({m:pr[0],n:pr[1],sum:pr[0]+pr[1]}))});
+                const hit=pairs.find(x=>x.sum===be);if(!hit)continue;
+                const pT=vTexV9(p),qT=vTexV9(q),mk=(k,v)=>({c:rational(k,1),v});
+                const table=`<span class="fv8-note">${pairs.map(x=>`\\(${x.m}\\cdot ${x.n.toString().replace(/^-/,'(-')+(x.n<0?')':'')}\\ \\to\\ ${x.sum}\\)${x===hit?' ✓':''}`).join(' · ')}</span>`;
+                if(al===1){
+                    const b1=[{c:rational(1,1),v:p},mk(hit.m,q)],b2=[{c:rational(1,1),v:p},mk(hit.n,q)];
+                    return {id:'tri1',name:'Trinomial x² + bx + c',parts:[b1,b2],steps:[
+                        {title:'Trinomial with leading coefficient 1',html:`Look for two numbers whose <b>product is c = ${ga}</b> and whose <b>sum is b = ${be}</b>:${table}The numbers are <b>${hit.m}</b> and <b>${hit.n}</b>.`,local:`${pTexV9(P,f)}\\ \\ \\left[m\\cdot n=${ga},\\ m+n=${be}\\right]`},
+                        {title:'Write the two binomials',html:`Use the numbers as the second terms:<br>\\((${pTexV9(b1,f)})(${pTexV9(b2,f)})\\)`,local:`(${pTexV9(b1,f)})(${pTexV9(b2,f)})`}]};
+                }
+                // ac method with grouping
+                const tryOrder=(m,n)=>{
+                    const g1=gcfOfTermsV9([o1,{c:rational(m,1),v:vMulV9(p,q)}]),g2=gcfOfTermsV9([{c:rational(n,1),v:vMulV9(p,q)},o2]);
+                    const B1=[tDivV9(o1,g1),tDivV9({c:rational(m,1),v:vMulV9(p,q)},g1)],B2=[tDivV9({c:rational(n,1),v:vMulV9(p,q)},g2),tDivV9(o2,g2)];
+                    if(pEqV9(B1,B2))return {g1,g2,B1,m,n};
+                    if(pEqV9(B1,pNegV9(B2)))return {g1,g2:tNegV9(g2),B1,m,n};
+                    return null;
+                };
+                const res=tryOrder(hit.m,hit.n)||tryOrder(hit.n,hit.m);if(!res)continue;
+                const {g1,g2,B1,m,n}=res,mid1={c:rational(m,1),v:vMulV9(p,q)},mid2={c:rational(n,1),v:vMulV9(p,q)},G=[g1,g2],gTex=pTexV9(G,f),bTex=pTexV9(B1,f);
+                return {id:'tri-ac',name:'Trinomial ax² + bx + c (ac method)',parts:[B1,G],steps:[
+                    {title:'ac method: find the pair',html:`Multiply \\(a\\cdot c=${al}\\cdot ${ga<0?'('+ga+')':ga}=${ac}\\). Find two numbers whose <b>product is ${ac}</b> and whose <b>sum is b = ${be}</b>:${table}The numbers are <b>${m}</b> and <b>${n}</b>.`,local:`${pTexV9(P,f)}\\ \\ \\left[m\\cdot n=${ac},\\ m+n=${be}\\right]`},
+                    {title:'Split the middle term',html:`Rewrite \\(${tTexV9(P[mid],f)}\\) as \\(${tTexV9(mid1,f)}${tTexV9(mid2,f)[0]==='-'?'':'+'}${tTexV9(mid2,f)}\\):<br>\\(${pTexV9([o1,mid1,mid2,o2],f)}\\)`,local:pTexV9([o1,mid1,mid2,o2],f)},
+                    {title:'Group in pairs',html:`Put the first two and the last two terms in parentheses:<br>\\((${pTexV9([o1,mid1],f)})+(${pTexV9([mid2,o2],f)})\\)`,local:`(${pTexV9([o1,mid1],f)})+(${pTexV9([mid2,o2],f)})`},
+                    {title:'Factor the GCF out of each pair',html:`First pair: \\(${tTexV9(g1,f)}(${bTex})\\). Second pair: \\(${tTexV9(g2,f)==='1'?'':wrapNegV8(tTexV9(g2,f))}(${bTex})\\).<span class="fv8-note">Both pairs now show the <b>same binomial</b> \\((${bTex})\\). That is how you know the split was right.</span>`,local:`${colV9(tTexV9(g1,f))}(${bTex})${g2.c.n<0?'-':'+'}${colV9(tTexV9(tAbsV9(g2),f))}(${bTex})`},
+                    {title:'Factor out the common binomial',html:`\\((${bTex})\\) is common: the leftovers \\(${gTex}\\) make the second factor.<br>\\((${bTex})(${gTex})\\)`,local:`(${bTex})(${gTex})`}]};
+            }
+            return null;
+        }
+        function methodGrouping(P,f){
+            if(P.length!==4)return null;
+            const pairings=[[[0,1],[2,3]],[[0,2],[1,3]],[[0,3],[1,2]]];
+            for(let k=0;k<pairings.length;k++){
+                const [A,B]=pairings[k],X=[P[A[0]],P[A[1]]],Y=[P[B[0]],P[B[1]]],g1=gcfOfTermsV9(X),g2=gcfOfTermsV9(Y),B1=X.map(t=>tDivV9(t,g1));let B2=Y.map(t=>tDivV9(t,g2)),G2=g2;
+                if(!pEqV9(B1,B2)){if(pEqV9(B1,pNegV9(B2))){G2=tNegV9(g2);B2=pNegV9(B2)}else continue}
+                const order=[...A,...B],reorder=order.some((x,i)=>x!==i),bTex=pTexV9(B1,f),G=[g1,G2],gTex=pTexV9(G,f);
+                return {id:'grouping',name:'Factoring by grouping',parts:[B1,G],steps:[
+                    {title:'Factoring by grouping',html:`Four terms: group them in pairs that share a factor${reorder?' (the terms are rearranged so that each pair has a common factor)':''}:<br>\\((${pTexV9(X,f)})+(${pTexV9(Y,f)})\\)`,local:`(${pTexV9(X,f)})+(${pTexV9(Y,f)})`},
+                    {title:'Factor the GCF out of each pair',html:`First pair: \\(${tTexV9(g1,f)}(${bTex})\\)<br>Second pair: \\(${tTexV9(G2,f)}(${bTex})\\)${G2!==g2?'<span class="fv8-note">The GCF of the second pair is taken with a <b>negative</b> sign so that both binomials are identical.</span>':''}`,local:`${colV9(tTexV9(g1,f))}(${bTex})${G2.c.n<0?'-':'+'}${colV9(tTexV9(tAbsV9(G2),f))}(${bTex})`},
+                    {title:'Factor out the common binomial',html:`\\((${bTex})\\) appears in both parts, so factor it out:<br>\\((${bTex})(${gTex})\\)`,local:`(${bTex})(${gTex})`}]};
+            }
+            return null;
+        }
+        function methodCubeTrinomial(P,f){
+            if(P.length!==4)return null;const a=tCbrtV9(P[0]),b=tCbrtV9(P[3]);if(!a||!b||a.c.n<0)return null;
+            const bin=[a,b];if(!pEqV9(pMulV9(pMulV9(bin,bin),bin),P))return null;
+            const aT=tTexV9(a,f),bT=tTexV9(b,f),sg=b.c.n<0?'-':'+',bAbs=tTexV9(tAbsV9(b),f);
+            return {id:'pcube',name:'Perfect cube',parts:[bin,bin.map(t=>({...t,v:{...t.v}})),bin.map(t=>({...t,v:{...t.v}}))],steps:[
+                {title:'Perfect cube',html:`Four terms: the first and last are perfect cubes:<br>\\(${tTexV9(P[0],f)}=(${aT})^{3}\\) and \\(${tTexV9(P[3],f)}=(${bT})^{3}\\)<span class="fv8-note">Pattern: a³ ${sg} 3a²b + 3ab² ${sg} b³ = (a ${sg} b)³</span>`,local:`(${aT})^{3}\\cdots(${bT})^{3}`},
+                {title:'Check the middle terms',html:`\\(3a^{2}b=3(${aT})^{2}(${bT})=${tTexV9(P[1],f)}\\) ✓ and \\(3ab^{2}=3(${aT})(${bT})^{2}=${tTexV9(P[2],f)}\\) ✓`,local:`${pTexV9(P,f)}`},
+                {title:'Write the binomial cubed',html:`\\((${aT}${sg}${bAbs})^{3}=(${aT}${sg}${bAbs})(${aT}${sg}${bAbs})(${aT}${sg}${bAbs})\\)`,local:`(${aT}${sg}${bAbs})^{3}`}]};
+        }
+        // Trinomial square minus a square: x²+2x+1−y²  ->  (x+1)² − y²  ->  (x+1−y)(x+1+y)
+        function methodSquareMinusSquare(P,f){
+            if(P.length!==4)return null;
+            for(let k=0;k<4;k++){
+                const lone=P[k],rest=P.filter((_,i)=>i!==k);if(lone.c.n>=0)continue;const b2=tSqrtV9(tAbsV9(lone));if(!b2)continue;
+                const sub=methodPST(pSortV9(rest),f);if(!sub)continue;
+                const bin=sub.parts[0],A=bin.map(t=>({...t,v:{...t.v}})),f1=[...A,tNegV9(b2)],f2=[...A,b2];
+                const gT=pTexV9(bin,f),bT=tTexV9(b2,f);
+                return {id:'sqminus',name:'Trinomial square minus a square',parts:[f1,f2],steps:[
+                    {title:'Group a perfect square trinomial',html:`Three of the four terms form a perfect square trinomial and the last one is a negative perfect square:<br>\\((${pTexV9(pSortV9(rest),f)})${tTexV9(lone,f)}\\)`,local:`(${pTexV9(pSortV9(rest),f)})${tTexV9(lone,f)}`},
+                    {title:'Write the trinomial as a square',html:`\\((${gT})^{2}-(${bT})^{2}\\) — now it is a difference of squares.`,local:`(${gT})^{2}-(${bT})^{2}`},
+                    {title:'Difference of squares',html:`With a = \\((${gT})\\) and b = \\(${bT}\\):<br>\\((${pTexV9(f1,f)})(${pTexV9(f2,f)})\\)`,local:`(${pTexV9(f1,f)})(${pTexV9(f2,f)})`}]};
+            }
+            return null;
+        }
+        function primeReasonV9(P,f){
+            if(P.length===2){const [a,b]=P;if(a.c.n>0&&b.c.n>0&&tSqrtV9(a)&&tSqrtV9(b))return 'A <b>sum of squares</b> cannot be factored over the real numbers, so it is prime.';return 'It is not a difference of squares nor a sum or difference of cubes, so it is prime.'}
+            if(P.length===3)return 'No pair of numbers has the required product and sum (and it is not a perfect square trinomial), so it is a <b>prime trinomial</b>.';
+            if(P.length===4)return 'The terms cannot be grouped so that both pairs share the same binomial, so it cannot be factored by grouping.';
+            return 'None of the factoring patterns for this number of terms applies.';
+        }
+        const methodsForV9=n=>n===2?[methodDOS,methodCubes]:n===3?[methodPST,methodTrinomial]:n===4?[methodGrouping,methodCubeTrinomial,methodSquareMinusSquare]:[];
+        function tryFactorV9(P,f){for(const m of methodsForV9(P.length)){const r=m(P,f);if(r)return r}return null}
+        const itemTexV9=(items,f,skip=-1,local=null)=>{
+            const out=[];let i=0;
+            while(i<items.length){
+                if(i===skip){out.push(local);i++;continue}
+                const it=items[i];
+                if(it.kind==='poly'){const tex=pTexV9(it.p,f);let k=1;while(i+k<items.length&&k+i!==skip&&items[i+k].kind==='poly'&&pTexV9(items[i+k].p,f)===tex)k++;out.push(`\\left(${tex}\\right)${k>1?`^{${k}}`:''}`);i+=k}
+                else{const t=tTexV9(it.t,f);out.push(t==='1'?'':t==='-1'?'-':t);i++}
+            }
+            return out.join('\\,');
+        };
+        // Full plan: repeat the methods on every factor until all are prime.
+        function planFactorV9(P0,f='fraction',prefixTex=''){
+            let items=[polyItemV9(pSortV9(pCombineV9(P0)))];const steps=[],methods=[];let guard=0;
+            const ctx=(idx,local)=>`${prefixTex}${prefixTex&&!prefixTex.endsWith('-')?'\\,':''}${itemTexV9(items,f,idx,local)}`;
+            while(guard++<24){
+                const i=items.findIndex(it=>it.kind==='poly'&&!it.done&&it.p.length>=2);if(i<0)break;
+                const it=items[i],res=tryFactorV9(it.p,f);
+                if(!res){
+                    it.done=true;
+                    const interesting=it.p.length>=3||it.p.some(t=>vDegV9(t.v)>1);
+                    if(steps.length&&interesting)steps.push({title:'Check the factor for more factoring',html:`\\(${pTexV9(it.p,f)}\\): ${primeReasonV9(it.p,f)}`,frame:ctx(i,colV9(`\\left(${pTexV9(it.p,f)}\\right)`,'#4ade80')),note:true});
+                    continue;
+                }
+                methods.push(res.name);
+                res.steps.forEach((s,k)=>steps.push({title:s.title,html:s.html,frame:ctx(i,k===res.steps.length-1?s.local:colV9(s.local)),method:res.id,last:k===res.steps.length-1}));
+                items.splice(i,1,...res.parts.map(p=>polyItemV9(p.length>=2?p:p)));
+                items=items.map(x=>x.kind==='poly'&&x.p.length===1?{kind:'mono',t:x.p[0]}:x);
+            }
+            const polys=items.filter(x=>x.kind==='poly').map(x=>x.p),monos=items.filter(x=>x.kind==='mono').map(x=>x.t);
+            const product=items.reduce((acc,x)=>pMulV9(acc,x.kind==='poly'?x.p:[x.t]),[mkTermV9(1,1)]);
+            const ok=steps.length===0||pEqV9(product,P0);
+            return {steps:steps.filter(s=>!s.note||true),methods,items,polys,monos,ok,finalFrame:ctx(-1,null),factorable:steps.some(s=>!s.note)&&ok};
+        }
+
+        /* ======================================================================
+           V8 LAYER — Factoring (common factor) in Addition mode, factor pairs in
+           the expression display, implicit products after a group, shortcuts.
+           ====================================================================== */
+        const lcmV8=(a,b)=>a&&b?Math.abs(a*b)/gcd(a,b):Math.max(a,b);
+        const srV8=d=>{const r=rational(Number(d.meta.num??d.coeff??1),Number(d.meta.den||1));return rational(String(d.type).startsWith('-')?-r.n:r.n,r.d)};
+        const flipDescV8=d=>({...d,type:String(d.type).startsWith('-')?'+'+d.type.slice(1):'-'+d.type.slice(1)});
+        const powTexV8=(letter,e)=>`${letter}${e>1?`^{${e}}`:''}`;
+        const factorV8={running:false};
+
+        // A factor pair (common factor + container) is shown as a product, not as a sum.
+        V7_META_KEYS.push('factorGroup');
+        const createTileElementBeforeV8=createTileElement;
+        createTileElement=function(type,x,y,coeff,parentNode,forceId,meta){const tile=createTileElementBeforeV8.apply(this,arguments);if(meta&&meta.factorGroup)tile.dataset.factorGroup=meta.factorGroup;return tile};
+        const getStateSnapshotBeforeV8=getStateSnapshot;
+        getStateSnapshot=function(){const s=JSON.parse(getStateSnapshotBeforeV8());s.parens.forEach(d=>{const el=container.querySelector(`.parenthesis[data-id="${d.id}"]`);if(el&&el.dataset.factorGroup)d.factorGroup=el.dataset.factorGroup});return JSON.stringify(s)};
+        const loadStateBeforeV8=loadState;
+        loadState=function(str){
+            loadStateBeforeV8(str);if(!str)return;
+            try{const st=JSON.parse(str);
+                st.tiles.forEach(d=>{if(d.factorGroup){const el=container.querySelector(`.algebra-tile[data-id="${d.id}"]`);if(el)el.dataset.factorGroup=d.factorGroup}});
+                (st.parens||[]).forEach(d=>{if(d.factorGroup){const el=container.querySelector(`.parenthesis[data-id="${d.id}"]`);if(el)el.dataset.factorGroup=d.factorGroup}});
+                updateEquation();
+            }catch(_){}
+        };
+        sumTexV7=function(items){
+            let out='';const used=new Set();
+            const push=s=>{out+=!out?(s[0]==='+'?s.slice(1):s):(s[0]==='-'?` - ${s.slice(1)}`:` + ${s.slice(1)}`)};
+            items.forEach(el=>{
+                if(used.has(el))return;
+                const fg=el.dataset?.factorGroup;let s=null;
+                if(fg){
+                    const isP=el.classList.contains('parenthesis'),mate=items.find(o=>o!==el&&!used.has(o)&&o.dataset?.factorGroup===fg&&o.classList.contains('parenthesis')!==isP);
+                    if(mate){
+                        used.add(el);used.add(mate);
+                        const tile=isP?mate:el,paren=isP?el:mate,t=termTex(tile),body=/^[+-]/.test(t)?t.slice(1):t,neg=(t[0]==='-')!==(parenSignV7(paren)<0);
+                        s=`${neg?'-':'+'}${body==='1'?'':body}${parenTexV7(paren)}`;
+                    }
+                }
+                if(s===null){used.add(el);s=el.classList.contains('algebra-tile')?termTex(el):`${parenSignV7(el)<0?'-':'+'}${parenTexV7(el)}`}
+                push(s);
+            });
+            return out;
+        };
+
+        // ---------- Factor analysis: coefficients first, then the variables ----------
+        function buildDescV8(r,vars,colorOf,fmt){
+            r=rational(r.n,r.d);const neg=r.n<0,ar=rational(Math.abs(r.n),r.d),format=ar.d===1?'integer':(fmt==='decimal'?'decimal':'fraction');
+            if(!vars.length)return {type:neg?'-n':'+n',coeff:ar.n,meta:{kind:'number',num:ar.n,den:ar.d,format,color:'#f97316',shape:'rational-tile',variables:[],factorParts:[]}};
+            const parts=vars.map(v=>({letter:v.letter,color:colorOf(v.letter),count:v.exponent}));
+            if(vars.length===1){const v=vars[0];return {type:`${neg?'-':'+'}v_${v.letter}_${v.exponent}`,coeff:ar.n,meta:{kind:'variable',letter:v.letter,exponent:v.exponent,num:ar.n,den:ar.d,format,color:parts[0].color,shape:'tile-variable',variables:vars,factorParts:parts}}}
+            return {type:neg?'-product':'+product',coeff:ar.n,meta:{kind:'product',num:ar.n,den:ar.d,format,color:parts[0].color,shape:'product-tile',variables:vars,factorParts:parts}};
+        }
+        function analyzeFactorV8(descs){
+            const terms=descs.map(d=>{const s=srV8(d),vars={};variablesFromTile(shimV8(d)).forEach(v=>{vars[v.letter]=(vars[v.letter]||0)+Number(v.exponent||1)});return {d,s,abs:rational(Math.abs(s.n),s.d),neg:s.n<0,vars}});
+            let gn=0,ld=1;terms.forEach(t=>{gn=gcd(gn,t.abs.n);ld=lcmV8(ld,t.abs.d)});
+            const gcfCoef=rational(gn,ld),letters=Array.from(new Set(terms.flatMap(t=>Object.keys(t.vars)))).sort();
+            const rows=letters.map(l=>{const exps=terms.map(t=>t.vars[l]||0);return {letter:l,exps,common:exps.every(e=>e>0),min:Math.min(...exps)}});
+            const common=rows.filter(r=>r.common).map(r=>({letter:r.letter,exponent:r.min})),coefIsOne=gcfCoef.n===1&&gcfCoef.d===1;
+            const negLead=terms[0].neg,factorable=!coefIsOne||common.length>0||negLead,sgn=negLead?-1:1,fmt=descs.some(d=>d.meta.format==='decimal')?'decimal':'fraction';
+            const colorOf=letter=>{for(const d of descs){const p=factorPartsFromTile(shimV8(d)).find(x=>x.letter===letter);if(p)return colorValue(p.color)}return '#8b5cf6'};
+            const out={terms,gcfCoef,rows,common,coefIsOne,factorable,negLead,sgn,fmt,colorOf};
+            if(!factorable)out.quotients=descs;
+            if(factorable){
+                out.gcf=buildDescV8(rational(sgn*gcfCoef.n,gcfCoef.d),common,colorOf,fmt);
+                out.quotients=terms.map(t=>{const q=rational(t.s.n*gcfCoef.d*sgn,t.s.d*gcfCoef.n),vars=[];Object.keys(t.vars).sort().forEach(l=>{const e=t.vars[l]-(common.find(c=>c.letter===l)?.exponent||0);if(e>0)vars.push({letter:l,exponent:e})});return buildDescV8(q,vars,colorOf,fmt)});
+            }
+            return out;
+        }
+
+        // ---------- Which terms were chosen? ----------
+        function collectFactorTermsV8(){
+            const live=t=>t.isConnected&&!t.classList.contains('annihilate'),selT=selectedTilesV7().filter(live),selP=selectedParensV7();
+            if(selT.length>=2){
+                if(new Set(selT.map(t=>t.parentElement)).size>1)return {error:'Select terms that sit in the same place: all on the board or all inside the same container.'};
+                return {terms:selT};
+            }
+            if(selT.length===1&&!selP.length)return {error:'Select at least two terms: factoring needs a sum of terms.'};
+            if(selP.length===1)return {paren:selP[0]};
+            if(selP.length>1)return {error:'Select a single container to factor, or select its terms.'};
+            const top=eqItemsV7(container),tiles=top.filter(e=>e.classList.contains('algebra-tile')),parens=top.filter(e=>e.classList.contains('parenthesis'));
+            if(tiles.length>=2&&!parens.length)return {terms:tiles};
+            if(parens.length===1&&!tiles.length)return {paren:parens[0]};
+            return {error:'Select the terms of a sum (two or more tiles) or click a container header, then press the factor button.'};
+        }
+
+        // ---------- Layout helpers ----------
+        function areaV8(){const board=container.getBoundingClientRect(),m=distributionPanelMetricsV6(),left=Math.max(12,m.left-board.left+m.width+24),right=container.clientWidth-16;return {left,right,width:Math.max(180,right-left)}}
+        function topAncestorV8(el){let cur=el;while(cur.parentElement&&cur.parentElement!==container){const p=cur.parentElement.closest('.parenthesis');if(!p)break;cur=p}return cur}
+        function layoutRowsV8(nodes,top){
+            const a=areaV8(),gap=18,rows=[];let cur={items:[],w:0,h:0};
+            nodes.forEach(el=>{const w=el.offsetWidth||80,h=el.offsetHeight||80,add=(cur.items.length?gap:0)+w;if(cur.items.length&&cur.w+add>a.width){rows.push(cur);cur={items:[],w:0,h:0}}cur.w+=add;cur.h=Math.max(cur.h,h);cur.items.push({el,w,h})});rows.push(cur);
+            let y=top,minX=1e9,maxX=0;
+            rows.forEach(row=>{let x=a.left+Math.max(0,(a.width-row.w)/2);row.items.forEach(({el,w,h})=>{el.classList.add('arranging');el.style.left=`${x}px`;el.style.top=`${y+(row.h-h)/2}px`;minX=Math.min(minX,x);maxX=Math.max(maxX,x+w);x+=w+gap;setTimeout(()=>el.classList.remove('arranging'),700)});y+=row.h+gap});
+            return {minX,maxX,top,bottom:y-gap};
+        }
+        // A factor pair = common-factor tile + container, linked by data-factor-group.
+        function makeShellV8(parent,gcf,gid){
+            const nested=parent!==container,paren=addParenthesisRaw('+',0,0,null,nested?{parent}:{});paren.dataset.factorGroup=gid;paren.classList.add('fv8-appear');
+            const tile=createTileElement(gcf.type,0,0,gcf.coeff,parent,null,{...gcf.meta,factorGroup:gid});tile.classList.add('product-preview');
+            return {tile,paren};
+        }
+        function addQuotientV8(paren,q,i){const t=createTileElement(q.type,9000+i*1000,24,q.coeff,contentOfV7(paren),null,q.meta);t.dataset.ord=String(i);t.classList.add('product-preview');return t}
+        function placeShellV8(shell,x,y){
+            const tw=shell.tile.offsetWidth||80,th=shell.tile.offsetHeight||80,ph=shell.paren.offsetHeight||160;
+            shell.paren.style.left=`${x+tw+18}px`;shell.paren.style.top=`${y}px`;shell.tile.style.left=`${x}px`;shell.tile.style.top=`${y+14+(ph-th)/2}px`;
+        }
+        // Floating chips used by the animations.
+        const chipsV8=[];
+        function chipV8(tex,cx,cy,cls=''){const c=document.createElement('div');c.className=`fv8-chip ${cls}`;c.style.left=`${cx}px`;c.style.top=`${cy}px`;c.innerHTML=`\\(${tex}\\)`;document.body.appendChild(c);chipsV8.push(c);if(window.MathJax?.typesetPromise)MathJax.typesetPromise([c]).catch(()=>{});c.getBoundingClientRect();requestAnimationFrame(()=>c.classList.add('on'));return c}
+        const moveChipV8=(c,x,y,ms=800)=>{c.style.left=`${x}px`;c.style.top=`${y}px`;return waitV7(ms)};
+        const dropChipsV8=()=>{chipsV8.splice(0).forEach(c=>c.remove())};
+        function createFactorPanelV8(total){
+            document.querySelectorAll('.distribution-sequence-panel').forEach(n=>n.remove());
+            const m=distributionPanelMetricsV6(),panel=document.createElement('section');
+            panel.className='distribution-sequence-panel';panel.setAttribute('aria-label','Factoring steps');
+            panel.style.setProperty('--distribution-panel-left',`${m.left}px`);panel.style.setProperty('--distribution-panel-top',`${m.top}px`);panel.style.setProperty('--distribution-panel-width',`${m.width}px`);panel.style.setProperty('--distribution-panel-max-height',`${m.maxHeight}px`);
+            panel.innerHTML=`<div class="distribution-sequence-title"><span>Factoring · Step-by-step</span><span class="distribution-panel-actions"><span id="factor-progress-v8">0 / ${total}</span><button type="button" class="distribution-panel-close" aria-label="Close steps panel" title="Close steps panel">×</button></span></div><div id="factor-steps-v8" class="distribution-steps-list"></div>`;
+            panel.querySelector('.distribution-panel-close').addEventListener('click',()=>{ctlSkipV7();panel.remove()});
+            document.body.appendChild(panel);return panel;
+        }
+        const sameTermV8=(p,d,outer)=>{const a=srV8(p),b=srV8(d),sig=x=>variablesFromTile(shimV8(x)).map(v=>`${v.letter}^${v.exponent}`).sort().join('*');return a.n===b.n*outer&&a.d===b.d&&sig(p)===sig(d)};
+
+        // ---------- The factoring lesson (V9: GCF + every factoring case, step by step) ----------
+        function descToTermV9(d){const v={};variablesFromTile(shimV8(d)).forEach(x=>{v[x.letter]=(v[x.letter]||0)+Number(x.exponent||1)});return {c:srV8(d),v}}
+        function termToDescV9(t,colorOf,fmt){const vars=Object.keys(t.v).filter(l=>t.v[l]>0).sort().map(l=>({letter:l,exponent:t.v[l]}));return buildDescV8(t.c,vars,colorOf,fmt)}
+        const isOneDescV9=d=>!d||(d.meta.kind==='number'&&String(d.type)[0]==='+'&&Number(d.meta.num)===1&&Number(d.meta.den||1)===1);
+        const leadPrefixV9=d=>{if(isOneDescV9(d))return '';const t=texV8(d);return t==='-1'?'-':t};
+        function createStepPanelV9(title,total,pid,label){
+            document.querySelectorAll('.distribution-sequence-panel').forEach(n=>n.remove());
+            const m=distributionPanelMetricsV6(),panel=document.createElement('section');
+            panel.className='distribution-sequence-panel';panel.setAttribute('aria-label',label||title);
+            panel.style.setProperty('--distribution-panel-left',`${m.left}px`);panel.style.setProperty('--distribution-panel-top',`${m.top}px`);panel.style.setProperty('--distribution-panel-width',`${m.width}px`);panel.style.setProperty('--distribution-panel-max-height',`${m.maxHeight}px`);
+            panel.innerHTML=`<div class="distribution-sequence-title"><span>${title} · Step-by-step</span><span class="distribution-panel-actions"><span id="${pid}-progress">0 / ${total}</span><button type="button" class="distribution-panel-close" aria-label="Close steps panel" title="Close steps panel">×</button></span></div><div id="${pid}-steps" class="distribution-steps-list"></div>`;
+            panel.querySelector('.distribution-panel-close').addEventListener('click',()=>{ctlSkipV7();panel.remove()});
+            document.body.appendChild(panel);return panel;
+        }
+        async function runFactorV8(){
+            if(factorV8.running||distributionLockedV3||gridV7.active||likeV9.running||document.body.classList.contains('splash-open'))return;
+            if(operationMode!=='addition'){toastV7('Factoring is available in Addition & Subtraction mode.',true);return}
+            const pick=collectFactorTermsV8();if(pick.error){toastV7(pick.error,true);return}
+            const snapshot=getStateSnapshot();let mutated=false,paren=pick.paren||null,terms=pick.terms||[];
+            if(paren){
+                if(contentOfV7(paren).querySelector(':scope > .parenthesis')){saveState();mutated=true;flattenInsideV7(paren);toastV7('Nested groupings were simplified (signs applied) before factoring.')}
+                terms=directTilesV7(contentOfV7(paren));
+            }else terms=terms.slice();
+            if(terms.length<2){if(mutated){historyStack.pop();loadState(snapshot)}toastV7('Factoring needs a sum: select at least two terms.',true);return}
+            // Standard form: highest degree first.
+            const positional=terms.slice().sort(eqSortV7);
+            terms=terms.slice().sort((a,b)=>cmpMonoV7(variablesFromTile(a),variablesFromTile(b)));
+            const reordered=terms.some((t,i)=>t!==positional[i]);
+            const descs=terms.map(descV7),an=analyzeFactorV8(descs),outer=paren?parenSignV7(paren):1,hasGcf=an.factorable,cfmt=an.fmt==='decimal'?'decimal':'fraction';
+            const gcfFinal=hasGcf?(outer<0?flipDescV8(an.gcf):an.gcf):(outer<0?buildDescV8(rational(-1,1),[],an.colorOf,an.fmt):null);
+            const leadPrefix=leadPrefixV9(gcfFinal),P0=(hasGcf?an.quotients:descs).map(descToTermV9);
+            const plan2=planFactorV9(P0,cfmt,leadPrefix);if(!plan2.ok){plan2.steps=[];plan2.factorable=false}
+            const p2=plan2.steps.length,factorable=hasGcf||plan2.factorable;
+            const btn=document.getElementById('factor-btn');
+            factorV8.running=true;beginRunV7();btn.disabled=true;
+            terms.forEach(t=>t.classList.remove('selected'));paren?.classList.remove('paren-selected');
+            const total=factorable?1+(hasGcf?3+terms.length+1:0)+p2+(p2?1:0)+1:1;
+            setDistributionLockV3(true);const lockNote=document.querySelector('.distribution-locked-note');if(lockNote)lockNote.textContent='Factoring in progress — the workspace is temporarily locked';
+            const panel=createStepPanelV9('Factoring',total,'factor','Factoring steps'),progress=panel.querySelector('#factor-progress'),list=panel.querySelector('#factor-steps');
+            panel.insertBefore(buildCtlRowV7(),list);
+            let n=0;
+            const begin=async()=>{await gateV7(n===0);n++;if(progress?.isConnected)progress.textContent=`${n} / ${total}`};
+            const card=(title,html,cls='')=>{if(!list?.isConnected)return;const c=document.createElement('div');c.className=`distribution-sequence-step fv8-card ${cls}`;c.innerHTML=`<div class="fv8-title">${n}. ${title}</div><div class="fv8-body">${html}</div>`;list.appendChild(c);if(window.MathJax?.typesetPromise)MathJax.typesetPromise([c]).catch(()=>{});list.scrollTop=list.scrollHeight};
+            const fly=()=>stepCtlV7.interact&&!stepCtlV7.skip;
+            const coefTexOf=t=>ratTex(t.abs,cfmt),coefTex=ratTex(an.gcfCoef,cfmt);
+            const varTex=an.common.map(c=>powTexV8(c.letter,c.exponent)).join(''),exprTex=joinTerms(terms),origTex=paren?`${outer<0?'-':''}\\left(${exprTex}\\right)`:exprTex;
+            let bench=null,fin=null,shell=null;
+            try{
+                // ---- 1. Is it factorable? (strategy: GCF first, then look at the number of terms)
+                await begin();terms.forEach(t=>t.classList.add('step-active'));
+                if(!factorable){
+                    terms.forEach(t=>{t.classList.remove('step-active');t.classList.add('fv8-shake')});playSound('disappear');
+                    const sorted=pSortV9(P0);
+                    card('Is it factorable?',`\\(${exprTex}\\)<br><span class="fv8-no">Not factorable ✗</span><span class="fv8-note"><b>1. Common factor:</b> the coefficients share no divisor greater than 1 (\\(\\gcd=${coefTex}\\)) and ${an.rows.length?'no variable appears in every term':'there are no variables'}.<br><b>2. Number of terms (${terms.length}):</b> ${primeReasonV9(sorted,cfmt)}</span>`,'is-bad');
+                    await waitV7(1200);terms.forEach(t=>t.classList.remove('fv8-shake'));
+                    toastV7('Not factorable: no common factor and no factoring pattern applies.',true);return;
+                }
+                const toolbox=[];if(hasGcf)toolbox.push('common factor');plan2.methods.forEach(m=>{if(!toolbox.includes(m.toLowerCase()))toolbox.push(m.toLowerCase())});
+                card('Is it factorable?',`\\(${exprTex}\\)<br><span class="fv8-ok">Factorable ✓</span><span class="fv8-note"><b>Strategy:</b> 1) look for a common factor (also take out a negative sign if the first term is negative); 2) count the terms and choose the method; 3) check every new factor — keep factoring until each factor is prime; 4) multiply back to check.</span><span class="fv8-note"><b>This expression will use:</b> ${toolbox.join(' → ')}.${reordered?' The terms are first rearranged in descending order of degree (standard form).':''}</span>`,'is-good');
+                playSound('expression');await waitV7(900);terms.forEach(t=>t.classList.remove('step-active'));
+                // ---- Move the work to the free area (undo returns to the original board)
+                if(!mutated){saveState();mutated=true}
+                const parent=paren?paren.parentElement:terms[0].parentElement,nestedTarget=parent!==container,replaceNodes=paren?[paren]:terms;
+                let ox=1e9,oy=1e9;replaceNodes.forEach(e=>{ox=Math.min(ox,parseFloat(e.style.left)||0);oy=Math.min(oy,parseFloat(e.style.top)||0)});
+                const topY=Math.max(110,Math.round(container.clientHeight*.2));
+                const anchors=nestedTarget?[topAncestorV8(parent.closest('.parenthesis'))]:(paren?[paren]:terms),box=layoutRowsV8(anchors,topY),area=areaV8();
+                const chipRoom=hasGcf?an.rows.length*30+70:20,stageTop=Math.max(box.bottom+30,Math.min(container.clientHeight-175,box.bottom+chipRoom+20));
+                await waitV7(700);
+                const cr=()=>container.getBoundingClientRect(),gx=()=>cr().left+area.left+area.width/2,gy=()=>cr().top+stageTop-34,rects=()=>terms.map(t=>t.getBoundingClientRect());
+                let finalTile=null,finalParens=[];
+                if(hasGcf){
+                    // ---- 2. Coefficients
+                    await begin();
+                    const ints=an.terms.every(t=>t.abs.d===1),list2=an.terms.map(coefTexOf);
+                    let coefChip=null,varChip=null;
+                    card('Common factor: look at the coefficients',ints?`Numbers in front of each term (signs ignored): \\(${list2.join(',\\ ')}\\)<br>\\(\\gcd(${list2.join(',\\ ')})=${coefTex}\\)`:`Numbers in front of each term (signs ignored): \\(${list2.join(',\\ ')}\\)<br>GCF = gcd of numerators ÷ lcm of denominators: \\(\\dfrac{\\gcd(${an.terms.map(t=>t.abs.n).join(',\\ ')})}{\\operatorname{lcm}(${an.terms.map(t=>t.abs.d).join(',\\ ')})}=${coefTex}\\)`+(an.coefIsOne?'<span class="fv8-note">No number greater than 1 divides every coefficient, so no number is taken out.</span>':''));
+                    if(fly()){
+                        terms.forEach(t=>t.classList.add('step-active'));
+                        const chips=rects().map((r,i)=>chipV8(list2[i],r.left+r.width/2,r.top-26));
+                        await waitV7(900);await Promise.all(chips.map(c=>moveChipV8(c,gx()-70,gy(),800)));
+                        chips.forEach(c=>c.classList.add('fade'));await waitV7(300);chips.forEach(c=>c.remove());
+                        coefChip=chipV8(`\\text{GCF } ${coefTex}`,gx()-70,gy(),'gcf good');await waitV7(600);
+                        terms.forEach(t=>t.classList.remove('step-active'));
+                    }else await waitV7(300);
+                    // ---- 3. Variables (lowest exponent shared by every term)
+                    await begin();
+                    const rowLines=an.rows.map(r=>r.common?`\\(${r.letter}\\): exponents \\(${r.exps.join(',\\ ')}\\) → lowest is \\(${r.min}\\) → \\(${powTexV8(r.letter,r.min)}\\)`:`\\(${r.letter}\\): exponents \\(${r.exps.join(',\\ ')}\\) → <span class="fv8-no">missing in some terms</span>`);
+                    card('Common factor: look at the variables',(rowLines.length?rowLines.join('<br>'):'None of the terms has a variable.')+`<span class="fv8-note">Only a variable present in <b>every</b> term can be taken out, using its lowest exponent. Variable part of the GCF: \\(${varTex||'1'}\\)</span>`);
+                    if(fly()&&an.rows.length){
+                        const rs=rects(),all=[];
+                        an.rows.forEach((row,j)=>rs.forEach((r,i)=>{const e=row.exps[i];all.push({chip:chipV8(e>0?powTexV8(row.letter,e):'\\text{—}',r.left+r.width/2,r.bottom+26+j*30,e>0?'':'miss'),row,e})}));
+                        await waitV7(1000);
+                        all.forEach(({chip,row,e})=>{if(row.common){chip.classList.add('good');if(e===row.min)chip.classList.add('min')}else if(e>0)chip.classList.add('bad')});
+                        await waitV7(1000);
+                        const merging=all.filter(a=>a.row.common);all.filter(a=>!a.row.common).forEach(a=>a.chip.classList.add('fade'));
+                        await Promise.all(merging.map(a=>moveChipV8(a.chip,gx()+70,gy(),800)));
+                        all.forEach(a=>a.chip.classList.add('fade'));await waitV7(300);all.forEach(a=>a.chip.remove());
+                        if(an.common.length){varChip=chipV8(`\\text{GCF } ${varTex}`,gx()+70,gy(),'gcf good');await waitV7(600)}
+                    }else await waitV7(300);
+                    // ---- 4. Build the common factor
+                    await begin();
+                    const gcf=an.gcf,gid=`factor-stage-${Date.now()}`;
+                    card('Common factor (GCF)',`Number × variables: \\(${an.coefIsOne?'1':coefTex}\\cdot ${varTex||'1'}=${texV8({...gcf,type:'+'+gcf.type.slice(1)})}\\)`+(an.negLead?'<span class="fv8-note">The first term is negative, so the minus sign is also taken out: the common factor is <b>negative</b>'+(an.coefIsOne&&!an.common.length?' (just −1)':'')+'.</span>':''),'is-good');
+                    shell=makeShellV8(container,gcf,gid);placeShellV8(shell,area.left+14,stageTop);
+                    const tr0=shell.tile.getBoundingClientRect(),targets=[coefChip,varChip].filter(Boolean);
+                    await Promise.all(targets.map(c=>moveChipV8(c,tr0.left+tr0.width/2,tr0.top+tr0.height/2,800)));
+                    targets.forEach(c=>c.classList.add('fade'));shell.tile.classList.add('is-revealed');shell.paren.classList.add('on');playSound('multiply');await waitV7(650);
+                    dropChipsV8();shell.tile.classList.remove('product-preview','is-revealed');shell.paren.classList.remove('fv8-appear','on');
+                    // ---- 5. Divide every term by the GCF
+                    for(let i=0;i<terms.length;i++){
+                        await begin();const q=an.quotients[i],te=terms[i],t=an.terms[i];te.classList.add('step-active');
+                        const made=addQuotientV8(shell.paren,q,i);relayoutRowV7(shell.paren);
+                        const bits=[];if(!an.coefIsOne)bits.push(`\\(${coefTexOf(t)}\\div ${coefTex}=${ratTex(rational(t.abs.n*an.gcfCoef.d,t.abs.d*an.gcfCoef.n),cfmt)}\\)`);
+                        an.common.forEach(c=>bits.push(`\\(${powTexV8(c.letter,t.vars[c.letter])}\\div ${powTexV8(c.letter,c.exponent)}=${t.vars[c.letter]-c.exponent>0?powTexV8(c.letter,t.vars[c.letter]-c.exponent):'1'}\\)`));
+                        card(`Divide term ${i+1} by the GCF`,`\\(${texV8(descs[i])}\\div ${wrapNegV8(texV8(gcf))}=${texV8(q)}\\)`+(bits.length?`<span class="fv8-note">${bits.join(' · ')}${an.negLead?' · sign: '+(t.neg?'−÷− = +':'+÷− = −'):''}</span>`:''));
+                        if(fly()){
+                            const ca=cloneForFlightV7(te),cb=cloneForFlightV7(shell.tile),r=made.getBoundingClientRect(),c0=cr(),cx=r.left+r.width/2-c0.left,cy=r.top+r.height/2-c0.top;
+                            await Promise.all([flyV7(ca,cx-ca.offsetWidth-6,cy-ca.offsetHeight/2,750),flyV7(cb,cx+6,cy-cb.offsetHeight/2,750)]);
+                            const sign=chipV8('\\div',r.left+r.width/2,r.top-18,'gcf');
+                            await Promise.all([flyV7(ca,cx-ca.offsetWidth/2,cy-ca.offsetHeight/2,320),flyV7(cb,cx-cb.offsetWidth/2,cy-cb.offsetHeight/2,320)]);
+                            ca.classList.add('step-merge');cb.classList.add('step-merge');made.classList.add('is-revealed');ca.style.opacity='0';cb.style.opacity='0';sign.classList.add('fade');playSound('multiply');await waitV7(620);ca.remove();cb.remove();dropChipsV8();
+                        }else{made.classList.add('is-revealed');playSound('multiply');await waitV7(550)}
+                        made.classList.remove('product-preview','is-revealed');te.classList.remove('step-active');
+                    }
+                    // ---- 6. Write the common factor outside the parentheses
+                    await begin();
+                    const quots=an.quotients,quotSum=sumTexDescsV8(quots),gcfT=texV8(gcfFinal),lead=isOneDescV9(gcfFinal)?'':(gcfT==='-1'?'-':gcfT),finalTex=`${lead}\\left(${quotSum}\\right)`;
+                    card(p2?'Write the common factor outside':'Write the factored form',`\\(${origTex}=${finalTex}\\)`+(outer<0?'<span class="fv8-note">The minus sign in front of the container is multiplied into the common factor.</span>':'')+(p2?`<span class="fv8-note">The parentheses may still be factorable — keep going.</span>`:'<span class="fv8-note">The common factor goes outside; the quotients stay inside the parentheses.</span>'),'is-good');
+                    replaceNodes.forEach(e=>e.classList.add('annihilate'));playSound('disappear');await waitV7(420);replaceNodes.forEach(e=>e.remove());
+                    const gid2=`factor-${Date.now()}`;fin=makeShellV8(parent,gcfFinal,gid2);
+                    quots.forEach((q,i)=>addQuotientV8(fin.paren,q,i));relayoutRowV7(fin.paren);
+                    const tw=fin.tile.offsetWidth||80,pw=fin.paren.offsetWidth||220,compW=tw+18+pw;
+                    if(isOneDescV9(gcfFinal))fin.tile.style.display='none';
+                    if(!nestedTarget)placeShellV8(fin,Math.max(area.left,(box.minX+box.maxX)/2-compW/2),box.top);
+                    else{placeShellV8(fin,ox,oy);fitParenToChildrenV7(parent.closest('.parenthesis'))}
+                    requestAnimationFrame(()=>{fin.tile.classList.add('is-revealed');fin.paren.classList.add('on');Array.from(contentOfV7(fin.paren).children).forEach(t=>t.classList.add('is-revealed'))});
+                    shell.tile.classList.add('annihilate');shell.paren.classList.add('annihilate');playSound('multiply');await waitV7(800);
+                    shell.tile.remove();shell.paren.remove();
+                    fin.tile.classList.remove('product-preview','is-revealed');fin.paren.classList.remove('fv8-appear','on');Array.from(contentOfV7(fin.paren).children).forEach(t=>t.classList.remove('product-preview','is-revealed'));
+                    updateEquation();finalTile=fin.tile;finalParens=[fin.paren];
+                }
+                // ---- Keep factoring the parentheses (all the other factoring cases)
+                let chainPolys=[P0];
+                if(p2){
+                    const benchTop=Math.min(container.clientHeight-130,Math.max(stageTop,hasGcf?box.top+215:box.bottom+40));
+                    bench=document.createElement('div');bench.className='fv9-bench';bench.style.left=`${area.left}px`;bench.style.top=`${benchTop}px`;bench.style.width=`${Math.max(260,area.width-6)}px`;
+                    bench.innerHTML='<div class="fv9-bench-title"></div><div class="fv9-bench-expr"></div>';container.appendChild(bench);
+                    const setBench=async(title,tex,good=false)=>{const t=bench.querySelector('.fv9-bench-title'),e=bench.querySelector('.fv9-bench-expr');bench.classList.add('dim');if(!stepCtlV7.skip)await waitV7(220);t.textContent=title;e.innerHTML=`\\(\\displaystyle ${tex}\\)`;if(window.MathJax?.typesetPromise)await MathJax.typesetPromise([e]).catch(()=>{});bench.classList.toggle('good',good);bench.classList.remove('dim')};
+                    const focus=hasGcf?[finalParens[0]]:terms;
+                    for(let i=0;i<p2;i++){
+                        const s=plan2.steps[i];await begin();
+                        if(i===0||s.method)focus.forEach(e=>e.isConnected&&e.classList.add('step-active'));
+                        card(s.title,s.html,s.note?'':(s.last?'is-good':''));
+                        await setBench(s.title,s.frame,s.last);playSound(s.last?'multiply':'expression');await waitV7(fly()?1100:250);
+                        focus.forEach(e=>e.classList.remove('step-active'));
+                    }
+                    // ---- Write the complete factored form with tiles
+                    await begin();
+                    const polys=plan2.polys.slice().sort((a,b)=>Math.max(...a.map(t=>vDegV9(t.v)))-Math.max(...b.map(t=>vDegV9(t.v)))||pTexV9(a).localeCompare(pTexV9(b)));
+                    let leadT=gcfFinal?descToTermV9(gcfFinal):mkTermV9(1,1);plan2.monos.forEach(m=>{leadT=tMulV9(leadT,m)});
+                    const leadDesc=termToDescV9(leadT,an.colorOf,an.fmt),hasLead=!isOneDescV9(leadDesc);
+                    const items=polys.map(p=>({kind:'poly',p})),chainTex=`${hasLead?(texV8(leadDesc)==='-1'?'-':texV8(leadDesc)):''}${itemTexV9(items,cfmt)}`;
+                    card('Write the complete factored form',`\\(${origTex}=${chainTex}\\)<span class="fv8-note">Every factor in parentheses is now prime, so the expression is <b>completely factored</b>.</span>`,'is-good');
+                    await setBench('Completely factored',chainTex,true);
+                    const old=fin?[fin.tile,fin.paren]:replaceNodes;old.forEach(e=>e.classList.add('annihilate'));playSound('disappear');await waitV7(420);old.forEach(e=>e.remove());
+                    const gid3=`factor-${Date.now()}c`,nodes=[];let leadTile=null;
+                    if(hasLead){leadTile=createTileElement(leadDesc.type,0,0,leadDesc.coeff,parent,null,{...leadDesc.meta,factorGroup:gid3});leadTile.classList.add('product-preview');nodes.push(leadTile)}
+                    const parens=polys.map(p=>{const pr=addParenthesisRaw('+',0,0,null,nestedTarget?{parent}:{});pr.dataset.factorGroup=gid3;pr.classList.add('fv8-appear');p.forEach((t,i)=>{const d=termToDescV9(t,an.colorOf,an.fmt),tl=createTileElement(d.type,9000+i*1000,24,d.coeff,contentOfV7(pr),null,d.meta);tl.dataset.ord=String(i);tl.classList.add('product-preview')});relayoutRowV7(pr);nodes.push(pr);return pr});
+                    if(!nestedTarget){layoutRowsV8(nodes,box.top,false);if(leadTile)leadTile.style.top=`${(parseFloat(leadTile.style.top)||0)+14}px`}
+                    else{let x=ox;nodes.forEach(nd=>{nd.style.left=`${x}px`;nd.style.top=nd===leadTile?`${oy+14+((parens[0]?.offsetHeight||160)-(nd.offsetHeight||80))/2}px`:`${oy}px`;x+=(nd.offsetWidth||80)+18});fitParenToChildrenV7(parent.closest('.parenthesis'))}
+                    requestAnimationFrame(()=>{leadTile?.classList.add('is-revealed');parens.forEach(pr=>{pr.classList.add('on');Array.from(contentOfV7(pr).children).forEach(t=>t.classList.add('is-revealed'))})});
+                    playSound('multiply');await waitV7(850);
+                    leadTile?.classList.remove('product-preview','is-revealed');parens.forEach(pr=>{pr.classList.remove('fv8-appear','on');Array.from(contentOfV7(pr).children).forEach(t=>t.classList.remove('product-preview','is-revealed'))});
+                    updateEquation();finalTile=leadTile;finalParens=parens;chainPolys=polys;
+                    if(bench){bench.classList.add('gone');setTimeout(()=>bench?.remove(),500)}
+                }
+                // ---- Check by multiplying
+                await begin();
+                const chainItems=chainPolys.map(p=>({kind:'poly',p}));
+                let leadForCheck=gcfFinal?descToTermV9(gcfFinal):mkTermV9(1,1);if(p2)plan2.monos.forEach(m=>{leadForCheck=tMulV9(leadForCheck,m)});
+                const expanded=pSortV9(chainItems.reduce((acc,x)=>pMulV9(acc,x.p),[leadForCheck])),origP=descs.map(descToTermV9).map(t=>outer<0?tNegV9(t):t),okAll=pEqV9(expanded,origP);
+                const leadShow=(()=>{const d=termToDescV9(leadForCheck,an.colorOf,an.fmt);return isOneDescV9(d)?'':(texV8(d)==='-1'?'-':texV8(d))})(),chainShow=p2?`${leadShow}${itemTexV9(chainItems.map(x=>({kind:'poly',p:x.p})),cfmt)}`:`${leadShow}\\left(${pTexV9(P0,cfmt)}\\right)`;
+                card('Check by multiplying',`\\(${chainShow}=${pTexV9(expanded,cfmt)}\\)<br>${okAll?'<span class="fv8-ok">✓ It equals the original expression</span>':'<span class="fv8-no">✗ It does not match the original</span>'}`,okAll?'is-good':'is-bad');
+                if(finalTile&&finalParens.length===1&&!p2){const svg=drawDistributionArrows(finalTile,directTilesV7(contentOfV7(finalParens[0])));svg.querySelectorAll('.distribution-arrow').forEach(p=>{p.style.animationDuration=stepCtlV7.skip?'.01s':'.9s';p.style.animationDelay='0s'});await waitV7(1100);svg.remove()}
+                else if(finalParens.length){for(const pr of finalParens){pr.classList.add('step-active');await waitV7(fly()?500:80)}finalParens.forEach(pr=>pr.classList.remove('step-active'));await waitV7(200)}
+                playSound('expression');
+            }catch(err){
+                console.error(err);
+                if(mutated){historyStack.pop();loadState(snapshot)}
+                toastV7('The factoring steps stopped unexpectedly. The board was restored.',true);
+            }finally{
+                dropChipsV8();bench?.remove();document.querySelectorAll('.step-clone').forEach(c=>c.remove());document.querySelectorAll('.step-active').forEach(c=>c.classList.remove('step-active'));document.querySelectorAll('.fv8-shake').forEach(c=>c.classList.remove('fv8-shake'));document.querySelectorAll('.distribution-arrows').forEach(s=>s.remove());
+                setWaitingV7(false);factorV8.running=false;btn.disabled=false;releaseDistributionLockV3();updateEquation();
+            }
+        }
+        document.getElementById('factor-btn').addEventListener('click',runFactorV8);
+        window.addEventListener('keydown',e=>{
+            if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)||e.target.isContentEditable||e.ctrlKey||e.metaKey||e.altKey)return;
+            if(document.querySelector('.modal-backdrop:not(.hidden)')||document.body.classList.contains('splash-open'))return;
+            if(e.key.toLowerCase()==='f'&&operationMode==='addition')runFactorV8();
+        });
+
+        // Mode tips mention the new tools.
+        const setOperationModeBeforeFactorV8=setOperationMode;
+        setOperationMode=function(mode){
+            setOperationModeBeforeFactorV8(mode);
+            if(mode==='addition'){document.getElementById('dynamic-tip').innerHTML='<b>Tip:</b> Select two or more terms (or click a container header) and press the factor button in the top-right corner to take out their common factor.'}
+            else if(mode==='multiplication'){document.getElementById('dynamic-tip').innerHTML='<b>Multiplication:</b> Use 2y(3x+6) or (a+2b)(3x-y). Double-click a container to distribute it, or press the grid button (top-left) to multiply with a table — it works with a parenthesis and a number or variable outside, or with several parentheses.'}
+        };
+
+        /* ======================================================================
+           V9 LAYER — Like terms (T), Elements of an expression (E), slow
+           combination of like terms after multiplication, factor chains.
+           ====================================================================== */
+        const likeV9={running:false};
+        const LIKE_COLORS_V9=['#a855f7','#f97316','#0ea5e9','#ec4899','#22c55e','#eab308'];
+        const sigOfDescV9=d=>variablesFromTile(shimV8(d)).map(v=>`${v.letter}^${v.exponent}`).sort().join('*');
+        const colorOfPartsV9=parts=>letter=>{const p=(parseFactorParts(parts)||[]).find(x=>x.letter===letter);return colorValue((p&&p.color)||'#8b5cf6')};
+        const varsKeyTexV9=vars=>vars.slice().sort((a,b)=>a.letter.localeCompare(b.letter)).map(v=>`${v.letter}${Number(v.exponent)>1?`^{${v.exponent}}`:''}`).join('');
+        function planLikeV9(descs){
+            const map=new Map();
+            descs.forEach((d,i)=>{const sig=sigOfDescV9(d);if(!map.has(sig))map.set(sig,{sig,idx:[],vars:variablesFromTile(shimV8(d))});map.get(sig).idx.push(i)});
+            const groups=Array.from(map.values()).sort((a,b)=>cmpMonoV7(a.vars,b.vars));
+            return {groups,likeGroups:groups.filter(g=>g.idx.length>1),merges:groups.reduce((s,g)=>s+Math.max(0,g.idx.length-1),0)};
+        }
+        // Sum of two like terms (descriptors) -> descriptor, or null when they cancel.
+        function sumDescV9(a,b){
+            const r=rAddV9(srV8(a),srV8(b));if(r.n===0)return null;
+            const vars=variablesFromTile(shimV8(a)).map(v=>({letter:v.letter,exponent:Number(v.exponent)})),fmt=a.meta.format==='decimal'||b.meta.format==='decimal'?'decimal':'fraction';
+            return buildDescV8(r,vars,colorOfPartsV9(a.meta.factorParts),fmt);
+        }
+        const ruleTextV9=(a,b,s)=>{const x=srV8(a),y=srV8(b);if(!s)return 'Opposite terms cancel: the coefficients add up to 0, so the pair disappears.';return (x.n<0)===(y.n<0)?'Same signs → <b>add</b> the coefficients and keep the sign. The variable part does not change.':'Different signs → <b>subtract</b> the smaller coefficient from the larger one and keep the sign of the larger. The variable part does not change.'};
+        const coefArithV9=(a,b,s)=>{const x=srV8(a),y=srV8(b),f=r=>ratTex(r,'fraction');return `\\(${f(x)}${y.n<0?' - '+f(rational(-y.n,y.d)):' + '+f(y)}=${f(s?srV8(s):rational(0,1))}\\)`};
+        // In-place engine: tiles of the same parent are analysed, like terms are merged tile by tile, the result is ordered.
+        async function combineLikeInPlaceV9(tiles,ui){
+            const parent=tiles[0].parentElement,fly=()=>stepCtlV7.interact&&!stepCtlV7.skip;
+            const info=tiles.map(el=>({el,d:descV7(el)})),plan=planLikeV9(info.map(i=>i.d)),groups=plan.groups.map(g=>({...g,members:g.idx.map(i=>info[i])}));
+            // A. analysis
+            await ui.begin();
+            let ci=0;
+            const likeLines=[],soloLines=[];
+            groups.forEach(g=>{
+                const list=g.members.map(m=>texV8(m.d)),vt=varsKeyTexV9(g.vars);
+                if(g.members.length>1){const col=LIKE_COLORS_V9[ci++%LIKE_COLORS_V9.length];g.color=col;g.members.forEach(m=>{m.el.classList.add('lt-mark');m.el.style.setProperty('--lt',col)});likeLines.push(`<span style="color:${col};font-weight:800">●</span> \\(${list.join(',\\ ')}\\) — ${vt?`same variable part \\(${vt}\\)`:'all are constants (numbers)'}`)}
+                else{g.members[0].el.classList.add('lt-solo');soloLines.push(`\\(${list[0]}\\)`)}
+            });
+            ui.card('Which terms are alike?',`<b>Like terms</b> have exactly the same variable part (the same letters with the same exponents); only the coefficients can differ. Numbers are like terms with each other.<br>${likeLines.length?likeLines.join('<br>'):'<span class="fv8-no">No two terms are alike.</span>'}${soloLines.length?`<span class="fv8-note"><b>Unlike (nothing to combine):</b> ${soloLines.join(', ')}</span>`:''}`,likeLines.length?'is-good':'is-bad');
+            playSound('expression');await waitV7(1100);
+            if(!ui.alive())return null;
+            if(!plan.likeGroups.length){tiles.forEach(t=>{t.classList.remove('lt-mark','lt-solo');t.style.removeProperty('--lt')});return tiles}
+            // B. merge each group
+            const resultEls=[];
+            for(const g of groups){
+                if(g.members.length===1){resultEls.push(g.members[0].el);continue}
+                let accEl=g.members[0].el,accD=g.members[0].d;
+                for(let j=1;j<g.members.length;j++){
+                    await ui.begin();if(!ui.alive())return null;
+                    const b=g.members[j],sum=sumDescV9(accD,b.d),vt=varsKeyTexV9(g.vars);
+                    accEl.classList.add('step-active');b.el.classList.add('step-active');
+                    ui.card(`Combine like terms${vt?` in \\(${vt}\\)`:' (constants)'}`,`\\(${texV8(accD)} + ${wrapNegV8(texV8(b.d))} = ${sum?texV8(sum):'0'}\\)<span class="fv8-note">${ruleTextV9(accD,b.d,sum)}</span><span class="fv8-note">Coefficients: ${coefArithV9(accD,b.d,sum)}${sum&&vt?` → keep \\(${vt}\\)`:''}</span>`,sum?'':'is-good');
+                    const ar=accEl.getBoundingClientRect(),cr=container.getBoundingClientRect();
+                    if(fly()){
+                        const c=cloneForFlightV7(b.el),w=c.offsetWidth,h=c.offsetHeight;b.el.style.opacity='.15';
+                        await flyV7(c,ar.left-cr.left+ar.width/2-w/2,ar.top-cr.top+ar.height/2-h/2,800);
+                        accEl.classList.add('step-merge');c.classList.add('step-merge');playSound(sum?(srV8(accD).n<0!==srV8(b.d).n<0?'subtract':'sum'):'disappear');await waitV7(560);c.remove();
+                    }
+                    const px=parseFloat(accEl.style.left)||0,py=parseFloat(accEl.style.top)||0,grp=accEl.dataset.distributionGroup;
+                    accEl.classList.remove('step-active','step-merge','lt-mark');b.el.remove();
+                    if(sum){
+                        const meta={...sum.meta};if(grp)meta.distributionGroup=grp;
+                        const nt=createTileElement(sum.type,px,py,sum.coeff,parent,null,meta);nt.classList.add('lt-mark','product-preview');nt.style.setProperty('--lt',g.color);accEl.remove();
+                        requestAnimationFrame(()=>nt.classList.add('is-revealed'));await waitV7(fly()?600:120);nt.classList.remove('product-preview','is-revealed');
+                        accEl=nt;accD=sum;
+                    }else{
+                        accEl.classList.add('annihilate');playSound('disappear');await waitV7(fly()?520:100);accEl.remove();accEl=null;accD=null;
+                        // a new running total starts with the next like term, if any
+                        if(j+1<g.members.length){g.members[j+1].el.classList.remove('step-active');accEl=g.members[j+1].el;accD=g.members[j+1].d;j++}
+                    }
+                }
+                if(accEl){accEl.classList.remove('lt-mark','step-active');accEl.style.removeProperty('--lt');resultEls.push(accEl)}
+            }
+            // C. order the result
+            await ui.begin();if(!ui.alive())return null;
+            const sorted=resultEls.filter(e=>e.isConnected).sort(compareTilesV7);
+            sorted.forEach(e=>{e.classList.remove('lt-solo','lt-mark');e.style.removeProperty('--lt');delete e.dataset.ord});
+            if(sorted.length){
+                if(parent===container){let top=1e9;sorted.forEach(e=>{top=Math.min(top,parseFloat(e.style.top)||0)});layoutRowsV8(sorted,Math.max(90,top))}
+                else{arrangeTilesV7(sorted,parent)}
+            }
+            const exprTex=sorted.length?joinTerms(sorted):'0';
+            ui.card('Order the result',`Write the terms from the highest degree to the lowest:<br>\\(${exprTex}\\)<span class="fv8-note">${sorted.length===tiles.length?'':`The ${tiles.length} original terms became ${sorted.length}${sorted.length?'':' (everything cancelled)'}.`}</span>`,'is-good');
+            playSound('expression');await waitV7(fly()?800:150);
+            return sorted;
+        }
+        function collectLikeTermsV9(){
+            const live=t=>t.isConnected&&!t.classList.contains('annihilate'),selT=selectedTilesV7().filter(live),selP=selectedParensV7();
+            if(selT.length>=2){
+                if(new Set(selT.map(t=>t.parentElement)).size>1)return {error:'Select terms that sit in the same place: all on the board or all inside the same container.'};
+                return {tiles:selT.slice().sort(eqSortV7)};
+            }
+            if(selT.length===1&&!selP.length)return {error:'Select two or more terms, then press T.'};
+            if(selP.length===1){const tiles=directTilesV7(contentOfV7(selP[0]));return tiles.length>=2?{tiles}:{error:'The container needs at least two terms.'}}
+            if(selP.length>1)return {error:'Select terms from a single container.'};
+            if(operationMode==='addition'){const top=eqItemsV7(container),tiles=top.filter(e=>e.classList.contains('algebra-tile'));if(tiles.length>=2&&top.length===tiles.length)return {tiles}}
+            return {error:'Select several terms (drag a selection box around them) and press T.'};
+        }
+        async function runLikeTermsV9(){
+            if(likeV9.running||factorV8.running||distributionLockedV3||gridV7.active||document.body.classList.contains('splash-open'))return;
+            const pick=collectLikeTermsV9();if(pick.error){toastV7(pick.error,true);return}
+            const tiles=pick.tiles,plan=planLikeV9(tiles.map(descV7)),total=1+plan.merges+(plan.likeGroups.length?1:0);
+            const snapshot=getStateSnapshot();saveState();likeV9.running=true;beginRunV7();
+            tiles.forEach(t=>t.classList.remove('selected'));selectedParensV7().forEach(p=>p.classList.remove('paren-selected'));
+            setDistributionLockV3(true);const lockNote=document.querySelector('.distribution-locked-note');if(lockNote)lockNote.textContent='Combining like terms — the workspace is temporarily locked';
+            const panel=createStepPanelV9('Like terms',total,'like','Like terms steps'),progress=panel.querySelector('#like-progress'),list=panel.querySelector('#like-steps');
+            panel.insertBefore(buildCtlRowV7(),list);
+            let n=0;
+            const ui={
+                alive:()=>true,
+                begin:async()=>{await gateV7(n===0);n++;if(progress?.isConnected)progress.textContent=`${n} / ${total}`},
+                card:(title,html,cls='')=>{if(!list?.isConnected)return;const c=document.createElement('div');c.className=`distribution-sequence-step fv8-card ${cls}`;c.innerHTML=`<div class="fv8-title">${n}. ${title}</div><div class="fv8-body">${html}</div>`;list.appendChild(c);if(window.MathJax?.typesetPromise)MathJax.typesetPromise([c]).catch(()=>{});list.scrollTop=list.scrollHeight}
+            };
+            try{
+                const res=await combineLikeInPlaceV9(tiles,ui);
+                if(res&&res.length===tiles.length&&!plan.likeGroups.length){historyStack.pop();toastV7('No like terms were found in the selection.',true)}
+            }catch(err){console.error(err);historyStack.pop();loadState(snapshot);toastV7('The like-terms steps stopped unexpectedly. The board was restored.',true)}
+            finally{
+                document.querySelectorAll('.step-clone').forEach(c=>c.remove());document.querySelectorAll('.step-active,.step-merge').forEach(c=>c.classList.remove('step-active','step-merge'));document.querySelectorAll('.lt-mark,.lt-solo').forEach(c=>{c.classList.remove('lt-mark','lt-solo');c.style.removeProperty('--lt')});
+                setWaitingV7(false);likeV9.running=false;releaseDistributionLockV3();updateEquation();
+            }
+        }
+        // After a distribution: combine the like terms of the products, slowly, tile by tile.
+        async function combineAfterDistributionV9(madeList,list,progress){
+            const tiles=madeList.filter(t=>t.isConnected);if(tiles.length<2||!list?.isConnected)return;
+            if(progress?.isConnected)progress.textContent='Like terms';
+            const ui={alive:()=>true,begin:async()=>{await gateV7()},card:(title,html,cls='')=>{if(!list?.isConnected)return;const c=document.createElement('div');c.className=`distribution-sequence-step fv8-card ${cls}`;c.innerHTML=`<div class="fv8-title">${title}</div><div class="fv8-body">${html}</div>`;list.appendChild(c);if(window.MathJax?.typesetPromise)MathJax.typesetPromise([c]).catch(()=>{});list.scrollTop=list.scrollHeight}};
+            try{await combineLikeInPlaceV9(tiles,ui)}finally{tiles.forEach(t=>{t.classList.remove('lt-mark','lt-solo','step-active','step-merge');t.style.removeProperty('--lt')})}
+        }
+        // Grid: the cells' tiles fly into the result area and merge there one pair at a time.
+        async function gridCombineAnimV9(st,all,finalData,addCard,alive){
+            const members=new Map();
+            st.products.forEach((line,r)=>line.forEach((p,c)=>{const tile=st.cells[r][c].querySelector('.algebra-tile'),sig=sigOfDescV9(p.data);if(!members.has(sig))members.set(sig,[]);members.get(sig).push({tile,data:p.data})}));
+            const groups=all.slice().sort((a,b)=>cmpMonoV7(a.vars,b.vars)),fly=()=>stepCtlV7.interact&&!stepCtlV7.skip,slots=new Map();
+            finalData.forEach(d=>{const ph=createTileElement(d.type,0,0,d.coeff,gridResultTiles,null,d.meta);ph.classList.add('product-preview');slots.set(sigOfDescV9(d),ph)});
+            gridResult.classList.add('on');fitGridV7();
+            const put=(old,data)=>{const nt=createTileElement(data.type,0,0,data.coeff,gridResultTiles,null,data.meta);nt.classList.add('product-preview');gridResultTiles.insertBefore(nt,old);old.remove();requestAnimationFrame(()=>nt.classList.add('is-revealed'));return nt};
+            const flyTo=async(src,target,ms)=>{const c=cloneForFlightV7(src,true),b=c.getBoundingClientRect(),tr=target.getBoundingClientRect();src.style.opacity='.18';await flyV7(c,tr.left+tr.width/2-b.width/2,tr.top+tr.height/2-b.height/2,ms);return c};
+            for(const g of groups){
+                if(!alive())return;
+                const mem=members.get(g.sig)||[];if(!mem.length)continue;
+                let slotEl=slots.get(g.sig);if(!slotEl){slotEl=createTileElement(mem[0].data.type,0,0,mem[0].data.coeff,gridResultTiles,null,mem[0].data.meta);slotEl.classList.add('product-preview')}
+                let accEl=slotEl,accD=null;
+                for(let j=0;j<mem.length;j++){
+                    const b=mem[j];if(j>0)await gateV7();if(!alive())return;
+                    if(accD===null){
+                        if(fly()){const c=await flyTo(b.tile,accEl,650);accEl=put(accEl,b.data);await waitV7(380);c.remove()}else{b.tile.style.opacity='.18';accEl=put(accEl,b.data);await waitV7(60)}
+                        accD=b.data;continue;
+                    }
+                    const sum=sumDescV9(accD,b.data),vt=varsKeyTexV9(g.vars);
+                    addCard(`<span class="mr-2 text-amber-300 font-bold">+</span><span class="distribution-step-equation" style="white-space:normal">\\(${resultTexV4(accD)} + ${wrapNegV8(resultTexV4(b.data))} = ${sum?resultTexV4(sum):'0'}\\)<br><small style="color:#cbd5e1">${ruleTextV9(accD,b.data,sum)}</small></span>`);
+                    if(fly()){const c=await flyTo(b.tile,accEl,720);accEl.classList.add('step-merge');c.classList.add('step-merge');playSound(sum?'sum':'disappear');await waitV7(520);c.remove()}else b.tile.style.opacity='.18';
+                    if(sum){accEl=put(accEl,sum);accD=sum;await waitV7(fly()?520:80)}
+                    else{
+                        const ph=createTileElement(mem[0].data.type,0,0,mem[0].data.coeff,gridResultTiles,null,mem[0].data.meta);ph.classList.add('product-preview');
+                        accEl.classList.add('annihilate');playSound('disappear');await waitV7(fly()?500:80);gridResultTiles.insertBefore(ph,accEl);accEl.remove();accEl=ph;accD=null;
+                    }
+                }
+                if(accD===null)accEl.remove();else accEl.classList.remove('product-preview','is-revealed','step-merge');
+            }
+            gridResultTiles.querySelectorAll('.algebra-tile').forEach(t=>t.classList.remove('product-preview','is-revealed','step-merge'));
+        }
+        // ---------- Elements of an algebraic expression (E) ----------
+        function coefPlainV9(r,format){if(r.d===1)return String(r.n);if(format==='decimal')return String(Math.round(r.n/r.d*1e6)/1e6);if(format==='mixed'&&r.n>r.d){const w=Math.floor(r.n/r.d),rem=r.n%r.d;return rem?`${w} ${rem}/${r.d}`:String(w)}return `${r.n}/${r.d}`}
+        function elementsOfTileV9(t){
+            const sg=typeSign(t),r=absRat(t),vars=variablesFromTile(t).slice().sort((a,b)=>a.letter.localeCompare(b.letter)).map(v=>({letter:v.letter,exp:Number(v.exponent||1)}));
+            const deg=vars.reduce((s,v)=>s+v.exp,0),plain=`${sg<0?'−':''}${vars.length&&r.n===1&&r.d===1?'':coefPlainV9(r,t.dataset.format)}${vars.map(v=>v.letter+(v.exp>1?`<sup>${v.exp}</sup>`:'')).join('')}`;
+            return {neg:sg<0,r,fmt:t.dataset.format,vars,deg,plain,isConst:!vars.length,tex:termTex(t)};
+        }
+        const closeElementsV9=()=>{const o=document.getElementById('elements-overlay');if(!o)return;o.classList.add('closing');setTimeout(()=>o.remove(),220)};
+        function openElementsV9(){
+            if(document.getElementById('elements-overlay')){closeElementsV9();return}
+            const live=t=>t.isConnected&&!t.classList.contains('annihilate');
+            let tiles=selectedTilesV7().filter(live);
+            if(!tiles.length){const ps=selectedParensV7();if(ps.length)tiles=ps.flatMap(p=>Array.from(p.querySelectorAll('.algebra-tile')).filter(live))}
+            if(!tiles.length)tiles=Array.from(container.querySelectorAll('.algebra-tile')).filter(live);
+            if(!tiles.length){toastV7('Select one or more terms (or add some tiles) and press E.',true);return}
+            tiles=tiles.slice().sort((a,b)=>{const ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect();return a.parentElement===b.parentElement?eqSortV7(a,b):ra.left-rb.left});
+            const els=tiles.map(elementsOfTileV9),n=els.length,maxDeg=Math.max(...els.map(e=>e.deg)),withVars=els.filter(e=>!e.isConst),consts=els.filter(e=>e.isConst);
+            const letters=Array.from(new Set(els.flatMap(e=>e.vars.map(v=>v.letter)))).sort(),lead=els.find(e=>e.deg===maxDeg),plan=planLikeV9(tiles.map(descV7));
+            const name=n===1?'Monomial':n===2?'Binomial':n===3?'Trinomial':'Polynomial';
+            const part=(cls,glyph,label,implied,delay)=>`<div class="el-part ${cls}${implied?' implied':''}" style="--d:${delay}s"><b>${glyph}</b><i></i><small>${label}</small></div>`;
+            let delay=.15;
+            const termHtml=els.map((e,idx)=>{
+                const first=idx===0,parts=[];
+                parts.push(part('el-sign',e.neg?'−':'+',e.neg?'Sign (negative)':(first?'Sign (positive; the + is understood)':'Sign (positive)'),!e.neg&&first,(delay+=.12)));
+                const coefImplied=e.vars.length&&e.r.n===1&&e.r.d===1,coefGlyph=e.r.d===1||e.fmt==='decimal'?coefPlainV9(e.r,e.fmt):`<span class="el-frac"><span>${e.r.n}</span><span>${e.r.d}</span></span>`;
+                if(e.isConst)parts.push(part('el-const',coefGlyph,'Constant term<br>(no variable)',false,(delay+=.12)));
+                else{
+                    parts.push(part('el-coef',coefImplied?'1':coefGlyph,coefImplied?'Coefficient (understood 1)':'Coefficient',coefImplied,(delay+=.12)));
+                    e.vars.forEach(v=>{parts.push(part('el-var',v.letter,'Variable<br>(literal part)',false,(delay+=.12)));parts.push(part('el-exp',String(v.exp),v.exp===1?'Exponent (understood 1)':'Exponent<br>(degree of the variable)',v.exp===1,(delay+=.12)))});
+                }
+                return `<div class="el-term"><div class="el-glyphs">${parts.join('')}</div><div class="el-info">Term: <b>${e.plain}</b><br>Degree of the term: <b>${e.deg}</b>${e.isConst?' (a constant has degree 0)':''}</div></div>`;
+            }).join('');
+            const likeTxt=plan.likeGroups.length?plan.likeGroups.map(g=>`<b>${g.idx.map(i=>els[i].plain.replace(/^−/,'−')).join(', ')}</b>`).join(' · '):'none';
+            const sum=[
+                ['Number of terms',`${n} → <b>${name}</b>`],
+                ['Degree of the expression',`<b>${maxDeg}</b> (the highest degree among its terms)`],
+                ['Leading term',`<b>${lead.plain}</b> — leading coefficient <b>${(lead.neg?'−':'')+(coefPlainV9(lead.r,lead.fmt))}</b>`],
+                ['Constant term',consts.length?`<b>${consts.map(c=>c.plain).join(', ')}</b>`:'none (it is 0)'],
+                ['Variables',letters.length?`<b>${letters.join(', ')}</b>`:'none'],
+                ['Terms with a variable',`${withVars.length} of ${n}`],
+                ['Like terms',likeTxt]
+            ].map(([k,v])=>`<div class="el-row"><span>${k}</span><span>${v}</span></div>`).join('');
+            const ov=document.createElement('div');ov.id='elements-overlay';
+            ov.innerHTML=`<button type="button" class="el-close" aria-label="Close" title="Close (click anywhere or press Esc)">×</button><div class="el-card"><h2 class="el-title">Elements of an algebraic expression</h2><p class="el-sub">Terms are separated by + and − signs. Each term has these parts:</p><div class="el-terms">${termHtml}</div><div class="el-summary">${sum}</div><p class="el-foot">Click anywhere to close</p></div>`;
+            ov.addEventListener('click',closeElementsV9);document.body.appendChild(ov);playSound('expression');
+        }
+        window.addEventListener('keydown',e=>{
+            if(e.key==='Escape'&&document.getElementById('elements-overlay')){closeElementsV9();return}
+            if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)||e.target.isContentEditable||e.ctrlKey||e.metaKey||e.altKey)return;
+            if(document.querySelector('.modal-backdrop:not(.hidden)')||document.body.classList.contains('splash-open'))return;
+            const k=e.key.toLowerCase();
+            if(k==='t'){e.preventDefault();runLikeTermsV9()}
+            else if(k==='e'){e.preventDefault();openElementsV9()}
+        });
+        // Factor pairs and chains (GCF tile + one or more containers) are shown as products.
+        sumTexV7=function(items){
+            let out='';const used=new Set();
+            const push=s=>{out+=!out?(s[0]==='+'?s.slice(1):s):(s[0]==='-'?` - ${s.slice(1)}`:` + ${s.slice(1)}`)};
+            items.forEach(el=>{
+                if(used.has(el))return;
+                const fg=el.dataset?.factorGroup;let s=null;
+                if(fg){
+                    const members=items.filter(o=>o.dataset?.factorGroup===fg&&!used.has(o));
+                    if(members.length>=2&&members.some(m=>m.classList.contains('parenthesis'))){
+                        members.forEach(m=>used.add(m));let neg=false;const parts=[];
+                        members.forEach(m=>{
+                            if(m.classList.contains('algebra-tile')){const t=termTex(m);if(t[0]==='-')neg=!neg;const body=/^[+-]/.test(t)?t.slice(1):t;if(body!=='1')parts.push({k:'t',s:body})}
+                            else{if(parenSignV7(m)<0)neg=!neg;parts.push({k:'p',s:parenTexV7(m)})}
+                        });
+                        let body='',i=0;while(i<parts.length){let k=1;if(parts[i].k==='p')while(i+k<parts.length&&parts[i+k].k==='p'&&parts[i+k].s===parts[i].s)k++;body+=parts[i].s+(k>1?`^{${k}}`:'');i+=k}
+                        s=`${neg?'-':'+'}${body}`;
+                    }
+                }
+                if(s===null){used.add(el);s=el.classList.contains('algebra-tile')?termTex(el):`${parenSignV7(el)<0?'-':'+'}${parenTexV7(el)}`}
+                push(s);
+            });
+            return out;
+        };
+        const setOperationModeBeforeV9=setOperationMode;
+        setOperationMode=function(mode){
+            setOperationModeBeforeV9(mode);
+            const tip=document.getElementById('dynamic-tip');if(!tip)return;
+            if(mode==='addition')tip.innerHTML='<b>Tip:</b> Select terms and press <kbd>F</kbd> (amber button) to factor, <kbd>T</kbd> to combine like terms, or <kbd>E</kbd> to see the elements of the expression.';
+            else if(mode==='multiplication')tip.innerHTML='<b>Multiplication:</b> Use 2y(3x+6) or (a+2b)(3x-y). Double-click a container to distribute, or use the grid button. Select terms and press <kbd>T</kbd> (like terms) or <kbd>E</kbd> (elements).';
+        };
 
         updateEquation();
     </script>
